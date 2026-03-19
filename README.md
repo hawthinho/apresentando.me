@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/vite.svg" alt="Apresentando-me Logo" width="100"/>
 
-  # APRESENTANDO-ME <br> _Motor Analítico ATS_
+  # APRESENTANDO.ME <br> _Motor Analítico ATS_
 
   **A ferramenta definitiva para otimizar e blindar seu currículo contra sistemas de recrutamento automatizados.**
   
@@ -13,11 +13,11 @@
 
 ---
 
-## 🚀 O que é o APRESENTANDO-ME?
+## 🚀 O que é o APRESENTANDO.ME?
 
 Milhares de currículos são sumariamente descartados por sistemas de rastreamento de candidatos (ATS) não porque os profissionais não são qualificados, mas porque o layout do currículo (duas colunas, barras laterais, gráficos) impede a leitura por robôs.
 
-O **APRESENTANDO-ME** é uma plataforma inovadora baseada no conceito de _Editorial Brutalism_ projetada para:
+O **APRESENTANDO.ME** é uma plataforma inovadora baseada no conceito de _Editorial Brutalism_ projetada para:
 1. **Diagnosticar o seu PDF** e calcular um ATS Score (focado puramente em leitura por máquina).
 2. **Comparar seu perfil com uma vaga alvo** e sugerir palavras-chave (Match Score).
 3. **Reescrever seu currículo por completo** através de IA Generativa de maneira cirúrgica (em três níveis de agressividade).
@@ -83,7 +83,7 @@ Este projeto foi construído usando tecnologias modernas focadas em agilidade e 
 
 ## 🔑 Como Utilizar o Sistema
 
-O APRESENTANDO-ME é moldado para operar num formato BYOK (*Bring Your Own Key*), garantindo controle total.
+O APRESENTANDO.ME é moldado para operar num formato BYOK (*Bring Your Own Key*), garantindo controle total.
 
 ### 1. Obtenha sua Gemini API Key
 - Acesse o [Google AI Studio](https://aistudio.google.com/).
@@ -111,7 +111,7 @@ Este repositório orgulha-se do seu guia estilístico. A UI é carregada de bord
 
 ## ☕ Apoie o Projeto
 
-Curtiu o APRESENTANDO-ME? Ele deu um trabalho do caramba para ficar pronto.
+Curtiu o APRESENTANDO.ME? Ele deu um trabalho do caramba para ficar pronto.
 Se quiser mandar um PIX para financiar meu café (e minha terapia), você ainda ganha o passaporte VIP pro céu dos Vibecoders! 
 <br>
 
