@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileUpload } from './FileUpload';
 import { JobInput } from './JobInput';
+import { getSettings } from '../services/settingsService';
 
 export const AnalysisCard = ({
     file,
@@ -10,6 +11,8 @@ export const AnalysisCard = ({
     onAnalyze
 }) => {
     const firstName = 'Operador';
+    const settings = getSettings();
+    const hasApiKey = Boolean(settings?.apiKey);
 
     return (
         <div className="w-full max-w-5xl lg:max-w-6xl mx-auto flex flex-col mt-2 md:mt-6 lg:mt-10 mb-24 relative">
@@ -42,6 +45,15 @@ export const AnalysisCard = ({
 
             {/* ── Pipeline Container ──────────────────── */}
             <div className="flex flex-col gap-0">
+
+                {!hasApiKey && (
+                    <div className="bg-primary text-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-8">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                        <span className="opacity-95">
+                            <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações para adicionar uma API Key gratuita. Recomendamos o modelo <strong>"gemini-3.1-flash-lite-preview"</strong>.
+                        </span>
+                    </div>
+                )}
 
                 {/* ══ STEP 1 — File Upload ══════════════ */}
                 <section className="relative">
@@ -135,12 +147,6 @@ export const AnalysisCard = ({
 
             {/* ── Info Banners ────────────────────────── */}
             <div className="mt-4 flex flex-col gap-2">
-                <div className="bg-primary text-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-                    <span className="opacity-95">
-                        <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações para adicionar uma API Key gratuita. Recomendamos o modelo <strong>"gemini-3.1-flash-lite-preview"</strong>.
-                    </span>
-                </div>
                 <div className="bg-foreground text-primary px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
                     <span className="w-2 h-2 bg-primary rounded-full animate-pulse shrink-0" />
                     <span className="opacity-80">
