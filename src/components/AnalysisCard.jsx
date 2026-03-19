@@ -135,10 +135,10 @@ export const AnalysisCard = ({
 
             {/* ── Info Banners ────────────────────────── */}
             <div className="mt-4 flex flex-col gap-2">
-                <div className="bg-destructive text-destructive-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                    <span className="opacity-90">
-                        Aviso: Para utilizar o sistema é necessário colocar uma API Key de uma IA nas configurações.
+                <div className="bg-primary text-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    <span className="opacity-95">
+                        <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações para adicionar uma API Key gratuita. Recomendamos o modelo <strong>"gemini-3.1-flash-lite-preview"</strong>.
                     </span>
                 </div>
                 <div className="bg-foreground text-primary px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
