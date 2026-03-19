@@ -226,7 +226,7 @@ function App() {
         {/* Footer */}
         <footer className="w-full mt-12 pt-8 pb-4 border-t-2 border-foreground/10 flex flex-col items-center justify-center gap-2">
             <span className="font-jetbrains text-xs md:text-sm font-bold uppercase tracking-widest text-muted-foreground text-center">
-                Vibecodado com amor por Flavio
+                vibecodado com ❤️
             </span>
             <a 
                 href="https://github.com/" 

@@ -37,8 +37,8 @@ export const AnalysisCard = ({
 
                 {/* Subtitle */}
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mt-6">
-                    <p className="font-jetbrains font-bold text-sm md:text-base uppercase text-muted-foreground max-w-md leading-relaxed">
-                        Carregue seu currículo para iniciar a<br className="hidden md:block" /> análise de compatibilidade ATS.
+                    <p className="font-jetbrains font-bold text-sm md:text-base uppercase text-muted-foreground max-w-xl md:w-3/4 lg:w-2/3 leading-relaxed">
+                        Carregue seu currículo para<br className="hidden md:block" /> iniciar a análise de compatibilidade ATS.
                     </p>
                 </div>
             </header>
