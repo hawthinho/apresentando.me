@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 60 20% 96%;
+    --foreground: 0 0% 10%;
+    --card: 60 20% 96%;
+    --card-foreground: 0 0% 10%;
+    --popover: 60 20% 96%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 68 100% 50%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 68 100% 50%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 10%;
+    --input: 0 0% 10%;
+    --ring: 0 0% 10%;
+    --radius: 0rem;
+  }
+
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 60 20% 96%;
+    --card: 0 0% 10%;
+    --card-foreground: 60 20% 96%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 60 20% 96%;
+    --primary: 68 100% 50%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 60 20% 96%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 60 10% 60%;
+    --accent: 68 100% 50%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 60 20% 96%;
+    --input: 60 20% 96%;
+    --ring: 60 20% 96%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-jetbrains antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-space font-bold tracking-tight text-balance;
+  }
+  p {
+    @apply text-pretty;
+  }
+}
