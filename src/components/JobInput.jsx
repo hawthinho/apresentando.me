@@ -1,5 +1,111 @@
 import React, { useState, useMemo } from 'react';
 
+const JOB_PRESETS = [
+    {
+        label: "[01] Desenvolvedor(a) Fullstack Sênior",
+        text: `🚀 SOBRE A VAGA
+Estamos buscando um(a) Desenvolvedor(a) Fullstack Sênior para integrar nossa principal Squad de pagamentos. Você será diretamente responsável por arquitetar soluções resilientes, de alta disponibilidade e contribuir com decisões arquiteturais de impacto para milhões de usuários.
+
+💼 RESPONSABILIDADES
+- Liderar o desenho e implementação de microsserviços escaláveis.
+- Manter e evoluir interfaces front-end complexas utilizando React.js e Next.js.
+- Otimizar queries e modelagem de banco de dados relacionais e NoSQL (PostgreSQL, MongoDB).
+- Atuar como mentor técnico para desenvolvedores Plenos e Juniores.
+
+🎯 REQUISITOS OBRIGATÓRIOS
+- 5+ anos de experiência comprovada com Node.js e React.
+- Vivência sólida em arquiteturas orientadas a eventos (Kafka/RabbitMQ).
+- Forte background em testes automatizados e Integração Contínua (CI/CD).
+- Inglês avançado para conversação com times globais.
+
+🌟 DIFERENCIAIS
+- Conhecimento prático em metodologias de DevOps (Docker, Kubernetes).
+- Certificações AWS ou GCP.`
+    },
+    {
+        label: "[02] Coordenador(a) Financeiro(a) Corporativo",
+        text: `🚀 SOBRE A VAGA
+Buscamos um(a) Coordenador(a) Financeiro(a) analítico(a) e movido(a) a resultados para gerenciar o planejamento financeiro, orçamento e rotinas de tesouraria de uma grande multinacional de varejo.
+
+💼 RESPONSABILIDADES
+- Coordenar a equipe de contas a pagar, receber e tesouraria diária (Cash Management).
+- Estruturar e analisar o DRE mensal, garantindo a saúde do fluxo de caixa e capital de giro.
+- Elaborar reports e dashboards financeiros críticos em Power BI para a diretoria executiva.
+- Liderar o processo de auditoria externa e garantir a conformidade fiscal (Compliance).
+
+🎯 REQUISITOS OBRIGATÓRIOS
+- Formação superior completa em Administração, Economia ou Ciências Contábeis.
+- Excel nível Especialista (VBA, Power Query, modelagem financeira de alto grau).
+- Experiência mínima de 4 anos em posição de liderança no setor financeiro corporativo.
+- Sólido conhecimento de operação em ERPs de grande porte (SAP HANO ou TOTVS).
+
+🌟 DIFERENCIAIS
+- Pós-graduação, MBA ou especialização em Controladoria Corporativa.
+- CRC Ativo.`
+    },
+    {
+        label: "[03] Gerente de Recursos Humanos (HR Business Partner)",
+        text: `🚀 SOBRE A VAGA
+Vaga para Gerente de Recursos Humanos (BP) com atuação 100% estratégica e próxima às lideranças (C-Level). Foco total em retenção de talentos (Turnover) e gestão robusta da cultura de um ambiente em hiper-crescimento.
+
+💼 RESPONSABILIDADES
+- Estruturar planos de carreira consolidados, trilhas de desenvolvimento (PDI) e mapas de sucessão empresarial.
+- Conduzir e orquestrar avaliações de desempenho (OKRs, Matriz 9-Box) integradas com feedbacks 360º.
+- Desenhar políticas de Remuneração e Benefícios baseadas em benchmarks de mercado (Pesquisas Salariais).
+- Liderar o direcionamento de Programas de Diversidade, Equidade e Inclusão (DE&I).
+
+🎯 REQUISITOS OBRIGATÓRIOS
+- Formação superior em Psicologia, Administração ou Gestão de RH.
+- Sólida vivência demonstrável de no mínimo 6 anos em posições estratégicas de Recursos Humanos.
+- Domínio em metodologias ágeis de avaliação e People Analytics em softwares modernos.
+- Capacidade argumentativa e visão de dono do negócio.
+
+🌟 DIFERENCIAIS
+- Vivência prévia no segmento de tecnologia (Startups/Fintechs) escalando de Series A para Series C.`
+    },
+    {
+        label: "[04] Enfermeiro(a) RT - Auditoria Clínica Hospitalar",
+        text: `🚀 SOBRE A VAGA
+Rede hospitalar referência de nível ouro busca Enfermeiro(a) Especialista em Auditoria Clínica para atuar estritamente na garantia da qualidade da assistência prestada (Quality Assurance) e conformidade de faturamentos operacionais.
+
+💼 RESPONSABILIDADES
+- Realizar rotinas de auditoria concorrente à beira do leito e retrospectiva analítica de prontuários eletrônicos.
+- Analisar a pertinência clínica de uso rigoroso de OPME (Órteses, Próteses e Materiais Especiais) frente às normativas ANS Múltiplas.
+- Elaborar e assinar pareceres técnicos baseados em literatura médica para contestação robusta de glosas junto às Operadoras.
+- Criar POPs e capacitar equipes gerenciais de enfermagem para minimizar evasão local.
+
+🎯 REQUISITOS OBRIGATÓRIOS
+- Graduação em Enfermagem com registro ativo, isento de infrações e totalmente regularizado no COREN.
+- Pós-graduação lato-sensu completa em Auditoria de Sistemas de Saúde ou Gestão de OPME.
+- Experiência prévia exigida de 3 anos liderando rotinas de auditoria complexa em contas médicas.
+- Domínio técnico da Tabela SUS, CBHPM e Rol de Procedimentos Reguladores da ANS.
+
+🌟 DIFERENCIAIS
+- Vivência em Terapia Intensiva (UTI) de Alta Complexidade.
+- Treinamento ONA 3 consolidado.`
+    },
+    {
+        label: "[05] UX/UI Product Designer",
+        text: `🚀 SOBRE A VAGA
+Buscamos um Product Designer end-to-end com paixão em traduzir dores de negócios latentes em interfaces polidas, mágicas e super usáveis para o nosso maior pilar SaaS B2B.
+
+💼 RESPONSABILIDADES
+- Conduzir ciclos completos de pesquisas de UX (User Research), testes a/b em massa e entrevistas com grande amostragem de clientes corporativos.
+- Desenhar arquitetura de informação coerente, criar fluxos lógicos e construir jornadas sem atritos.
+- Dar manutenção iterativa ao nosso forte Design System local (Design Tokens & Hand-offs).
+- Produzir protótipos em alta fidelidade com extrema qualidade visual usando Figma.
+
+🎯 REQUISITOS OBRIGATÓRIOS
+- Mais de 3 anos de experiência imersa construindo Produtos Digitais e Web Apps complexos.
+- Portfólio demonstrando não apenas as interfaces prontas, mas todo o processo de investigação e discovery (Design Thinking).
+- Facilidade com prototipagem avançada de Auto-layouts no Figma.
+- Empatia e foco contínuo no sucesso do usuário final.
+
+🌟 DIFERENCIAIS
+- Habilidade profunda em microinterações avançadas usando Framer ou Principie.`
+    }
+];
+
 export const JobInput = ({ value, onChange }) => {
     const [isExpanded, setIsExpanded] = useState(!!value);
 
@@ -58,10 +164,9 @@ export const JobInput = ({ value, onChange }) => {
                             defaultValue=""
                         >
                             <option value="" disabled>⚡ CARREGAR PRESET DE VAGA</option>
-                            <option value="Desenvolvedor(a) Fullstack Sênior | Remoto...">[01] Desenvolvedor Fullstack Sênior</option>
-                            <option value="UX/UI Designer Pleno | Híbrido - São Paulo...">[02] UX/UI Designer Pleno</option>
-                            <option value="Product Manager | Remoto...">[03] Product Manager Estratégico</option>
-                            <option value="Analista de Dados Sênior | Híbrido - Rio de Janeiro...">[04] Data Analyst Sr. / Scientist</option>
+                            {JOB_PRESETS.map((preset, idx) => (
+                                <option key={idx} value={preset.text}>{preset.label}</option>
+                            ))}
                         </select>
                         <div className="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center pointer-events-none text-foreground/40">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
