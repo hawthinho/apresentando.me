@@ -8,7 +8,7 @@ export const ImprovementsSection = ({ keywordOps, tips }) => {
                 <div className="absolute top-0 right-0 w-16 h-16 border-l-4 border-b-4 border-foreground bg-primary pointer-events-none"></div>
                 <div className="p-8 lg:p-12 pb-4 lg:pb-6">
                     <span className="inline-block font-jetbrains font-bold text-[10px] lg:text-xs uppercase tracking-widest bg-foreground text-primary px-3 py-1 mb-4 border-2 border-foreground shadow-[2px_2px_0px_rgba(212,255,0,1)]">Keywords Pivotais</span>
-                    <h3 className="font-space font-black text-3xl md:text-4xl lg:text-5xl uppercase tracking-tighter leading-tight mb-8">Lexicon de <br/><span className="text-primary underline decoration-4 underline-offset-4">Conversão.</span></h3>
+                    <h3 className="font-space font-black text-3xl md:text-4xl lg:text-5xl uppercase tracking-tighter leading-tight mb-8">Lexicon de <br/><span className="bg-foreground text-primary px-3 pt-2 pb-1 inline-block mt-3 mb-2 shadow-[4px_4px_0px_0px_rgba(212,255,0,1)]">Conversão.</span></h3>
                 </div>
                 
                 <div className="flex-1 px-8 lg:px-12 pb-8 lg:pb-12 flex flex-col gap-3">
@@ -18,7 +18,7 @@ export const ImprovementsSection = ({ keywordOps, tips }) => {
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                             </div>
                             <div className="flex-1 font-jetbrains font-bold uppercase text-xs md:text-sm truncate">{op}</div>
-                            <span className="text-[10px] uppercase tracking-widest font-black text-primary border-l-2 border-dashed border-foreground pl-3">REC</span>
+                            <span className="text-[10px] uppercase tracking-widest font-black bg-foreground text-primary px-2 py-0.5 ml-2 border-2 border-foreground">REC</span>
                         </div>
                     ))}
                 </div>

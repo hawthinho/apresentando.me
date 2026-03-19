@@ -290,7 +290,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                     {step === 'success' && (
                         <div className="flex flex-col gap-8">
                             <div className="bg-primary text-foreground p-8 border-4 border-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                <h3 className="font-space font-black text-4xl uppercase tracking-tighter">Currículo Reconstruído.</h3>
+                                <h3 className="font-space font-black text-3xl md:text-4xl uppercase tracking-tighter break-words hyphens-auto">Currículo Reconstruído.</h3>
                                 <p className="font-jetbrains font-bold uppercase text-sm lg:text-base mt-4">Sua nova versão profissional está encriptada e pronta para emissão.</p>
                             </div>
 
@@ -317,9 +317,9 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         {showLatex && (
                                             <div className="p-4 border-t-2 border-foreground bg-[#F4F4F0]">
                                                 <textarea readOnly value={latexCode} className="w-full h-32 bg-foreground text-primary font-jetbrains text-xs p-4 resize-none mb-4 focus:outline-none" />
-                                                <div className="flex gap-4">
-                                                    <Button variant="outline" className="flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={handleCopyLatex}>Copiar Código</Button>
-                                                    <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="flex-1">
+                                                <div className="flex flex-col md:flex-row gap-3">
+                                                    <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={handleCopyLatex}>Copiar Código</Button>
+                                                    <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                         <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                     </a>
                                                 </div>
@@ -356,12 +356,12 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                             {showEditedLatex && (
                                                 <div className="p-4 border-t-2 border-foreground bg-[#F4F4F0]">
                                                     <textarea readOnly value={formatResumeToLatex(parsedResume)} className="w-full h-32 bg-foreground text-primary font-jetbrains text-xs p-4 resize-none mb-4 focus:outline-none" />
-                                                    <div className="flex gap-4">
-                                                        <Button variant="outline" className="flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
+                                                    <div className="flex flex-col md:flex-row gap-3">
+                                                        <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
                                                                 navigator.clipboard.writeText(formatResumeToLatex(parsedResume));
                                                                 alert("Código LaTeX copiado!");
                                                             }}>Copiar Código</Button>
-                                                        <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="flex-1">
+                                                        <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                             <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                         </a>
                                                     </div>
@@ -380,7 +380,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                             {improvements && improvements.length > 0 && impact && (
                                 <div className="border-4 border-foreground bg-white p-8 px-8 flex flex-col gap-6 shadow-[8px_8px_0px_0px_rgba(212,255,0,1)]">
                                     <div>
-                                        <h4 className="font-space font-black text-2xl uppercase tracking-tighter text-primary border-b-4 border-foreground pb-2 flex items-center gap-3">
+                                        <h4 className="font-space font-black text-2xl uppercase tracking-tighter bg-foreground text-primary px-4 py-2 flex items-center gap-3 w-fit shadow-[4px_4px_0px_0px_rgba(212,255,0,1)] mb-4 border-2 border-foreground">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                                             O que mudou?
                                         </h4>
@@ -447,8 +447,8 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         )}
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                            <Button className="w-full h-14 rounded-none bg-foreground text-primary hover:bg-black font-jetbrains font-black uppercase tracking-widest border-2 border-foreground" onClick={handleDownloadCoverLetterPDF}>
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                            <Button className="w-full min-h-[3.5rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-primary hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground whitespace-normal leading-tight text-center" onClick={handleDownloadCoverLetterPDF}>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                                 Baixar PDF da Carta
                                             </Button>
                                             <Button variant="outline" className="w-full h-14 rounded-none border-2 border-dashed border-foreground font-jetbrains font-bold uppercase text-xs hover:bg-muted" onClick={() => setIsEditingCoverLetter(!isEditingCoverLetter)}>
@@ -466,12 +466,12 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                             {showCoverLetterLatex && (
                                                 <div className="p-4 border-t-2 border-foreground bg-[#F4F4F0]">
                                                     <textarea readOnly value={formatCoverLetterToLatex(coverLetter)} className="w-full h-32 bg-foreground text-primary font-jetbrains text-xs p-4 resize-none mb-4 focus:outline-none" />
-                                                    <div className="flex gap-4">
-                                                        <Button variant="outline" className="flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
+                                                    <div className="flex flex-col md:flex-row gap-3">
+                                                        <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
                                                                 navigator.clipboard.writeText(formatCoverLetterToLatex(coverLetter));
                                                                 alert("Código LaTeX copiado!");
                                                             }}>Copiar Código</Button>
-                                                        <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="flex-1">
+                                                        <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                             <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                         </a>
                                                     </div>
@@ -494,17 +494,17 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         </div>
                                         
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                            <Button className="w-full h-16 rounded-none bg-foreground text-[#D4FF00] hover:bg-black font-jetbrains font-black uppercase tracking-widest border-2 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200" onClick={() => generateResumePDF(optimizedContent, 'documento_completo.pdf', coverLetter)}>
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                            <Button className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-[#D4FF00] hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => generateResumePDF(optimizedContent, 'documento_completo.pdf', coverLetter)}>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                                 Baixar PDF Único
                                             </Button>
                                             
-                                            <Button variant="outline" className="w-full h-16 rounded-none border-4 border-foreground bg-white text-foreground hover:bg-muted font-jetbrains font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200" onClick={() => {
+                                            <Button variant="outline" className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none border-4 border-foreground bg-white text-foreground hover:bg-muted font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => {
                                                 const latex = formatCombinedToLatex(latexCode, coverLetter);
                                                 navigator.clipboard.writeText(latex);
                                                 alert("LaTeX do pacote unificado copiado! Cole no Prism.");
                                             }}>
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-3"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
                                                 Copiar LaTeX Único
                                             </Button>
                                         </div>

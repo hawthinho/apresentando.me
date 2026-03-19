@@ -23,8 +23,8 @@ export const SettingsView = ({ onBack }) => {
                     <span className="inline-block font-jetbrains font-bold text-[10px] uppercase tracking-widest bg-foreground text-primary px-3 py-1 mb-4 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                         Painel de Controle
                     </span>
-                    <h1 className="font-space font-black text-5xl md:text-6xl uppercase tracking-tighter leading-none">
-                        Configuração de <br/><span className="text-primary italic border-b-4 border-primary pb-1 pr-4 inline-block mt-2">Motor IA.</span>
+                    <h1 className="font-space font-black text-5xl md:text-6xl uppercase tracking-tighter leading-none mb-2">
+                        Configuração de <br/><span className="bg-foreground text-primary px-3 pt-2 pb-1 inline-block mt-3 mb-2 shadow-[4px_4px_0px_0px_rgba(212,255,0,1)]">Motor IA.</span>
                     </h1>
                 </div>
                 <button
@@ -46,15 +46,17 @@ export const SettingsView = ({ onBack }) => {
                         <p className="font-jetbrains font-bold text-xs text-muted-foreground uppercase mb-2">
                             Selecione a tecnologia de inteligência artificial
                         </p>
-                        <select 
-                            className="h-16 border-4 border-foreground px-4 font-jetbrains font-bold uppercase focus:outline-none focus:ring-4 focus:ring-primary/20 bg-background transition-shadow appearance-none cursor-pointer"
-                            value={settings.provider}
-                            onChange={(e) => setSettings({...settings, provider: e.target.value})}
-                        >
-                            <option value="google">Google Generative AI (Gemini)</option>
-                        </select>
-                        <div className="absolute right-6 top-[84px] pointer-events-none text-foreground">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <div className="relative w-full">
+                            <select 
+                                className="h-16 w-full border-4 border-foreground px-4 pr-12 font-jetbrains font-bold uppercase focus:outline-none focus:ring-4 focus:ring-primary/20 bg-background transition-shadow appearance-none cursor-pointer text-xs md:text-sm truncate"
+                                value={settings.provider}
+                                onChange={(e) => setSettings({...settings, provider: e.target.value})}
+                            >
+                                <option value="google">Google Generative AI (Gemini)</option>
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-foreground">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
                         </div>
                     </div>
 

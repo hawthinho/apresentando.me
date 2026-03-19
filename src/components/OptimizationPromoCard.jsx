@@ -63,12 +63,12 @@ export const OptimizationPromoCard = ({
                 <div className="w-full lg:w-[450px] shrink-0 border-4 border-foreground bg-white text-foreground p-8 md:p-10 flex flex-col justify-center relative transform lg:rotate-2 shadow-[-12px_12px_0px_0px_rgba(212,255,0,1)] mx-auto lg:mx-0">
                     <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-muted-foreground border-b-2 border-foreground pb-2 self-start mb-6">Ação Recomendada</span>
 
-                    <Button onClick={onOptimize} className="w-full rounded-none h-20 bg-primary hover:bg-black hover:text-primary text-foreground border-4 border-foreground font-jetbrains font-black uppercase text-xl md:text-2xl tracking-widest transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none mt-2">
+                    <Button onClick={onOptimize} className="w-full rounded-none min-h-[5rem] py-4 bg-primary hover:bg-black hover:text-primary text-foreground border-4 border-foreground font-jetbrains font-black uppercase text-lg sm:text-lg md:text-2xl tracking-wider transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none mt-2 whitespace-normal h-auto leading-tight md:leading-normal text-center">
                         OTIMIZAR CURRÍCULO
                     </Button>
 
-                    <div className="mt-6 flex items-center justify-center gap-2 font-jetbrains font-bold text-[10px] uppercase text-muted-foreground bg-muted py-2 border-2 border-dashed border-muted-foreground">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    <div className="mt-8 flex items-center justify-center gap-2 font-jetbrains font-bold text-[10px] uppercase text-muted-foreground bg-muted py-2 px-2 border-2 border-dashed border-muted-foreground text-center">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
                         Otimização instantânea via IA
                     </div>
                 </div>
