@@ -50,7 +50,7 @@ export const AnalysisCard = ({
                     <div className="bg-primary text-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-8">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                         <span className="opacity-95">
-                            <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações para adicionar uma API Key gratuita. Recomendamos o modelo <strong>"gemini-3.1-flash-lite-preview"</strong>.
+                            <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações e adicione uma API Key gratuitamente para iniciar.
                         </span>
                     </div>
                 )}
