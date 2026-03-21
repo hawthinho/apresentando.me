@@ -229,12 +229,15 @@ function App() {
                 vibecodado com ❤️
             </span>
             <a 
-                href="https://github.com/" 
+                href="https://github.com/hawthinho/apresentando.me" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="font-jetbrains text-[10px] sm:text-xs font-black uppercase tracking-widest text-primary hover:text-foreground transition-colors"
+                className="mt-2 font-jetbrains text-xs font-black uppercase tracking-widest bg-primary text-primary-foreground border-4 border-foreground px-6 py-2 hover:bg-background hover:text-foreground hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center gap-3"
             >
-                [ VER NO GITHUB ]
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="bevel">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+                VER NO GITHUB
             </a>
         </footer>
       </main>
