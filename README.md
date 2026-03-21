@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="public/vite.svg" alt="Apresentando-me Logo" width="100"/>
 
   # APRESENTANDO.ME <br> _Motor Analítico ATS_
 
