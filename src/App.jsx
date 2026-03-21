@@ -146,6 +146,10 @@ function App() {
             jobDescription={jobDescription}
             onChangeJobDescription={setJobDescription}
             onAnalyze={handleAnalyze}
+            onOpenSettings={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setView('settings');
+            }}
           />
         )}
 

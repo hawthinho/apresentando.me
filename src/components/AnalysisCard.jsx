@@ -8,7 +8,8 @@ export const AnalysisCard = ({
     onFileSelect,
     jobDescription,
     onChangeJobDescription,
-    onAnalyze
+    onAnalyze,
+    onOpenSettings
 }) => {
     const firstName = 'Operador';
     const settings = getSettings();
@@ -47,11 +48,24 @@ export const AnalysisCard = ({
             <div className="flex flex-col gap-0">
 
                 {!hasApiKey && (
-                    <div className="bg-primary text-foreground px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-8">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-                        <span className="opacity-95">
-                            <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações e adicione uma API Key gratuitamente para iniciar.
-                        </span>
+                    <div className="bg-primary text-foreground p-4 md:p-6 font-jetbrains text-sm md:text-base font-bold uppercase tracking-wider flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-2 md:border-4 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-8">
+                        <div className="flex items-center gap-3">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                            <span className="opacity-95 leading-relaxed">
+                                <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações e adicione uma API Key gratuitamente.
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={onOpenSettings}
+                            className="w-full md:w-auto shrink-0 bg-foreground text-primary px-6 py-3 border-2 border-foreground hover:bg-background hover:text-foreground active:scale-95 transition-all font-black flex items-center justify-center gap-2"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Configurações
+                        </button>
                     </div>
                 )}
 
