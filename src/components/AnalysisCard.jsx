@@ -116,15 +116,15 @@ export const AnalysisCard = ({
                         font-space font-black text-2xl md:text-3xl lg:text-4xl uppercase tracking-tight
                         border-4 border-foreground border-t-0
                         transition-all duration-200 group
-                        ${file
+                        ${file && hasApiKey
                             ? 'bg-primary text-foreground hover:bg-foreground hover:text-primary active:scale-[0.98] cursor-pointer shadow-[0_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[0_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-2'
                             : 'bg-muted text-muted-foreground cursor-not-allowed'
                         }
                     `}
                     onClick={onAnalyze}
-                    disabled={!file}
+                    disabled={!file || !hasApiKey}
                 >
-                    {file ? (
+                    {file && hasApiKey ? (
                         <>
                             <span>Processar Análise</span>
                             <svg className="w-8 h-8 md:w-10 md:h-10 group-hover:translate-x-2 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
@@ -132,6 +132,15 @@ export const AnalysisCard = ({
                                 <polyline points="15 5 22 12 15 19" />
                             </svg>
                         </>
+                    ) : file && !hasApiKey ? (
+                        <span className="flex items-center gap-3 text-xl md:text-2xl">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            Aguardando chave de api
+                        </span>
                     ) : (
                         <span className="flex items-center gap-3 text-xl md:text-2xl">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
