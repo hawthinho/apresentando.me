@@ -118,3 +118,7 @@ Se quiser mandar um PIX para financiar meu café (e minha terapia), você ainda 
 
 ---
 *Vibecodado com amor.*
+
+<br>
+
+&copy; 2026 apresentando.me. Distribuído sob a licença [MIT](./LICENSE).
