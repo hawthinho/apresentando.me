@@ -104,7 +104,7 @@ export const analyzeResume = async (resumeText, jobDescription) => {
         const genAI = getGenAIInstance();
         const settings = getSettings();
         const model = genAI.getGenerativeModel({
-            model: settings.model || "gemini-3.1-flash-lite-preview",
+            model: settings.model || "gemini-3.5-flash",
             generationConfig: {
                 temperature: 0, // Temperatura 0 para resultados determinísticos e consistentes
             }
@@ -277,7 +277,7 @@ export const generateCoverLetter = async (resumeText, jobDescription) => {
         const genAI = getGenAIInstance();
         const settings = getSettings();
         const model = genAI.getGenerativeModel({
-            model: settings.model || "gemini-3.1-flash-lite-preview",
+            model: settings.model || "gemini-3.5-flash",
             generationConfig: {
                 temperature: 0.5,
             }
