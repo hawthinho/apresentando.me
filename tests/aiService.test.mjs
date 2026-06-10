@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { sanitizeGeneratedText, stripAiDashMarks } from '../src/services/textSanitizer.js';
+import { sanitizeCoverLetterText, sanitizeGeneratedText, stripAiDashMarks } from '../src/services/textSanitizer.js';
 
 test('stripAiDashMarks removes em and en dash punctuation from generated prose', () => {
     const text = 'Tenho experiencia em produto \u2014 especialmente em B2B \u2013 e foco em resultado. Atuei de 2020\u20132024.';
@@ -31,4 +31,14 @@ test('sanitizeGeneratedText recursively cleans generated AI payloads', () => {
         untouched: 91
     });
     assert.doesNotMatch(JSON.stringify(sanitized), /[\u2014\u2013]/);
+});
+
+test('sanitizeCoverLetterText removes pushy scheduling closes and formats paragraphs', () => {
+    const letter = 'Prezado time de Produto da Serasa Experian, Meu nome é Flávio e trabalho com UX. Conduzi pesquisas com usuários e protótipos de alta fidelidade. Gostaria de agendar uma conversa de 30 minutos para apresentar como posso gerar valor imediato. Agradeço a atenção e fico no aguardo de um retorno.';
+
+    const sanitized = sanitizeCoverLetterText(letter);
+
+    assert.match(sanitized, /^Olá, time de Produto da Serasa Experian\./);
+    assert.doesNotMatch(sanitized, /agendar|30 minutos|fico no aguardo|valor imediato/i);
+    assert.match(sanitized, /\n\n/);
 });

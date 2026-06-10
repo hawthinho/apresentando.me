@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getProvider } from "./providerConfig";
 import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from "./settingsService";
-import { sanitizeGeneratedText, stripAiDashMarks } from "./textSanitizer.js";
+import { sanitizeCoverLetterText, sanitizeGeneratedText } from "./textSanitizer.js";
 
 const createMissingKeyError = (provider) => (
     `CHAVE DE API NÃO CONFIGURADA PARA ${provider.shortLabel.toUpperCase()}. Acesse as Configurações para inserir sua API Key.`
@@ -401,12 +401,16 @@ ${STYLE_GUARDRAILS}
 
 Direção de estilo:
 - Evite tom robótico, genérico ou subserviente.
-- Não use frases como "venho por meio desta" ou "fico à disposição".
+- Não use frases como "venho por meio desta", "fico à disposição", "fico no aguardo" ou "valor imediato".
+- Não peça para agendar conversa, reunião ou chamada.
+- Não mencione duração de conversa, como 15, 20 ou 30 minutos.
 - Use ritmo natural, com frases de tamanhos variados.
 - Conecte evidências do currículo ao problema da vaga.
 - Se faltar vaga, escreva uma carta mais aberta, mas ainda concreta.
 - Não invente experiências ou resultados.
 - Entregue apenas o texto final em 4 a 6 parágrafos curtos.
+- Separe os parágrafos com uma linha em branco.
+- Termine com interesse em contribuir para o time ou seguir nas próximas etapas, sem pedir agenda.
 `;
 
 export const generateCoverLetter = async (resumeText, jobDescription) => {
@@ -418,7 +422,7 @@ ${resumeText}
 VAGA DE DESTINO:
 ${jobDescription || "Não especificada"}
 
-Escreva uma carta que soe como uma pessoa competente falando com outra pessoa competente. Use detalhes reais do currículo, escolha 2 ou 3 evidências fortes e feche com uma proposta clara de conversa.
+Escreva uma carta que soe como uma pessoa competente falando com outra pessoa competente. Use detalhes reais do currículo, escolha 2 ou 3 evidências fortes e feche de forma confiante, sem tentar marcar conversa.
 `;
 
         const text = await generateText({
@@ -428,7 +432,7 @@ Escreva uma carta que soe como uma pessoa competente falando com outra pessoa co
             expectJson: false
         });
 
-        return stripAiDashMarks(text);
+        return sanitizeCoverLetterText(text);
     } catch (error) {
         console.error("Erro na geração da carta de apresentação:", error);
         throw new Error(error.message || "Falha ao gerar a carta de apresentação.");
