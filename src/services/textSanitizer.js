@@ -2,8 +2,8 @@ export const stripAiDashMarks = (value) => {
     if (typeof value !== 'string') return value;
 
     return value
-        .replace(/(\d)\s*[—–]\s*(\d)/g, '$1 a $2')
-        .replace(/\s*[—–]\s*/g, ', ')
+        .replace(/(\d)\s*[\u2014\u2013]\s*(\d)/g, '$1 a $2')
+        .replace(/\s*[\u2014\u2013]\s*/g, ', ')
         .replace(/\s+([,.!?;:])/g, '$1')
         .replace(/\s{2,}/g, ' ')
         .trim();

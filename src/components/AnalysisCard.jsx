@@ -23,11 +23,11 @@ export const AnalysisCard = ({
 
             {/* ── Editorial Header ─────────────────────── */}
             <header className="mb-8 md:mb-12 lg:mb-16">
-                {/* Top line — system status */}
+                {/* Top line */}
                 <div className="flex items-center gap-3 mb-6">
                     <span className="w-2.5 h-2.5 bg-primary animate-pulse" />
                     <span className="font-jetbrains font-bold text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                        Motor ATS Online — Pronto para Análise
+                        Motor ATS Online. Pronto para Análise
                     </span>
                 </div>
 
@@ -72,7 +72,7 @@ export const AnalysisCard = ({
                     </div>
                 )}
 
-                {/* ══ STEP 1 — File Upload ══════════════ */}
+                {/* ══ STEP 1: File Upload ══════════════ */}
                 <section className="relative">
                     {/* Step label */}
                     <div className="flex items-center gap-4 mb-4">
@@ -100,7 +100,7 @@ export const AnalysisCard = ({
                     </div>
                 </div>
 
-                {/* ══ STEP 2 — Job Description ══════════ */}
+                {/* ══ STEP 2: Job Description ══════════ */}
                 <section className="relative">
                     {/* Step label */}
                     <div className="flex items-center gap-4 mb-4">
@@ -176,7 +176,7 @@ export const AnalysisCard = ({
                 <div className="bg-foreground text-primary px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
                     <span className="w-2 h-2 bg-primary rounded-full animate-pulse shrink-0" />
                     <span className="opacity-80">
-                        Motor selecionado: {provider.shortLabel} / {selectedModel} — tempo estimado ~30s. Não feche a aba.
+                        Motor selecionado: {provider.shortLabel} / {selectedModel}. Tempo estimado ~30s. Não feche a aba.
                     </span>
                 </div>
                 <div className="bg-muted text-muted-foreground px-4 py-3 font-jetbrains text-[10px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground/20">

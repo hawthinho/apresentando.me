@@ -102,7 +102,7 @@ export const parseResumeText = (content) => {
                         bullets: []
                     };
                     // Try to extract date from the line
-                    const dateMatch = line.match(/(\w+\/?\s*\d{4})\s*[-–]\s*(\w+\/?\s*\d{4}|Presente|Atual|até o momento)/i);
+                    const dateMatch = line.match(/(\w+\/?\s*\d{4})\s*[-\u2013]\s*(\w+\/?\s*\d{4}|Presente|Atual|até o momento)/i);
                     if (dateMatch) {
                         currentExperience.startDate = dateMatch[1];
                         currentExperience.endDate = dateMatch[2];
@@ -306,7 +306,7 @@ function parseExperienceLine(line) {
     };
 
     if (parts[2]) {
-        const periodMatch = parts[2].match(/(.+?)\s*[-–]\s*(.+)/);
+        const periodMatch = parts[2].match(/(.+?)\s*[-\u2013]\s*(.+)/);
         if (periodMatch) {
             exp.startDate = periodMatch[1].trim();
             exp.endDate = periodMatch[2].trim();
@@ -414,7 +414,7 @@ function parseLanguageLine(line) {
         };
     }
 
-    const dashMatch = line.match(/(.+?)\s*[-–]\s*(.+)/);
+    const dashMatch = line.match(/(.+?)\s*[-\u2013]\s*(.+)/);
     if (dashMatch) {
         return {
             language: dashMatch[1].trim(),

@@ -16,11 +16,11 @@ export const FileUpload = ({ file, onFileSelect }) => {
     const validateFile = (f) => {
         if (!f) return false;
         if (f.type !== 'application/pdf') {
-            setError('FORMATO INVÁLIDO — APENAS ARQUIVOS .PDF');
+            setError('FORMATO INVÁLIDO: APENAS ARQUIVOS .PDF');
             return false;
         }
         if (f.size > 10 * 1024 * 1024) {
-            setError('ARQUIVO EXCEDE 10MB — COMPRIMA E TENTE NOVAMENTE');
+            setError('ARQUIVO EXCEDE 10MB: COMPRIMA E TENTE NOVAMENTE');
             return false;
         }
         setError('');
@@ -91,7 +91,7 @@ export const FileUpload = ({ file, onFileSelect }) => {
                 aria-label="Upload de currículo em PDF"
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onButtonClick(); }}
             >
-                {/* Scanner line — empty state only */}
+                {/* Scanner line: empty state only */}
                 {!file && !dragActive && (
                     <>
                         <div className="absolute top-0 left-0 w-full h-[3px] bg-primary z-20 opacity-40" style={{ animation: 'scanner 4s cubic-bezier(0.4,0,0.2,1) infinite' }} />

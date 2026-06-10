@@ -237,7 +237,7 @@ const generateText = async ({ systemPrompt, userPrompt, temperature = 0.2, expec
 
 const STYLE_GUARDRAILS = `
 Regra de estilo obrigatória:
-- Nunca use travessão ou meia-risca. Os caracteres proibidos são "—" e "–".
+- Nunca use travessão ou meia-risca. Os caracteres proibidos são U+2014 e U+2013.
 - Para pausas e explicações, use ponto, vírgula, dois-pontos ou parênteses.
 - Não substitua travessão por hífen solto.
 `;
