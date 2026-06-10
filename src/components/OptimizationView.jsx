@@ -223,19 +223,6 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                     {icon}
                 </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-2 mt-4">
-                {COVER_LETTER_STYLES.map((style) => (
-                    <button
-                        key={style.id}
-                        type="button"
-                        onClick={() => setSelectedCoverLetterStyle(style.id)}
-                        className={`min-h-[5rem] border-2 p-3 text-left transition-all ${selectedCoverLetterStyle === style.id ? 'border-foreground bg-primary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-foreground/30 bg-white hover:border-foreground'}`}
-                    >
-                        <span className="block font-space font-black text-sm uppercase leading-tight">{style.label}</span>
-                        <span className="block font-jetbrains text-[10px] leading-snug mt-2 text-foreground/70">{style.description}</span>
-                    </button>
-                ))}
-            </div>
         </div>
     );
 
