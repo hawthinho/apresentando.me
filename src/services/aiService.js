@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getProvider } from "./providerConfig";
 import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from "./settingsService";
+import { sanitizeGeneratedText, stripAiDashMarks } from "./textSanitizer.js";
 
 const createMissingKeyError = (provider) => (
     `CHAVE DE API NÃO CONFIGURADA PARA ${provider.shortLabel.toUpperCase()}. Acesse as Configurações para inserir sua API Key.`
@@ -234,9 +235,17 @@ const generateText = async ({ systemPrompt, userPrompt, temperature = 0.2, expec
     });
 };
 
+const STYLE_GUARDRAILS = `
+Regra de estilo obrigatória:
+- Nunca use travessão ou meia-risca. Os caracteres proibidos são "—" e "–".
+- Para pausas e explicações, use ponto, vírgula, dois-pontos ou parênteses.
+- Não substitua travessão por hífen solto.
+`;
+
 const ANALYSIS_SYSTEM_PROMPT = `
 Você é o motor de análise de currículos de uma plataforma de recrutamento.
 Retorne sempre JSON válido, sem markdown, sem comentários e sem texto fora do objeto.
+${STYLE_GUARDRAILS}
 
 Execute DUAS análises separadas:
 
@@ -293,7 +302,7 @@ ${hasJobDescription ? jobDescription : "Não fornecida"}
             expectJson: true
         });
 
-        return normalizeAnalysis(parseJsonResponse(text), hasJobDescription);
+        return sanitizeGeneratedText(normalizeAnalysis(parseJsonResponse(text), hasJobDescription));
     } catch (error) {
         console.error("Erro na análise da IA:", error);
         throw new Error(error.message || "Falha ao analisar currículo pela IA.");
@@ -332,6 +341,7 @@ const getOptimizationInstructions = (aggressiveness) => {
 const OPTIMIZATION_SYSTEM_PROMPT = `
 Você é um otimizador de currículos sênior.
 Retorne apenas JSON válido, sem markdown e sem texto fora do objeto.
+${STYLE_GUARDRAILS}
 
 Regras:
 - Nunca invente empresas, cargos, datas, certificações, tecnologias ou resultados.
@@ -377,7 +387,7 @@ ${jobDescription || "Não fornecida. Otimize para clareza, leitura ATS e competi
             expectJson: true
         });
 
-        return normalizeOptimization(parseJsonResponse(text));
+        return sanitizeGeneratedText(normalizeOptimization(parseJsonResponse(text)));
     } catch (error) {
         console.error("Erro na otimização:", error);
         throw new Error(error.message || "Falha ao otimizar currículo.");
@@ -387,6 +397,7 @@ ${jobDescription || "Não fornecida. Otimize para clareza, leitura ATS e competi
 const COVER_LETTER_SYSTEM_PROMPT = `
 Você é um redator de carreira sênior.
 Escreva uma carta de apresentação em português do Brasil, humana e específica.
+${STYLE_GUARDRAILS}
 
 Direção de estilo:
 - Evite tom robótico, genérico ou subserviente.
@@ -417,7 +428,7 @@ Escreva uma carta que soe como uma pessoa competente falando com outra pessoa co
             expectJson: false
         });
 
-        return text.trim();
+        return stripAiDashMarks(text);
     } catch (error) {
         console.error("Erro na geração da carta de apresentação:", error);
         throw new Error(error.message || "Falha ao gerar a carta de apresentação.");
