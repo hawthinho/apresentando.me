@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const STEPS = [
     { id: 'extract', label: 'Extraindo conteúdo do PDF' },
     { id: 'structure', label: 'Analisando estrutura do currículo' },
-    { id: 'gemini', label: 'Análise Inteligente Gemini' },
+    { id: 'ai', label: 'Análise inteligente por IA' },
     { id: 'match', label: 'Calculando Match Score' },
     { id: 'report', label: 'Gerando relatório final' }
 ];
@@ -68,11 +68,11 @@ export const LoadingOverlay = () => {
             <style>{`
         .loading-overlay-root {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(15, 118, 110, 0.4); /* Subtle teal tint */
+          inset: 0;
+          min-height: 100dvh;
+          padding: 1.5rem;
+          box-sizing: border-box;
+          background-color: rgba(15, 118, 110, 0.32);
           backdrop-filter: blur(12px);
           display: flex;
           align-items: center;
@@ -82,40 +82,42 @@ export const LoadingOverlay = () => {
         }
 
         .loading-card {
-          background-color: var(--surface-card);
-          border-radius: var(--radius-2xl);
-          padding: var(--space-12);
-          width: 90%;
-          max-width: 480px;
-          box-shadow: var(--shadow-xl);
+          background-color: hsl(var(--background));
+          border-radius: 0;
+          padding: 2rem;
+          width: min(92vw, 440px);
+          box-sizing: border-box;
+          box-shadow: 8px 8px 0 rgba(0, 0, 0, 1);
           display: flex;
           flex-direction: column;
           align-items: center;
-          border: 1px solid var(--border-subtle);
+          justify-content: center;
+          border: 4px solid hsl(var(--foreground));
         }
 
         .loading-title {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: var(--space-8);
-            letter-spacing: -0.5px;
+            color: hsl(var(--foreground));
+            margin-bottom: 2rem;
+            letter-spacing: 0;
+            text-align: center;
         }
 
         /* Scanner Animation */
         .scanner-container {
             width: 120px;
             height: 150px;
-            margin-bottom: var(--space-8);
+            margin-bottom: 2rem;
             position: relative;
         }
 
         .document-outline {
             width: 100%;
             height: 100%;
-            border: 3px solid var(--border-default);
-            border-radius: var(--radius-lg);
-            background-color: var(--surface-subtle);
+            border: 3px solid hsl(var(--foreground));
+            border-radius: 0;
+            background-color: hsl(var(--muted));
             position: relative;
             overflow: hidden;
             display: flex;
@@ -126,7 +128,7 @@ export const LoadingOverlay = () => {
 
         .document-lines .line {
             height: 4px;
-            background-color: var(--border-subtle);
+            background-color: hsl(var(--foreground) / 0.25);
             border-radius: 2px;
         }
 
@@ -141,8 +143,8 @@ export const LoadingOverlay = () => {
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(to bottom, transparent, var(--action-primary), transparent);
-            box-shadow: 0 0 15px var(--action-primary);
+            background: linear-gradient(to bottom, transparent, hsl(var(--primary)), transparent);
+            box-shadow: 0 0 15px hsl(var(--primary));
             animation: scan 2s infinite ease-in-out;
         }
 
@@ -157,13 +159,13 @@ export const LoadingOverlay = () => {
           width: 100%;
           display: flex;
           flex-direction: column;
-          gap: var(--space-4);
+          gap: 1rem;
         }
 
         .loading-step {
           display: flex;
           align-items: center;
-          gap: var(--space-4);
+          gap: 1rem;
           opacity: 0.4;
           transition: all 0.3s ease;
         }
@@ -175,7 +177,7 @@ export const LoadingOverlay = () => {
 
         .loading-step.completed {
           opacity: 0.8;
-          color: var(--action-strong);
+          color: hsl(var(--foreground));
         }
 
         .step-indicator {
@@ -185,17 +187,17 @@ export const LoadingOverlay = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: var(--surface-subtle);
+          background-color: hsl(var(--muted));
           flex-shrink: 0;
         }
 
         .completed .step-indicator {
-          background-color: var(--action-primary);
+          background-color: hsl(var(--primary));
           color: #0d3509;
         }
 
         .current .step-indicator {
-          background-color: var(--action-strong);
+          background-color: hsl(var(--foreground));
         }
 
         .step-dot-active {
@@ -209,13 +211,29 @@ export const LoadingOverlay = () => {
         .step-dot {
             width: 6px;
             height: 6px;
-            background-color: var(--text-muted);
+            background-color: hsl(var(--foreground) / 0.5);
             border-radius: 50%;
         }
 
         .step-label {
           font-size: 0.9375rem;
           font-weight: 600;
+          color: hsl(var(--foreground));
+        }
+
+        @media (max-width: 520px) {
+          .loading-card {
+            padding: 1.5rem;
+          }
+
+          .scanner-container {
+            width: 96px;
+            height: 120px;
+          }
+
+          .loading-title {
+            font-size: 1.25rem;
+          }
         }
 
         .completed .step-label {

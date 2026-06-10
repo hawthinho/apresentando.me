@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { FileText, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { optimizeResume, generateCoverLetter } from '../services/aiService';
+import { COVER_LETTER_STYLES } from '../services/coverLetterStyles';
 import { generateResumePDF, generateCoverLetterPDF } from '../services/pdfExportService';
 import { parseResumeText, formatResumeToText, formatResumeToLatex, formatCoverLetterToLatex, formatCombinedToLatex } from '../services/resumeParser';
 
@@ -30,6 +32,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
     const [showCoverLetterLatex, setShowCoverLetterLatex] = useState(false);
     const [isEditingCoverLetter, setIsEditingCoverLetter] = useState(false);
+    const [selectedCoverLetterStyle, setSelectedCoverLetterStyle] = useState('');
 
     useEffect(() => {
         if (step === 'processing') {
@@ -138,10 +141,18 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     };
 
     const handleGenerateCoverLetter = async () => {
+        if (!selectedCoverLetterStyle) {
+            alert("Escolha um estilo de carta antes de gerar.");
+            return;
+        }
+
         setIsGeneratingCoverLetter(true);
         try {
-            const letter = await generateCoverLetter(getCurrentResumeContent(), jobDescription);
+            const letter = await generateCoverLetter(getCurrentResumeContent(), jobDescription, selectedCoverLetterStyle);
             setCoverLetter(letter);
+            setSelectedCoverLetterStyle('');
+            setIsEditingCoverLetter(false);
+            setShowCoverLetterLatex(false);
             if (onOptimizationComplete) {
                 onOptimizationComplete({
                     optimizedContent,
@@ -175,6 +186,58 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
         if (step === 'processing') return 1;
         return 2;
     };
+
+    const coverLetterParagraphs = coverLetter
+        ? coverLetter.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean)
+        : [];
+
+    const renderCoverLetterStylePicker = ({ buttonLabel, icon, compact = false }) => (
+        <div className={`w-full ${compact ? 'border-2 border-dashed border-foreground/30 bg-[#F4F4F0] p-5' : ''}`}>
+            <label htmlFor={compact ? 'cover-letter-style-regenerate' : 'cover-letter-style'} className="block font-jetbrains font-black uppercase text-xs text-foreground mb-3">
+                Estilo da carta
+            </label>
+            <div className="flex flex-col lg:flex-row gap-4">
+                <div className="relative flex-1">
+                    <select
+                        id={compact ? 'cover-letter-style-regenerate' : 'cover-letter-style'}
+                        value={selectedCoverLetterStyle}
+                        onChange={(event) => setSelectedCoverLetterStyle(event.target.value)}
+                        className="w-full min-h-[3.5rem] rounded-none border-4 border-foreground bg-white px-4 pr-12 font-jetbrains font-bold text-xs uppercase text-foreground focus:outline-none focus:ring-4 focus:ring-primary appearance-none"
+                    >
+                        <option value="">Selecione um estilo...</option>
+                        {COVER_LETTER_STYLES.map((style) => (
+                            <option key={style.id} value={style.id}>{style.label}</option>
+                        ))}
+                    </select>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+
+                <Button
+                    className="min-h-[3.5rem] h-auto px-6 rounded-none border-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black uppercase text-xs shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+                    onClick={handleGenerateCoverLetter}
+                    disabled={!selectedCoverLetterStyle || isGeneratingCoverLetter}
+                >
+                    {isGeneratingCoverLetter ? 'Gerando...' : buttonLabel}
+                    {icon}
+                </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-2 mt-4">
+                {COVER_LETTER_STYLES.map((style) => (
+                    <button
+                        key={style.id}
+                        type="button"
+                        onClick={() => setSelectedCoverLetterStyle(style.id)}
+                        className={`min-h-[5rem] border-2 p-3 text-left transition-all ${selectedCoverLetterStyle === style.id ? 'border-foreground bg-primary shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : 'border-foreground/30 bg-white hover:border-foreground'}`}
+                    >
+                        <span className="block font-space font-black text-sm uppercase leading-tight">{style.label}</span>
+                        <span className="block font-jetbrains text-[10px] leading-snug mt-2 text-foreground/70">{style.description}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
 
     return (
         <div className="w-full flex flex-col mt-8 md:mt-12 animate-in fade-in slide-in-from-bottom-12 duration-500 max-w-5xl lg:max-w-[70rem] mx-auto mb-24">
@@ -408,19 +471,16 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                             {/* Cover Letter Section */}
                             <div className="mt-8">
                                 {!coverLetter && !isGeneratingCoverLetter && (
-                                    <div className="border-4 border-foreground bg-primary/10 p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                        <div>
+                                    <div className="border-4 border-foreground bg-primary/10 p-8 flex flex-col gap-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                        <div className="max-w-3xl">
                                             <h4 className="font-space font-black text-2xl uppercase tracking-tighter border-b-2 border-foreground pb-1 inline-block">Potencialize sua aplicação</h4>
-                                            <p className="font-jetbrains text-sm mt-3 font-bold text-foreground/80">Gerar uma Carta de Apresentação (Cover Letter) sob medida baseada neste currículo otimizado e na vaga desejada.</p>
+                                            <p className="font-jetbrains text-sm mt-3 font-bold text-foreground/80">Escolha um estilo e gere uma Carta de Apresentação sob medida baseada neste currículo otimizado e na vaga desejada.</p>
                                         </div>
-                                        <Button className="shrink-0 h-14 px-8 rounded-none border-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none" onClick={handleGenerateCoverLetter}>
-                                            Gerar Carta
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-5 h-5 ml-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                        </Button>
+                                        {renderCoverLetterStylePicker({ buttonLabel: 'Gerar Carta', icon: <FileText className="w-5 h-5 ml-2" strokeWidth={3} /> })}
                                     </div>
                                 )}
 
-                                {isGeneratingCoverLetter && (
+                                {isGeneratingCoverLetter && !coverLetter && (
                                     <div className="border-4 border-foreground bg-background p-8 flex flex-col items-center justify-center gap-4 border-dashed shadow-none opacity-70">
                                         <div className="w-8 h-8 border-4 border-primary rounded-full border-t-foreground animate-spin"></div>
                                         <span className="font-jetbrains font-bold uppercase tracking-widest text-xs animate-pulse">Forjando Carta Estratégica...</span>
@@ -432,8 +492,15 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         <div className="absolute -top-4 -left-4 bg-primary text-foreground font-jetbrains font-black text-[10px] uppercase px-3 py-1">Cover Letter Gerada</div>
                                         
                                         {!isEditingCoverLetter ? (
-                                            <div className="font-jetbrains text-sm leading-relaxed whitespace-pre-line bg-muted/30 p-6 border-2 border-dashed border-foreground/30 min-h-[200px]">
-                                                {coverLetter}
+                                            <div className="bg-[#FBFBF7] border-2 border-foreground/20 p-6 md:p-10 min-h-[240px]">
+                                                <div className="border-b border-foreground/20 pb-4 mb-6">
+                                                    <span className="font-jetbrains font-black uppercase text-[10px] text-foreground/50">Carta de apresentação</span>
+                                                </div>
+                                                <div className="font-sans text-[15px] md:text-base leading-8 text-foreground space-y-5">
+                                                    {coverLetterParagraphs.map((paragraph, index) => (
+                                                        <p key={index}>{paragraph}</p>
+                                                    ))}
+                                                </div>
                                             </div>
                                         ) : (
                                             <textarea 
@@ -457,6 +524,12 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                                 {isEditingCoverLetter ? 'Finalizar Edição' : 'Editar Carta'}
                                             </Button>
+                                        </div>
+
+                                        <div className="mt-2">
+                                            <h5 className="font-space font-black text-xl uppercase mb-3">Gerar outra versão</h5>
+                                            <p className="font-jetbrains text-xs font-bold uppercase text-foreground/60 mb-4">Selecione um estilo novamente para criar uma nova carta.</p>
+                                            {renderCoverLetterStylePicker({ buttonLabel: 'Gerar Novamente', icon: <RefreshCw className="w-5 h-5 ml-2" strokeWidth={3} />, compact: true })}
                                         </div>
 
                                         {/* LaTeX de Cover Letter */}

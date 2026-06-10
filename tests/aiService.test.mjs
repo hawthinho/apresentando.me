@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { COVER_LETTER_STYLES, getCoverLetterStyle } from '../src/services/coverLetterStyles.js';
 import { sanitizeCoverLetterText, sanitizeGeneratedText, stripAiDashMarks } from '../src/services/textSanitizer.js';
 
 test('stripAiDashMarks removes em and en dash punctuation from generated prose', () => {
@@ -41,4 +42,14 @@ test('sanitizeCoverLetterText removes pushy scheduling closes and formats paragr
     assert.match(sanitized, /^Olá, time de Produto da Serasa Experian\./);
     assert.doesNotMatch(sanitized, /agendar|30 minutos|fico no aguardo|valor imediato/i);
     assert.match(sanitized, /\n\n/);
+});
+
+test('cover letter styles expose five selectable prompt variants with fallback', () => {
+    assert.equal(COVER_LETTER_STYLES.length, 5);
+    assert.deepEqual(
+        COVER_LETTER_STYLES.map((style) => style.id),
+        ['direta', 'consultiva', 'humana', 'executiva', 'criativa']
+    );
+    assert.equal(getCoverLetterStyle('humana').label, 'Humana e natural');
+    assert.equal(getCoverLetterStyle('invalida').id, 'direta');
 });

@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getCoverLetterStyle } from "./coverLetterStyles";
 import { getProvider } from "./providerConfig";
 import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from "./settingsService";
 import { sanitizeCoverLetterText, sanitizeGeneratedText } from "./textSanitizer.js";
@@ -413,16 +414,23 @@ Direção de estilo:
 - Termine com interesse em contribuir para o time ou seguir nas próximas etapas, sem pedir agenda.
 `;
 
-export const generateCoverLetter = async (resumeText, jobDescription) => {
+export const generateCoverLetter = async (resumeText, jobDescription, styleId = 'direta') => {
     try {
+        const selectedStyle = getCoverLetterStyle(styleId);
         const userPrompt = `
+ESTILO ESCOLHIDO:
+${selectedStyle.label}
+
+INSTRUÇÕES DO ESTILO:
+${selectedStyle.prompt}
+
 CURRÍCULO DO CANDIDATO:
 ${resumeText}
 
 VAGA DE DESTINO:
 ${jobDescription || "Não especificada"}
 
-Escreva uma carta que soe como uma pessoa competente falando com outra pessoa competente. Use detalhes reais do currículo, escolha 2 ou 3 evidências fortes e feche de forma confiante, sem tentar marcar conversa.
+Escreva uma carta que soe como uma pessoa competente falando com outra pessoa competente. Use detalhes reais do currículo, escolha 2 ou 3 evidências fortes, respeite o estilo escolhido e feche de forma confiante, sem tentar marcar conversa.
 `;
 
         const text = await generateText({
