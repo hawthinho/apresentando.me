@@ -13,17 +13,18 @@ import { SettingsView } from './components/SettingsView';
 import { DonationBanner } from './components/DonationBanner';
 
 import { analyzeResume } from './services/aiService';
-import { extractTextFromPdf } from './services/pdfService';
-import { getAnalysisHistory, saveAnalysis, updateAnalysis } from './services/historyService';
+import { extractResumeFromPdf } from './services/pdfService';
+import { clearAnalysisHistory, getAnalysisHistory, saveAnalysis, updateAnalysis } from './services/historyService';
 
 /* ── Error Toast ─────────────────────────────────────────── */
 const ErrorToast = ({ message, onDismiss }) => {
-  if (!message) return null;
-
   React.useEffect(() => {
+    if (!message) return undefined;
     const timer = setTimeout(onDismiss, 6000);
     return () => clearTimeout(timer);
   }, [message, onDismiss]);
+
+  if (!message) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-[100] bg-destructive text-destructive-foreground border-4 border-foreground p-4 font-jetbrains font-bold uppercase shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center gap-3 animate-in slide-in-from-bottom-5" role="alert">
@@ -90,10 +91,10 @@ function App() {
     setError(null);
 
     try {
-      const text = await extractTextFromPdf(file);
+      const { text, metadata } = await extractResumeFromPdf(file);
       setResumeText(text);
 
-      const result = await analyzeResume(text, jobDescription);
+      const result = await analyzeResume(text, jobDescription, metadata);
       await new Promise(resolve => setTimeout(resolve, 3000));
 
       setAnalysisData(result);
@@ -188,7 +189,11 @@ function App() {
                     setView('results');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }} 
-                onBack={() => setView('upload')} 
+                onBack={() => setView('upload')}
+                onClearHistory={() => {
+                    clearAnalysisHistory();
+                    setHistory([]);
+                }}
             />
         )}
 

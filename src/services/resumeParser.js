@@ -287,7 +287,7 @@ function parseContactLine(line, contact) {
             contact.linkedin = part;
         } else if (part.match(/behance|dribbble|github|gitlab|portfolio|figma\.com/i)) {
             contact.portfolio = part;
-        } else if (part.match(/[\d\s\-\+\(\)]{8,}/)) {
+        } else if (part.match(/[\d\s+()-]{8,}/)) {
             contact.phone = part;
         } else if (part.length > 0 && !contact.location) {
             contact.location = part;

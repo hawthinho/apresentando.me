@@ -42,6 +42,10 @@ export const deleteAnalysis = (analysisId) => {
     localStorage.setItem(getStorageKey(), JSON.stringify(updatedHistory));
 };
 
+export const clearAnalysisHistory = () => {
+    localStorage.removeItem(getStorageKey());
+};
+
 export const updateAnalysis = (analysisId, updates) => {
     const history = getAnalysisHistory();
     const updatedHistory = history.map(item => {

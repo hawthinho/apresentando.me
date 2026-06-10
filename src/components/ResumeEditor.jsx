@@ -1,5 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+
+const EditorSectionHeader = ({ title, icon, section, isExpanded, onToggle }) => (
+    <div
+        className={`flex items-center justify-between p-6 cursor-pointer border-b-4 border-foreground transition-colors ${isExpanded ? 'bg-primary text-foreground' : 'bg-white hover:bg-muted'}`}
+        onClick={() => onToggle(section)}
+    >
+        <div className="flex items-center gap-4">
+            <div className="shrink-0 flex items-center justify-center">
+                {icon}
+            </div>
+            <h3 className="font-space font-black text-xl md:text-2xl uppercase tracking-tighter">{title}</h3>
+        </div>
+        <button className={`shrink-0 transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+    </div>
+);
 
 export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
     const [data, setData] = useState(resumeData);
@@ -10,13 +29,6 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
     const [softSkillsText, setSoftSkillsText] = useState(
         (resumeData?.skills?.soft || []).join(', ')
     );
-
-    useEffect(() => {
-        if (resumeData?.skills) {
-            setHardSkillsText((resumeData.skills.hard || []).join(', '));
-            setSoftSkillsText((resumeData.skills.soft || []).join(', '));
-        }
-    }, [resumeData]);
 
     const [expandedSections, setExpandedSections] = useState({
         contact: true,
@@ -104,25 +116,6 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
         onUpdate?.(newData);
     };
 
-    const SectionHeader = ({ title, icon, section }) => (
-        <div
-            className={`flex items-center justify-between p-6 cursor-pointer border-b-4 border-foreground transition-colors ${expandedSections[section] ? 'bg-primary text-foreground' : 'bg-white hover:bg-muted'}`}
-            onClick={() => toggleSection(section)}
-        >
-            <div className="flex items-center gap-4">
-                <div className="shrink-0 flex items-center justify-center">
-                    {icon}
-                </div>
-                <h3 className="font-space font-black text-xl md:text-2xl uppercase tracking-tighter">{title}</h3>
-            </div>
-            <button className={`shrink-0 transition-transform ${expandedSections[section] ? 'rotate-180' : ''}`}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
-        </div>
-    );
-
     const inputClasses = "w-full bg-background border-2 border-foreground p-4 font-jetbrains text-sm focus:outline-none focus:ring-4 focus:ring-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all";
     const labelClasses = "block font-space font-black uppercase tracking-tighter text-sm mb-2 text-foreground";
     const sectionContainerClasses = "mb-8 border-4 border-foreground bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]";
@@ -153,7 +146,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                 
                 {/* Contact Info */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Informações de Contato" section="contact" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>} />
+                    <EditorSectionHeader title="Informações de Contato" section="contact" isExpanded={expandedSections.contact} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>} />
                     {expandedSections.contact && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0]">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -188,7 +181,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Professional Summary */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Resumo Profissional" section="summary" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>} />
+                    <EditorSectionHeader title="Resumo Profissional" section="summary" isExpanded={expandedSections.summary} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>} />
                     {expandedSections.summary && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0]">
                             <label className={labelClasses}>Descrição</label>
@@ -199,7 +192,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Experiences */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Experiência Profissional" section="experiences" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><rect x="2" y="7" width="20" height="14"></rect><path d="M16 21V5h-8v16"></path></svg>} />
+                    <EditorSectionHeader title="Experiência Profissional" section="experiences" isExpanded={expandedSections.experiences} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><rect x="2" y="7" width="20" height="14"></rect><path d="M16 21V5h-8v16"></path></svg>} />
                     {expandedSections.experiences && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
                             {data.experiences.map((exp, expIndex) => (
@@ -257,7 +250,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Skills */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Competências" section="skills" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>} />
+                    <EditorSectionHeader title="Competências" section="skills" isExpanded={expandedSections.skills} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>} />
                     {expandedSections.skills && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-6">
                             <div>
@@ -280,7 +273,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Education */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Formação Acadêmica" section="education" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>} />
+                    <EditorSectionHeader title="Formação Acadêmica" section="education" isExpanded={expandedSections.education} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>} />
                     {expandedSections.education && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
                             {data.education.map((edu, eduIndex) => (
@@ -304,7 +297,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Certificates */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Certificações" section="certificates" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M10 2v7.31"></path><path d="M14 2v7.31"></path><rect x="4" y="2" width="16" height="20"></rect><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>} />
+                    <EditorSectionHeader title="Certificações" section="certificates" isExpanded={expandedSections.certificates} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M10 2v7.31"></path><path d="M14 2v7.31"></path><rect x="4" y="2" width="16" height="20"></rect><path d="M8 13h8"></path><path d="M8 17h8"></path></svg>} />
                     {expandedSections.certificates && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
                             {data.certificates.map((cert, certIndex) => (
@@ -328,7 +321,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Languages */}
                 <div className={sectionContainerClasses}>
-                    <SectionHeader title="Idiomas" section="languages" icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>} />
+                    <EditorSectionHeader title="Idiomas" section="languages" isExpanded={expandedSections.languages} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>} />
                     {expandedSections.languages && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-6">
                             {data.languages.map((lang, langIndex) => (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ScoreSection } from './ScoreSection';
 import { MatchReport } from './MatchReport';
@@ -6,7 +6,7 @@ import { StrengthsSection } from './StrengthsSection';
 import { ImprovementsSection } from './ImprovementsSection';
 import { OptimizationPromoCard } from './OptimizationPromoCard';
 
-export const ResultsView = ({ data, resumeText, jobDescription, onBack, onOpenEditor, editedResumeData, onNavigateOptimization, isOptimized }) => {
+export const ResultsView = ({ data, onBack, onNavigateOptimization, isOptimized }) => {
 
     return (
         <div className="w-full flex flex-col gap-12 mt-8 md:mt-12 lg:mt-16 animate-in fade-in slide-in-from-bottom-12 duration-500 max-w-7xl lg:max-w-[90rem] mx-auto">

@@ -8,6 +8,9 @@
   [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](#)
   [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#)
   [![Gemini API](https://img.shields.io/badge/Google_Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)](#)
+  [![OpenRouter](https://img.shields.io/badge/OpenRouter-111111?style=for-the-badge&logoColor=white)](#)
+  [![DeepSeek](https://img.shields.io/badge/DeepSeek_V4-1A1A1A?style=for-the-badge&logoColor=white)](#)
+  [![Z.ai](https://img.shields.io/badge/Z.ai_GLM_5.1-00B386?style=for-the-badge&logoColor=white)](#)
 </div>
 
 ---
@@ -23,13 +26,13 @@ O **APRESENTANDO.ME** é uma plataforma inovadora baseada no conceito de _Editor
 4. **Gerar Cover Letters incríveis** vinculando sua bagagem exata com a descrição da vaga.
 5. **Entregar o resultado final perfeitamente estruturado** em PDF ou LaTeX.
 
-Tudo isso **[100% de forma local no seu navegador]**, focando em garantir o máximo da sua privacidade.
+O app roda sem backend próprio: arquivos, histórico e chaves ficam no navegador. Durante análises e gerações, o currículo e a vaga são enviados ao provedor de IA escolhido pelo usuário.
 
 ---
 
 ## 🔥 Principais Funcionalidades
 
-- 📄 **Leitura inteligente de PDF (`pdfjs`):** Extrai o texto cru do seu currículo.
+- 📄 **Leitura inteligente de PDF (`pdfjs`):** Extrai texto e sinais estruturais do PDF, como possível layout em colunas, sidebar e imagens.
 - 🎯 **Três Tipos de Diagnósticos Isolados:**
   - **ATS Score:** Analisa o layout (duas colunas, ícones, imagens) e deduz penalizações.
   - **Match Score:** Avalia seu encaixe para a vaga desejada.
@@ -39,7 +42,7 @@ Tudo isso **[100% de forma local no seu navegador]**, focando em garantir o máx
   - Refaz o seu texto, reordena tópicos e converte parágrafos genéricos em resultados mensuráveis.
 - 💌 **Redação de Cover Letters:** Cria cartas de apresentação altamente magnéticas e baseadas no seu histórico.
 - 📝 **Editor Inteligente (JSON Parsing):** Possui edição manual pós-IA. Você sempre tem a palavra final.
-- 🛡️ **Privacidade "Serverless":** Não guardamos as chaves de API, nem seu currículo. Todo o histórico (*cache*) e análises são mantidos exclusivamente na sua máquina, e os cálculos ocorrem direto entre seu computador e o Google.
+- 🛡️ **Privacidade BYOK:** Não há armazenamento em servidor próprio. API keys e histórico ficam no Local Storage, com opção de limpar chaves e histórico pela interface.
 - 💅 **Código LaTeX exportável:** Fornecemos o código fonte de cada versão final do currículo, ou um PDF compilado instantaneamente.
 
 ---
@@ -50,7 +53,8 @@ Este projeto foi construído usando tecnologias modernas focadas em agilidade e 
 
 - **React (`^19.x`)** via **Vite** para a interface interativa.
 - **TailwindCSS** para uma estilização performática e semântica.
-- **@google/generative-ai** como motor de LLM (usando `Gemini 3 Flash Preview`).
+- **@google/generative-ai** como motor Gemini padrão (usando `gemini-3.5-flash`).
+- **OpenRouter / DeepSeek / Z.ai** por API compatível com OpenAI Chat Completions.
 - **pdfjs-dist** para manipulação binária e visual do documento via Client-side.
 - **jsPDF** para emissão de PDFs dinâmicos baseados no JSON otimizado.
 
@@ -78,27 +82,40 @@ Este projeto foi construído usando tecnologias modernas focadas em agilidade e 
 
 4. Acesse em seu navegador a porta fornecida (normalmente: `http://localhost:5173`).
 
+5. **Validações locais**
+   ```bash
+   npm test
+   npm run lint
+   npm run build
+   ```
+
 ---
 
 ## 🔑 Como Utilizar o Sistema
 
-O APRESENTANDO.ME é moldado para operar num formato BYOK (*Bring Your Own Key*), garantindo controle total.
+O APRESENTANDO.ME opera no formato BYOK (*Bring Your Own Key*). Acesse **Configurações** no app, escolha o provedor/modelo e cole a API key correspondente.
 
-### 1. Obtenha sua Gemini API Key
-- Acesse o [Google AI Studio](https://aistudio.google.com/).
-- Crie uma nova API Key (o uso na camada gratuita possui franquia suficiente de Requisições por Minuto para o seu dia a dia).
+### Provedores suportados
 
-### 2. Configure-a no Menu do App
-- Clique no menu **Settings / Configuração de Módulos (Engrenagem)** no topo superior esquerdo da interface principal.
-- Insira sua chave e escolha o modelo `gemini-3-flash-preview` (ou o fallback gratuito atual do pacote básico).
+- **Google Gemini (`gemini-3.5-flash`)**
+  Obtenha chave em [Google AI Studio](https://aistudio.google.com/apikey). Possui cota gratuita e uso pago conforme sua conta.
 
-### 3. Diagnose e Override
+- **OpenRouter (`openrouter/free`)**
+  Obtenha chave em [OpenRouter Keys](https://openrouter.ai/keys). A opção padrão usa o Free Router, que escolhe modelos gratuitos compatíveis e pode variar em velocidade/disponibilidade. Também há modelos pagos via OpenRouter, como DeepSeek V4 Pro e Z.ai GLM 5.1.
+
+- **DeepSeek (`deepseek-v4-pro`)**
+  Obtenha chave em [DeepSeek Platform](https://platform.deepseek.com/api_keys). Modelo pago por token, recomendado quando você quer maior estabilidade que o roteador gratuito.
+
+- **Z.ai (`glm-5.1`)**
+  Obtenha chave em [Z.ai Model API](https://z.ai/model-api). Use a API geral da Z.ai; o endpoint de Coding Plan é voltado para ferramentas de coding específicas.
+
+### Diagnose e Override
 - Faça o upload do seu currículo antigo em `.PDF`.
 - Colete toda a descrição da vaga na caixa correspondente.
 - Pressione o botão para submeter a análise.
 - Leia o painel com as críticas e scores, em seguida, pule para a seção de `Override (Otimização Completa)` para engajar as rotinas de AI e reescrever seu currículo de acordo com o nível que desejar.
 
-> **Importante:** Sempre faça download das compilações finais ou guarde o arquivo LaTeX gerado! Caso você limpe o cache do seu navegador, seu Histórico de Análises será deletado!
+> **Importante:** Sempre faça download das compilações finais ou guarde o arquivo LaTeX gerado. Caso você limpe o cache do navegador, seu Histórico de Análises e chaves locais serão deletados.
 
 ---
 

@@ -12,7 +12,6 @@ export const ScoreSection = ({ score, probability, reason }) => {
     const normalizedScore = Math.max(0, Math.min(100, score || 0));
     const offset = circumference * (1 - normalizedScore / 100);
 
-    const getStatusColor = (s) => s >= 80 ? 'text-primary' : s >= 50 ? 'text-orange-500' : 'text-destructive';
     const getStrokeColor = (s) => s >= 80 ? 'stroke-primary' : s >= 50 ? 'stroke-orange-500' : 'stroke-destructive';
 
     return (

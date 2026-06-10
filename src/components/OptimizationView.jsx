@@ -3,6 +3,15 @@ import { Button } from '@/components/ui/button';
 import { optimizeResume, generateCoverLetter } from '../services/aiService';
 import { generateResumePDF, generateCoverLetterPDF } from '../services/pdfExportService';
 import { parseResumeText, formatResumeToText, formatResumeToLatex, formatCoverLetterToLatex, formatCombinedToLatex } from '../services/resumeParser';
+
+const LOADING_STEPS = [
+    { id: 'analyze', label: 'Analisando compatibilidade' },
+    { id: 'keywords', label: 'Injetando palavras-chave' },
+    { id: 'rewrite', label: 'Reescrevendo descrições' },
+    { id: 'format', label: 'Ajustando formatação ATS' },
+    { id: 'finalize', label: 'Gerando versão final' }
+];
+
 export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, editedResumeData, onBack, initialOptimizedContent, initialLatexCode, initialImprovements, initialImpact, initialCoverLetter, onOptimizationComplete }) => {
     const [step, setStep] = useState(initialOptimizedContent ? 'success' : 'config'); // config, processing, success
     const [improvements, setImprovements] = useState(initialImprovements || null);
@@ -21,14 +30,6 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     const [isGeneratingCoverLetter, setIsGeneratingCoverLetter] = useState(false);
     const [showCoverLetterLatex, setShowCoverLetterLatex] = useState(false);
     const [isEditingCoverLetter, setIsEditingCoverLetter] = useState(false);
-
-    const LOADING_STEPS = [
-        { id: 'analyze', label: 'Analisando compatibilidade' },
-        { id: 'keywords', label: 'Injetando palavras-chave' },
-        { id: 'rewrite', label: 'Reescrevendo descrições' },
-        { id: 'format', label: 'Ajustando formatação ATS' },
-        { id: 'finalize', label: 'Gerando versão final' }
-    ];
 
     useEffect(() => {
         if (step === 'processing') {
@@ -130,15 +131,16 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
         generateResumePDF(updatedContent, 'curriculo_editado.pdf');
     };
 
-    const api_clipboard_writeText = (text) => {
-        navigator.clipboard.writeText(text);
-        alert("Conteúdo copiado! Cole no Prism para gerar o LaTeX.");
+    const getCurrentResumeContent = () => {
+        if (parsedResume) return formatResumeToText(parsedResume);
+        if (optimizedContent) return optimizedContent;
+        return resumeText;
     };
 
     const handleGenerateCoverLetter = async () => {
         setIsGeneratingCoverLetter(true);
         try {
-            const letter = await generateCoverLetter(resumeText, jobDescription);
+            const letter = await generateCoverLetter(getCurrentResumeContent(), jobDescription);
             setCoverLetter(letter);
             if (onOptimizationComplete) {
                 onOptimizationComplete({

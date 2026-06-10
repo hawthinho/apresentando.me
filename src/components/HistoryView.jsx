@@ -1,7 +1,13 @@
 import React from 'react';
 import { formatHistoryDate } from '../services/historyService';
 
-export const HistoryView = ({ history, onSelectAnalysis, onBack }) => {
+export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory }) => {
+    const handleClearHistory = () => {
+        if (window.confirm('Apagar todo o histórico salvo neste navegador?')) {
+            onClearHistory?.();
+        }
+    };
+
     return (
         <div className="w-full flex flex-col mt-8 animate-in fade-in slide-in-from-bottom-12 duration-500 max-w-5xl mx-auto">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-8 border-b-4 border-foreground">
@@ -13,13 +19,24 @@ export const HistoryView = ({ history, onSelectAnalysis, onBack }) => {
                         Histórico de <br/><span className="text-background bg-foreground px-2 inline-block mt-2 -rotate-1">Análises.</span>
                     </h1>
                 </div>
-                <button
-                    onClick={onBack}
-                    className="self-start md:self-auto rounded-none bg-white hover:bg-muted text-foreground border-4 border-foreground font-jetbrains font-black uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none transition-all flex items-center gap-3 h-14 px-8 shrink-0"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
-                    Voltar
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                    {history.length > 0 && (
+                        <button
+                            onClick={handleClearHistory}
+                            className="self-start md:self-auto rounded-none bg-white hover:bg-destructive hover:text-destructive-foreground text-foreground border-4 border-foreground font-jetbrains font-black uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none transition-all flex items-center gap-3 h-14 px-6 shrink-0"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>
+                            Limpar
+                        </button>
+                    )}
+                    <button
+                        onClick={onBack}
+                        className="self-start md:self-auto rounded-none bg-white hover:bg-muted text-foreground border-4 border-foreground font-jetbrains font-black uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none transition-all flex items-center gap-3 h-14 px-8 shrink-0"
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+                        Voltar
+                    </button>
+                </div>
             </header>
 
             <div className="bg-[#D4FF00] text-foreground p-4 border-4 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-jetbrains font-bold text-xs uppercase mb-6 flex items-center gap-4">

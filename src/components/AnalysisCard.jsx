@@ -1,7 +1,8 @@
 import React from 'react';
 import { FileUpload } from './FileUpload';
 import { JobInput } from './JobInput';
-import { getSettings } from '../services/settingsService';
+import { getProvider } from '../services/providerConfig';
+import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from '../services/settingsService';
 
 export const AnalysisCard = ({
     file,
@@ -13,7 +14,9 @@ export const AnalysisCard = ({
 }) => {
     const firstName = 'Operador';
     const settings = getSettings();
-    const hasApiKey = Boolean(settings?.apiKey);
+    const provider = getProvider(settings.provider);
+    const selectedModel = getSelectedModelForSettings(settings);
+    const hasApiKey = Boolean(getApiKeyForSettings(settings));
 
     return (
         <div className="w-full max-w-5xl lg:max-w-6xl mx-auto flex flex-col mt-2 md:mt-6 lg:mt-10 mb-24 relative">
@@ -52,7 +55,7 @@ export const AnalysisCard = ({
                         <div className="flex items-center gap-3">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 hidden md:block"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
                             <span className="opacity-95 leading-relaxed">
-                                <span className="md:hidden">✨ </span>Primeiro acesso? Vá até as configurações e adicione uma API Key gratuitamente.
+                                Primeiro acesso? Vá até as configurações e adicione uma API Key para {provider.shortLabel}.
                             </span>
                         </div>
                         <button
@@ -173,13 +176,13 @@ export const AnalysisCard = ({
                 <div className="bg-foreground text-primary px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
                     <span className="w-2 h-2 bg-primary rounded-full animate-pulse shrink-0" />
                     <span className="opacity-80">
-                        Processamento Avançado via IA Local — tempo estimado ~30s. Não feche a aba.
+                        Motor selecionado: {provider.shortLabel} / {selectedModel} — tempo estimado ~30s. Não feche a aba.
                     </span>
                 </div>
                 <div className="bg-muted text-muted-foreground px-4 py-3 font-jetbrains text-[10px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground/20">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     <span className="opacity-80">
-                        Privacidade Garantida: Seus arquivos e dados são processados inteiramente no seu navegador e não são armazenados em nossos servidores.
+                        Seus dados não passam por servidores próprios do app, mas currículo e vaga são enviados ao provedor de IA selecionado.
                     </span>
                 </div>
             </div>

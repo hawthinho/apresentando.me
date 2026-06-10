@@ -1,318 +1,425 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getSettings } from "./settingsService";
+import { getProvider } from "./providerConfig";
+import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from "./settingsService";
 
-export const getGenAIInstance = () => {
-    const settings = getSettings();
-    if (!settings.apiKey) {
-        throw new Error("CHAVE DE API NÃO CONFIGURADA. Acesse as Configurações para inserir sua API Key.");
+const createMissingKeyError = (provider) => (
+    `CHAVE DE API NÃO CONFIGURADA PARA ${provider.shortLabel.toUpperCase()}. Acesse as Configurações para inserir sua API Key.`
+);
+
+const extractJsonText = (text) => {
+    const cleaned = String(text || '').replace(/```json/g, '').replace(/```/g, '').trim();
+
+    try {
+        JSON.parse(cleaned);
+        return cleaned;
+    } catch {
+        const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            throw new Error("Resposta da IA não contém JSON válido.");
+        }
+        return jsonMatch[0];
     }
-    return new GoogleGenerativeAI(settings.apiKey);
 };
 
-const SYSTEM_PROMPT = `
-Você é o motor de análise de currículos de uma plataforma de recrutamento de nível enterprise.
-Sua função é executar DUAS análises SEPARADAS e INDEPENDENTES:
+const parseJsonResponse = (text) => JSON.parse(extractJsonText(text));
 
-## ANÁLISE 1: ATS SCORE (Compatibilidade Técnica com Sistemas ATS)
-Esta análise avalia se o currículo será PARSEADO CORRETAMENTE por sistemas ATS.
-IMPORTANTE: Sistemas ATS reais NÃO conseguem ler layouts complexos, duas colunas, fotos ou sidebars.
+const asText = (value, fallback = '') => {
+    if (value === null || value === undefined) return fallback;
+    return String(value).trim();
+};
 
-### PONTUAÇÃO BASE: Comece com 100 pontos e SUBTRAIA conforme problemas encontrados:
+const asScore = (value, fallback = 0) => {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return fallback;
+    return Math.max(0, Math.min(100, Math.round(number)));
+};
 
-**PENALIZAÇÕES CRÍTICAS (layout que QUEBRA parsing do ATS):**
-- Layout em DUAS COLUNAS ou mais: **-30 pontos** (ATS lê linha por linha, colunas misturam texto)
-- Possui FOTO/IMAGEM do candidato: **-15 pontos** (ocupa espaço e pode confundir OCR)
-- SIDEBAR com informações: **-20 pontos** (ATS não sabe ler barras laterais)
-- Tabelas ou caixas de texto: **-15 pontos** (estrutura não-linear)
-- Ícones ou elementos gráficos decorativos: **-10 pontos** (não são texto)
-- Headers/footers complexos: **-5 pontos**
+const asNullableScore = (value) => {
+    if (value === null || value === undefined || value === '') return null;
+    return asScore(value, 0);
+};
 
-**PENALIZAÇÕES MODERADAS (conteúdo subótimo):**
-- Falta seção de Resumo/Objetivo: **-8 pontos**
-- Falta seção de Experiência clara: **-10 pontos**
-- Falta seção de Formação: **-6 pontos**
-- Falta seção de Habilidades: **-6 pontos**
-- Falta informações de contato (email/telefone): **-8 pontos**
-- Não usa bullet points nas experiências: **-5 pontos**
-- Parágrafos muito longos (blocos de texto): **-5 pontos**
-- Não usa verbos de ação: **-5 pontos**
-- Não quantifica resultados: **-5 pontos**
+const asStringArray = (value, limit = 10) => {
+    if (!Array.isArray(value)) return [];
+    return value.map((item) => asText(item)).filter(Boolean).slice(0, limit);
+};
 
-### INTERPRETAÇÃO DO SCORE:
-- **85-100**: Formato ideal para ATS. Coluna única, estrutura limpa.
-- **70-84**: Bom formato com pequenos ajustes recomendados.
-- **50-69**: Formato problemático. Pode ter parsing parcial.
-- **0-49**: Formato RUIM. Alto risco de rejeição automática por falha de parsing.
+const normalizeStrengths = (value) => {
+    if (!Array.isArray(value)) return [];
+    return value
+        .map((item) => ({
+            title: asText(item?.title).slice(0, 80),
+            description: asText(item?.description).slice(0, 180)
+        }))
+        .filter((item) => item.title || item.description)
+        .slice(0, 3);
+};
 
-### PROBABILIDADE DE LEITURA ATS:
-- **Alta (≥75)**: Estrutura em coluna única, sem elementos visuais, seções claras.
-- **Média (50-74)**: Alguns elementos problemáticos, parsing parcial provável.
-- **Baixa (<50)**: Layout complexo (duas colunas, sidebar, foto) que ATS não consegue ler.
+const normalizeAnalysis = (data, hasJobDescription) => ({
+    atsScore: asScore(data?.atsScore),
+    probability: ['Alta', 'Média', 'Baixa'].includes(data?.probability) ? data.probability : 'Média',
+    screeningReason: asText(data?.screeningReason, 'Estrutura analisada com base no texto extraído do PDF.'),
+    matchScore: hasJobDescription ? asNullableScore(data?.matchScore) : null,
+    matchAnalysis: hasJobDescription ? asText(data?.matchAnalysis) || null : null,
+    foundKeywords: hasJobDescription ? asStringArray(data?.foundKeywords, 10) : null,
+    missingKeywords: hasJobDescription ? asStringArray(data?.missingKeywords, 10) : null,
+    strengths: normalizeStrengths(data?.strengths),
+    keywordOps: asStringArray(data?.keywordOps, 10),
+    tips: asStringArray(data?.tips, 5)
+});
 
-**REGRA DE OURO**: Se o currículo tem LAYOUT EM DUAS COLUNAS ou SIDEBAR, o score NUNCA pode ser acima de 55.
+const normalizeResumeData = (resumeData = {}) => ({
+    contact: {
+        name: asText(resumeData.contact?.name),
+        email: asText(resumeData.contact?.email),
+        phone: asText(resumeData.contact?.phone),
+        linkedin: asText(resumeData.contact?.linkedin),
+        portfolio: asText(resumeData.contact?.portfolio),
+        location: asText(resumeData.contact?.location)
+    },
+    summary: asText(resumeData.summary),
+    experiences: Array.isArray(resumeData.experiences) ? resumeData.experiences.map((exp) => ({
+        role: asText(exp?.role),
+        company: asText(exp?.company),
+        startDate: asText(exp?.startDate),
+        endDate: asText(exp?.endDate),
+        bullets: asStringArray(exp?.bullets, 12)
+    })).filter((exp) => exp.role || exp.company || exp.bullets.length) : [],
+    skills: {
+        hard: asStringArray(resumeData.skills?.hard, 40),
+        soft: asStringArray(resumeData.skills?.soft, 20)
+    },
+    education: Array.isArray(resumeData.education) ? resumeData.education.map((edu) => ({
+        degree: asText(edu?.degree),
+        institution: asText(edu?.institution),
+        year: asText(edu?.year)
+    })).filter((edu) => edu.degree || edu.institution || edu.year) : [],
+    certificates: Array.isArray(resumeData.certificates) ? resumeData.certificates.map((cert) => ({
+        name: asText(cert?.name),
+        institution: asText(cert?.institution),
+        year: asText(cert?.year)
+    })).filter((cert) => cert.name || cert.institution || cert.year) : [],
+    languages: Array.isArray(resumeData.languages) ? resumeData.languages.map((lang) => ({
+        language: asText(lang?.language),
+        level: asText(lang?.level)
+    })).filter((lang) => lang.language || lang.level) : []
+});
 
----
+const normalizeOptimization = (data) => ({
+    resumeData: normalizeResumeData(data?.resumeData),
+    improvements: asStringArray(data?.improvements, 8),
+    impact: asText(data?.impact)
+});
 
-## ANÁLISE 2: MATCH SCORE (Compatibilidade com a Vaga)
-Esta análise avalia APENAS se o candidato atende aos requisitos da vaga (SE fornecida).
-Se não houver vaga, retorne matchScore, matchAnalysis, foundKeywords e missingKeywords como NULL.
+const getOpenAICompatibleEndpoint = (providerId) => {
+    if (providerId === 'openrouter') return 'https://openrouter.ai/api/v1/chat/completions';
+    if (providerId === 'deepseek') return 'https://api.deepseek.com/chat/completions';
+    if (providerId === 'zai') return 'https://api.z.ai/api/paas/v4/chat/completions';
+    throw new Error(`Provedor não suportado: ${providerId}`);
+};
 
-Critérios (quando há vaga):
-- Requisitos obrigatórios atendidos
-- Requisitos desejáveis atendidos
-- Keywords encontradas vs faltantes
-- Alinhamento de senioridade
+const buildOpenAICompatibleBody = ({ providerId, model, messages, temperature, expectJson }) => {
+    const body = {
+        model,
+        messages,
+        temperature,
+        stream: false
+    };
 
----
+    if (expectJson) {
+        body.response_format = { type: 'json_object' };
+    }
 
-## LIMITES DE CARACTERES (RESPEITE RIGOROSAMENTE):
-- screeningReason: máximo 350 caracteres (fale APENAS sobre formato/estrutura, NÃO sobre vaga)
-- matchAnalysis: máximo 400 caracteres
-- foundKeywords: máximo 10 itens
-- missingKeywords: máximo 10 itens
-- keywordOps: máximo 10 itens
-- tips: máximo 5 itens, cada um com máximo 120 caracteres
-- strengths: máximo 3 itens
+    if (providerId === 'deepseek' || providerId === 'zai') {
+        body.thinking = { type: expectJson ? 'disabled' : 'enabled' };
+    }
 
-## OUTPUT JSON (estrutura obrigatória):
+    if (providerId === 'deepseek' && !expectJson) {
+        body.reasoning_effort = 'high';
+    }
+
+    return body;
+};
+
+const fetchOpenAICompatible = async ({ provider, apiKey, model, systemPrompt, userPrompt, temperature, expectJson }) => {
+    const endpoint = getOpenAICompatibleEndpoint(provider.id);
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+    };
+
+    if (provider.id === 'openrouter') {
+        headers['HTTP-Referer'] = typeof window !== 'undefined' ? window.location?.origin || 'https://apresentando.me' : 'https://apresentando.me';
+        headers['X-OpenRouter-Title'] = 'APRESENTANDO.ME';
+    }
+
+    const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+    ];
+
+    const requestBody = buildOpenAICompatibleBody({
+        providerId: provider.id,
+        model,
+        messages,
+        temperature,
+        expectJson
+    });
+
+    const sendRequest = async (body) => fetch(endpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body)
+    });
+
+    let response = await sendRequest(requestBody);
+    if (!response.ok && requestBody.response_format) {
+        const fallbackBody = { ...requestBody };
+        delete fallbackBody.response_format;
+        response = await sendRequest(fallbackBody);
+    }
+
+    if (!response.ok) {
+        const errorText = await response.text().catch(() => '');
+        throw new Error(`${provider.shortLabel} retornou HTTP ${response.status}. ${errorText.slice(0, 180)}`.trim());
+    }
+
+    const payload = await response.json();
+    const content = payload?.choices?.[0]?.message?.content;
+
+    if (!content) {
+        throw new Error(`${provider.shortLabel} não retornou conteúdo utilizável.`);
+    }
+
+    return content;
+};
+
+const fetchGemini = async ({ apiKey, model, systemPrompt, userPrompt, temperature, expectJson }) => {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const geminiModel = genAI.getGenerativeModel({
+        model,
+        generationConfig: {
+            temperature,
+            ...(expectJson ? { responseMimeType: 'application/json' } : {})
+        }
+    });
+
+    const result = await geminiModel.generateContent(`${systemPrompt}\n\n${userPrompt}`);
+    const response = await result.response;
+    return response.text();
+};
+
+const generateText = async ({ systemPrompt, userPrompt, temperature = 0.2, expectJson = false }) => {
+    const settings = getSettings();
+    const provider = getProvider(settings.provider);
+    const apiKey = getApiKeyForSettings(settings);
+    const model = getSelectedModelForSettings(settings);
+
+    if (!apiKey) {
+        throw new Error(createMissingKeyError(provider));
+    }
+
+    if (provider.id === 'google') {
+        return fetchGemini({ apiKey, model, systemPrompt, userPrompt, temperature, expectJson });
+    }
+
+    return fetchOpenAICompatible({
+        provider,
+        apiKey,
+        model,
+        systemPrompt,
+        userPrompt,
+        temperature,
+        expectJson
+    });
+};
+
+const ANALYSIS_SYSTEM_PROMPT = `
+Você é o motor de análise de currículos de uma plataforma de recrutamento.
+Retorne sempre JSON válido, sem markdown, sem comentários e sem texto fora do objeto.
+
+Execute DUAS análises separadas:
+
+1. ATS SCORE: avalia a chance de parsing correto por sistemas ATS. Baseie-se no texto extraído e em qualquer pista estrutural disponível. Seja crítico quando houver sinais de layout fragmentado, falta de seções, texto embaralhado, ausência de contato, blocos longos ou baixa legibilidade.
+
+2. MATCH SCORE: avalia compatibilidade com a vaga apenas quando uma descrição de vaga for fornecida. Se não houver vaga, use null em matchScore, matchAnalysis, foundKeywords e missingKeywords.
+
+Escala:
+- atsScore 85-100: formato limpo, seções claras, contato completo.
+- atsScore 70-84: bom, com ajustes menores.
+- atsScore 50-69: parsing possivelmente parcial.
+- atsScore 0-49: alto risco de falha de leitura.
+
+Limites:
+- screeningReason: até 350 caracteres, sem falar da vaga.
+- matchAnalysis: até 400 caracteres.
+- foundKeywords/missingKeywords/keywordOps: até 10 itens.
+- tips: até 5 itens.
+- strengths: até 3 itens.
+
+Formato obrigatório:
 {
-  "atsScore": (0-100, baseado APENAS na qualidade de formato do currículo),
-  "probability": "Alta" | "Média" | "Baixa" (probabilidade de LEITURA correta pelo ATS, não de aprovação na vaga),
-  "screeningReason": "(máx 350 chars) Explique a qualidade do FORMATO: seções presentes/ausentes, estrutura, legibilidade. NÃO mencione a vaga aqui.",
-  "matchScore": (0-100, compatibilidade com a vaga - NULL se não houver vaga),
-  "matchAnalysis": "(máx 400 chars) Análise de compatibilidade com a VAGA. Requisitos atendidos vs gaps. NULL se não houver vaga.",
-  "foundKeywords": ["Keywords da VAGA encontradas no currículo - NULL se não houver vaga"],
-  "missingKeywords": ["Keywords da VAGA não encontradas - NULL se não houver vaga"],
-  "strengths": [
-    { "title": "(máx 50 chars)", "description": "(máx 100 chars)" }
-  ],
-  "keywordOps": ["Termos que o candidato deveria adicionar para melhorar"],
-  "tips": ["Ações práticas para melhorar o currículo"]
+  "atsScore": 0,
+  "probability": "Alta" | "Média" | "Baixa",
+  "screeningReason": "",
+  "matchScore": null,
+  "matchAnalysis": null,
+  "foundKeywords": null,
+  "missingKeywords": null,
+  "strengths": [{ "title": "", "description": "" }],
+  "keywordOps": [],
+  "tips": []
 }
-
-## REGRAS CRÍTICAS:
-- atsScore = qualidade de FORMATO. matchScore = compatibilidade com VAGA.
-- Se não houver vaga, matchScore/matchAnalysis/foundKeywords/missingKeywords = null.
-- Seja CRÍTICO e REALISTA. Não infle scores.
-- Use Português do Brasil.
 `;
 
-
-
-export const analyzeResume = async (resumeText, jobDescription) => {
+export const analyzeResume = async (resumeText, jobDescription, pdfMetadata = null) => {
     try {
-        const genAI = getGenAIInstance();
-        const settings = getSettings();
-        const model = genAI.getGenerativeModel({
-            model: settings.model || "gemini-3.5-flash",
-            generationConfig: {
-                temperature: 0, // Temperatura 0 para resultados determinísticos e consistentes
-            }
+        const hasJobDescription = Boolean(jobDescription?.trim());
+        const userPrompt = `
+CURRÍCULO EXTRAÍDO:
+${resumeText}
+
+SINAIS TÉCNICOS DO PDF:
+${pdfMetadata ? JSON.stringify(pdfMetadata, null, 2) : "Não disponíveis"}
+
+DESCRIÇÃO DA VAGA:
+${hasJobDescription ? jobDescription : "Não fornecida"}
+`;
+
+        const text = await generateText({
+            systemPrompt: ANALYSIS_SYSTEM_PROMPT,
+            userPrompt,
+            temperature: 0,
+            expectJson: true
         });
 
-        const prompt = `
-      ${SYSTEM_PROMPT}
-      
-      CURRÍCULO:
-      ${resumeText}
-      
-      DESCRIÇÃO DA VAGA:
-      ${jobDescription || "Não fornecida"}
-    `;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        let text = response.text();
-
-        // Clean JSON response (sometimes Gemini wraps it in code blocks)
-        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-
-        return JSON.parse(text);
+        return normalizeAnalysis(parseJsonResponse(text), hasJobDescription);
     } catch (error) {
         console.error("Erro na análise da IA:", error);
-        throw new Error("Falha ao analisar currículo pela IA. Verifique sua conexão ou tente novamente.");
+        throw new Error(error.message || "Falha ao analisar currículo pela IA.");
     }
 };
+
+const getOptimizationInstructions = (aggressiveness) => {
+    const levels = {
+        low: `
+- Corrija gramática, ortografia e consistência.
+- Padronize datas, títulos e bullets.
+- Preserve voz, fatos, datas, empresas e links.
+- Insira keywords apenas onde já existe contexto compatível.
+- Não invente conquistas, senioridade, certificações ou ferramentas.
+`,
+        medium: `
+- Faça tudo do modo conservador.
+- Reescreva o resumo para destacar aderência real à vaga.
+- Reformule bullets com verbos de ação e impacto concreto.
+- Quantifique apenas quando houver número explícito ou inferência segura.
+- Reordene habilidades conforme relevância para a vaga.
+- Mantenha linguagem profissional, humana e verificável.
+`,
+        high: `
+- Faça tudo do modo equilibrado.
+- Reestruture a narrativa para maximizar clareza, aderência e impacto.
+- Remova informação irrelevante para a vaga.
+- Espelhe termos da vaga sem empilhar keywords artificialmente.
+- Reescreva todos os bullets fracos, mantendo fatos e limites do original.
+`
+    };
+
+    return levels[aggressiveness] || levels.medium;
+};
+
+const OPTIMIZATION_SYSTEM_PROMPT = `
+Você é um otimizador de currículos sênior.
+Retorne apenas JSON válido, sem markdown e sem texto fora do objeto.
+
+Regras:
+- Nunca invente empresas, cargos, datas, certificações, tecnologias ou resultados.
+- Preserve todos os links do currículo original.
+- Se uma seção não existir, deixe o array vazio.
+- Escreva em português do Brasil.
+- Use linguagem natural, profissional e específica. Evite texto robótico, clichês e exageros.
+- Cada bullet deve preferir verbo de ação + escopo + impacto.
+
+Formato obrigatório:
+{
+  "resumeData": {
+    "contact": { "name": "", "email": "", "phone": "", "linkedin": "", "portfolio": "", "location": "" },
+    "summary": "",
+    "experiences": [{ "role": "", "company": "", "startDate": "", "endDate": "", "bullets": [] }],
+    "skills": { "hard": [], "soft": [] },
+    "education": [{ "degree": "", "institution": "", "year": "" }],
+    "certificates": [{ "name": "", "institution": "", "year": "" }],
+    "languages": [{ "language": "", "level": "" }]
+  },
+  "improvements": [],
+  "impact": ""
+}
+`;
 
 export const optimizeResume = async (resumeText, jobDescription, aggressiveness) => {
     try {
-        const genAI = getGenAIInstance();
-        const settings = getSettings();
-        const model = genAI.getGenerativeModel({
-            model: settings.model || "gemini-3.1-flash-lite-preview",
-            generationConfig: {
-                temperature: 0.3, // Temperatura baixa para consistência, mas com alguma criatividade na reescrita
-            }
-        });
+        const userPrompt = `
+NÍVEL DE INTERVENÇÃO:
+${getOptimizationInstructions(aggressiveness)}
 
-        const levelInstructions = {
-            low: {
-                name: "CONSERVADOR",
-                focus: "Polimento e correções mínimas",
-                actions: `
-                    - Corrigir erros gramaticais e ortográficos
-                    - Padronizar formatação (datas, títulos, bullet points)
-                    - Melhorar clareza sem alterar significado
-                    - Adicionar keywords da vaga APENAS onde já existe contexto compatível
-                    - NÃO inventar experiências ou habilidades
-                    - NÃO reescrever bullet points significativamente
-                    - Manter tom e voz originais do candidato
-                `
-            },
-            medium: {
-                name: "EQUILIBRADO",
-                focus: "Reescrita estratégica com alinhamento à vaga",
-                actions: `
-                    - TUDO do nível conservador, MAIS:
-                    - Reescrever o resumo profissional para destacar fit com a vaga
-                    - Reformular bullet points de experiência com verbos de ação fortes (liderou, implementou, otimizou, reduziu, aumentou)
-                    - Quantificar resultados onde possível (%, números, impacto)
-                    - Inserir keywords da vaga naturalmente nas descrições de experiência
-                    - Reordenar habilidades priorizando as mais relevantes para a vaga
-                    - Ajustar títulos de cargo para melhor match (se razoável)
-                    - Manter veracidade: não inventar, apenas reformular
-                `
-            },
-            high: {
-                name: "AGRESSIVO",
-                focus: "Transformação completa orientada a conversão",
-                actions: `
-                    - TUDO dos níveis anteriores, MAIS:
-                    - Reescrever TODO o currículo com tom altamente persuasivo
-                    - Criar resumo profissional de alto impacto vendendo o candidato como a escolha ideal
-                    - Maximizar inserção de keywords da vaga em TODAS as seções
-                    - Reformular TODOS os bullet points para mostrar impacto e resultados
-                    - Reestruturar ordem das seções se beneficiar o match
-                    - Expandir descrições curtas para mostrar mais valor
-                    - Remover informações irrelevantes para a vaga
-                    - Usar linguagem que espelha a descrição da vaga
-                    - Objetivo: maximizar ATS score e impressionar recrutador
-                `
-            }
-        };
-
-        const level = levelInstructions[aggressiveness] || levelInstructions.medium;
-
-        const prompt = `
-Você é um otimizador de currículos de nível enterprise, especializado em maximizar aprovação em sistemas de recrutamento automatizado.
-
-## SUA MISSÃO
-Otimizar o currículo para MAXIMIZAR a chance de passar no filtro ATS e impressionar o recrutador.
-Nível de intervenção: **${level.name}** - ${level.focus}
-
-## ETAPA 1: ANÁLISE DA VAGA (execute mentalmente)
-Antes de otimizar, identifique na descrição da vaga:
-- Requisitos OBRIGATÓRIOS vs DESEJÁVEIS
-- Hard skills específicas (tecnologias, ferramentas, certificações)
-- Soft skills mencionadas
-- Nível de senioridade esperado
-- Palavras-chave que o ATS vai procurar
-
-## ETAPA 2: OTIMIZAÇÃO (nível ${level.name})
-${level.actions}
-
-## CURRÍCULO ORIGINAL:
+CURRÍCULO ORIGINAL:
 ${resumeText}
 
-## DESCRIÇÃO DA VAGA:
-${jobDescription || "Não fornecida - otimize para qualidade geral de mercado tech"}
+DESCRIÇÃO DA VAGA:
+${jobDescription || "Não fornecida. Otimize para clareza, leitura ATS e competitividade geral."}
+`;
 
-## REGRAS DE OURO:
-1. NUNCA invente experiências, empresas ou certificações que não existem no original
-2. Mantenha datas e empresas exatamente como estão
-3. Keywords devem ser inseridas de forma NATURAL, não forçada
-4. Resultados quantificados são mais impactantes (use quando possível inferir do contexto)
-5. Se alguma seção não existir no original, OMITA ela (não invente conteúdo)
-6. PRESERVE todos os links do currículo original (portfolio, github, behance, dribbble, etc) - NÃO os remova
+        const text = await generateText({
+            systemPrompt: OPTIMIZATION_SYSTEM_PROMPT,
+            userPrompt,
+            temperature: 0.25,
+            expectJson: true
+        });
 
-## FORMATAÇÃO DO OUTPUT JSON:
-Retorne ESTRITAMENTE o formato JSON abaixo, preenchendo as seções com o conteúdo otimizado. 
-A estrutura do objeto "resumeData" é mandatória para integração com nossa API.
-
-{
-    "resumeData": {
-        "contact": { "name": "Nome Completo", "email": "E-mail", "phone": "Telefone", "linkedin": "URL", "portfolio": "URL", "location": "Localização" },
-        "summary": "Resumo completo otimizado em 2-4 linhas descrevendo perfil, competências e objetivo.",
-        "experiences": [ 
-            { "role": "Cargo", "company": "Empresa", "startDate": "Mês/Ano", "endDate": "Mês/Ano ou Presente", "bullets": ["Ação 1 com verbo forte e resultado quantificado", "Ação 2 detalhada"] } 
-        ],
-        "skills": { "hard": ["Skill Técnica 1", "Skill Técnica 2"], "soft": ["Skill Comportamental 1", "Skill Comportamental 2"] },
-        "education": [ { "degree": "Grau - Curso", "institution": "Instituição", "year": "Ano de Conclusão" } ],
-        "certificates": [ { "name": "Nome do Certificado/Curso", "institution": "Instituição", "year": "Ano" } ],
-        "languages": [ { "language": "Idioma", "level": "Nível (Básico/Intermediário/Avançado/Fluente/Nativo)" } ]
-    },
-    "improvements": ["Melhoria específica 1 que você fez", "Melhoria específica 2 que você fez", "Melhoria específica 3 que você fez"],
-    "impact": "Explicação em um parágrafo de como essas mudanças específicas aumentam a chance do candidato conseguir o emprego, baseado na percepção dos recrutadores e ATS."
-}
-
-NOTAS:
-- Se alguma seção não existir no original (ex: idiomas ou certificados), deixe o array respectivo VAZIO (ex: "languages": []).
-- NÃO crie chaves fora do padrão acima.
-- Cada bullet point de experiência ('bullets') em 'experiences' deve preferencialmente começar com verbo de ação (Liderou, Desenvolveu, Implementou, Otimizou).
-- Remova hobbies e seções irrelevantes.
-        `;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        let text = response.text();
-
-        // Remove markdown code blocks
-        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-
-        // Extract JSON object from the response (in case AI adds extra text)
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            throw new Error("Resposta da IA não contém JSON válido");
-        }
-
-        return JSON.parse(jsonMatch[0]);
+        return normalizeOptimization(parseJsonResponse(text));
     } catch (error) {
         console.error("Erro na otimização:", error);
-        throw new Error("Falha ao otimizar currículo.");
+        throw new Error(error.message || "Falha ao otimizar currículo.");
     }
 };
 
+const COVER_LETTER_SYSTEM_PROMPT = `
+Você é um redator de carreira sênior.
+Escreva uma carta de apresentação em português do Brasil, humana e específica.
+
+Direção de estilo:
+- Evite tom robótico, genérico ou subserviente.
+- Não use frases como "venho por meio desta" ou "fico à disposição".
+- Use ritmo natural, com frases de tamanhos variados.
+- Conecte evidências do currículo ao problema da vaga.
+- Se faltar vaga, escreva uma carta mais aberta, mas ainda concreta.
+- Não invente experiências ou resultados.
+- Entregue apenas o texto final em 4 a 6 parágrafos curtos.
+`;
+
 export const generateCoverLetter = async (resumeText, jobDescription) => {
     try {
-        const genAI = getGenAIInstance();
-        const settings = getSettings();
-        const model = genAI.getGenerativeModel({
-            model: settings.model || "gemini-3.5-flash",
-            generationConfig: {
-                temperature: 0.5,
-            }
-        });
-
-        const prompt = `
-Você é um redator de nível premium auxiliando um profissional a conquistar um emprego estratégico.
-
-## DADOS DO CANDIDATO
+        const userPrompt = `
+CURRÍCULO DO CANDIDATO:
 ${resumeText}
 
-## VAGA DE DESTINO
-${jobDescription || "Não especificada - foque no valor geral e histórico de sucesso"}
+VAGA DE DESTINO:
+${jobDescription || "Não especificada"}
 
-## SUA MISSÃO
-Escreva uma Carta de Apresentação (Cover Letter) persuasiva focada no "fit" de valor, destacando o impacto do candidato.
+Escreva uma carta que soe como uma pessoa competente falando com outra pessoa competente. Use detalhes reais do currículo, escolha 2 ou 3 evidências fortes e feche com uma proposta clara de conversa.
+`;
 
-## REGRAS DE REDAÇÃO
-1. Tamanho: Máximo de 3 a 5 parágrafos curtos, diretos.
-2. Tom: Confiante, profissional, indo direto ao ponto, com estilo "Editorial Brutalism". Evite linguagem subserviente ou clichê.
-3. Estrutura:
-   - Gancho inicial focando no problema da vaga/empresa e sua solução.
-   - 1 a 2 parágrafos provindo evidências das suas experiências passadas sem citar o currículo desnecessariamente.
-   - Conclusão com call-to-action forte.
-4. Idioma: Português do Brasil.
-5. Retorne APENAS o texto formatado final.
+        const text = await generateText({
+            systemPrompt: COVER_LETTER_SYSTEM_PROMPT,
+            userPrompt,
+            temperature: 0.55,
+            expectJson: false
+        });
 
-Importante: Retorne o texto puro em parágrafos, sem metadados, títulos internos, ou markdown extras.
-        `;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        return response.text().trim();
+        return text.trim();
     } catch (error) {
         console.error("Erro na geração da carta de apresentação:", error);
-        throw new Error("Falha ao gerar a carta de apresentação.");
+        throw new Error(error.message || "Falha ao gerar a carta de apresentação.");
     }
 };

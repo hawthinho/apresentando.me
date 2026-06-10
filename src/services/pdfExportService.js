@@ -99,7 +99,7 @@ const parseResumeContent = (content) => {
  */
 const isBulletPoint = (text) => {
     return text.startsWith('-') || text.startsWith('•') || text.startsWith('*') ||
-        text.match(/^\d+[\.\\)]\s/) || text.startsWith('→') || text.startsWith('▪');
+        text.match(/^\d+[.)]\s/) || text.startsWith('→') || text.startsWith('▪');
 };
 
 /**
@@ -113,7 +113,7 @@ const cleanMarkdown = (text) => {
  * Clean bullet point text
  */
 const cleanBulletText = (text) => {
-    return cleanMarkdown(text.replace(/^[-•*→▪]\s*/, '').replace(/^\d+[\.\\)]\s*/, '').trim());
+    return cleanMarkdown(text.replace(/^[-•*→▪]\s*/, '').replace(/^\d+[.)]\s*/, '').trim());
 };
 
 /**
@@ -158,27 +158,6 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
             return true;
         }
         return false;
-    };
-
-    /**
-     * Draw text with word wrapping and return new Y position
-     */
-    const drawWrappedText = (text, x, y, maxWidth, fontSize, isBold = false, color = colors.textPrimary) => {
-        doc.setFontSize(fontSize);
-        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-        doc.setTextColor(color);
-
-        const cleanedText = cleanMarkdown(text);
-        const lines = doc.splitTextToSize(cleanedText, maxWidth);
-        const lineHeight = fontSize * 0.4;
-
-        for (const line of lines) {
-            checkPageBreak(lineHeight + 2);
-            doc.text(line, x, yPosition);
-            yPosition += lineHeight;
-        }
-
-        return yPosition;
     };
 
     /**
