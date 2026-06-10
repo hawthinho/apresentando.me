@@ -1,4 +1,4 @@
-import { getDefaultModelForProvider, getProvider } from './providerConfig';
+import { getDefaultModelForProvider, getModelOption, getProvider } from './providerConfig.js';
 
 const STORAGE_KEY = 'app_settings';
 
@@ -6,7 +6,7 @@ const DEFAULT_SETTINGS = {
     provider: 'google',
     apiKey: '',
     apiKeys: {},
-    model: 'gemini-3.5-flash',
+    model: 'gemini-3.1-flash-lite',
     models: {}
 };
 
@@ -21,7 +21,8 @@ const normalizeSettings = (settings = {}) => {
     }
 
     const models = { ...(settings.models || {}) };
-    const selectedModel = settings.model || models[provider] || getDefaultModelForProvider(provider);
+    const requestedModel = models[provider] || settings.model || getDefaultModelForProvider(provider);
+    const selectedModel = getModelOption(provider, requestedModel).id;
     models[provider] = selectedModel;
 
     return {

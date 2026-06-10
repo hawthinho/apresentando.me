@@ -4,7 +4,7 @@ export const PROVIDERS = {
         label: 'Google Gemini',
         shortLabel: 'Gemini',
         billingLabel: 'Cota gratuita + uso pago',
-        defaultModel: 'gemini-3.5-flash',
+        defaultModel: 'gemini-3.1-flash-lite',
         apiKeyLabel: 'Gemini API Key',
         docsUrl: 'https://aistudio.google.com/apikey',
         docsSteps: [
@@ -14,11 +14,11 @@ export const PROVIDERS = {
         ],
         models: [
             {
-                id: 'gemini-3.5-flash',
-                label: 'Gemini 3.5 Flash',
+                id: 'gemini-3.1-flash-lite',
+                label: 'Gemini 3.1 Flash-Lite',
                 badge: 'Recomendado',
                 billing: 'Cota gratuita + uso pago',
-                description: 'Modelo padrao para analise rapida, baixo custo e boa consistencia.'
+                description: 'Modelo padrao para analise rapida, menor custo e boa latencia.'
             }
         ]
     },

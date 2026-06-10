@@ -53,7 +53,7 @@ Este projeto foi construído usando tecnologias modernas focadas em agilidade e 
 
 - **React (`^19.x`)** via **Vite** para a interface interativa.
 - **TailwindCSS** para uma estilização performática e semântica.
-- **@google/generative-ai** como motor Gemini padrão (usando `gemini-3.5-flash`).
+- **@google/generative-ai** como motor Gemini padrão (usando `gemini-3.1-flash-lite`).
 - **OpenRouter / DeepSeek / Z.ai** por API compatível com OpenAI Chat Completions.
 - **pdfjs-dist** para manipulação binária e visual do documento via Client-side.
 - **jsPDF** para emissão de PDFs dinâmicos baseados no JSON otimizado.
@@ -97,7 +97,7 @@ O APRESENTANDO.ME opera no formato BYOK (*Bring Your Own Key*). Acesse **Configu
 
 ### Provedores suportados
 
-- **Google Gemini (`gemini-3.5-flash`)**
+- **Google Gemini (`gemini-3.1-flash-lite`)**
   Obtenha chave em [Google AI Studio](https://aistudio.google.com/apikey). Possui cota gratuita e uso pago conforme sua conta.
 
 - **OpenRouter (`openrouter/free`)**
