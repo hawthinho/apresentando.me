@@ -112,12 +112,6 @@ O APRESENTANDO.ME opera no formato BYOK (*Bring Your Own Key*). Acesse **Configu
 
 ---
 
-## ✨ Estilo: *Editorial Brutalism*
-
-Este repositório orgulha-se do seu guia estilístico. A UI é carregada de bordas afiadas, letras garrafais (`Space Grotesk` / `JetBrains Mono`), sombras block e cores de alta saturação que desafiam interfaces brandas corporativas padrão. Se for modificar o código, lembre-se de manter o tom confiante, brutalista e hiper-objetivo.
-
----
-
 ## ☕ Apoie o Projeto
 
 Curtiu o APRESENTANDO.ME? Ele deu um trabalho do caramba para ficar pronto.
