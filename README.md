@@ -82,13 +82,6 @@ Este projeto foi construído usando tecnologias modernas focadas em agilidade e 
 
 4. Acesse em seu navegador a porta fornecida (normalmente: `http://localhost:5173`).
 
-5. **Validações locais**
-   ```bash
-   npm test
-   npm run lint
-   npm run build
-   ```
-
 ---
 
 ## 🔑 Como Utilizar o Sistema
