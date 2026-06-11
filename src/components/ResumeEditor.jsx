@@ -240,7 +240,10 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                     </div>
                                 </div>
                             ))}
-                            <button className={`${addBtnClasses} bg-foreground text-background hover:bg-primary hover:text-foreground h-16 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none border-0`} onClick={() => addArrayItem('experiences', { role: '', company: '', startDate: '', endDate: '', bullets: [''] })}>
+                            <button
+                                className="w-full mt-6 h-16 border-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black text-sm uppercase transition-all flex justify-center items-center gap-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none"
+                                onClick={() => addArrayItem('experiences', { role: '', company: '', startDate: '', endDate: '', bullets: [''] })}
+                            >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 Adicionar experiência completa
                             </button>
