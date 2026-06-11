@@ -17,9 +17,12 @@ export const SettingsView = ({ onBack }) => {
 
     const handleProviderChange = (providerId) => {
         const nextModel = settings.models?.[providerId] || getDefaultModelForProvider(providerId);
+        const nextApiKey = settings.apiKeys?.[providerId] || '';
         setSettings({
             ...settings,
             provider: providerId,
+            apiKey: providerId === 'google' ? nextApiKey : '',
+            apiKeys: nextApiKey ? { [providerId]: nextApiKey } : {},
             model: nextModel,
             models: {
                 ...(settings.models || {}),
@@ -42,11 +45,8 @@ export const SettingsView = ({ onBack }) => {
     const handleApiKeyChange = (apiKey) => {
         setSettings({
             ...settings,
-            apiKey: provider.id === 'google' ? apiKey : settings.apiKey,
-            apiKeys: {
-                ...(settings.apiKeys || {}),
-                [provider.id]: apiKey
-            }
+            apiKey: provider.id === 'google' ? apiKey : '',
+            apiKeys: apiKey ? { [provider.id]: apiKey } : {}
         });
     };
 
@@ -59,7 +59,7 @@ export const SettingsView = ({ onBack }) => {
     };
 
     const handleClearSettings = () => {
-        if (window.confirm('Apagar todas as API Keys e modelos salvos neste navegador?')) {
+        if (window.confirm('Apagar a API Key ativa e os modelos salvos neste navegador?')) {
             setSettings(clearSettings());
             setSaved(false);
         }
@@ -95,6 +95,13 @@ export const SettingsView = ({ onBack }) => {
                             <p className="font-jetbrains font-bold text-xs text-muted-foreground uppercase mt-2">
                                 Escolha onde a análise e a geração serão executadas.
                             </p>
+                            <div className="mt-4 border-2 border-foreground bg-primary/20 p-3 font-jetbrains text-[10px] font-black uppercase leading-relaxed flex items-start gap-3">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="mt-0.5 shrink-0">
+                                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                                </svg>
+                                <span>Trava ativa: somente {provider.shortLabel} usa API Key agora. Ao salvar outro provedor, qualquer chave anterior é removida deste navegador.</span>
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -166,7 +173,7 @@ export const SettingsView = ({ onBack }) => {
                                 </label>
                                 <div className="bg-muted text-muted-foreground p-3 border-l-4 border-foreground font-jetbrains font-bold text-[10px] uppercase mb-2 flex items-center gap-3 mt-2">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-                                    <span>A chave fica no Local Storage deste navegador. Curriculo e vaga sao enviados ao provedor escolhido durante a analise.</span>
+                                    <span>Apenas a chave do provedor ativo fica salva no Local Storage. Curriculo e vaga sao enviados somente ao provedor escolhido.</span>
                                 </div>
                                 <input
                                     type="password"
@@ -207,7 +214,7 @@ export const SettingsView = ({ onBack }) => {
                             className="h-14 px-6 rounded-none border-4 border-foreground bg-white text-foreground hover:bg-destructive hover:text-destructive-foreground font-jetbrains font-black uppercase text-xs shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center gap-3"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>
-                            Apagar chaves salvas
+                            Apagar chave salva
                         </button>
 
                         {saved && (

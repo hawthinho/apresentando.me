@@ -5,6 +5,7 @@ import { optimizeResume, generateCoverLetter } from '../services/aiService';
 import { COVER_LETTER_STYLES } from '../services/coverLetterStyles';
 import { generateResumePDF, generateCoverLetterPDF } from '../services/pdfExportService';
 import { parseResumeText, formatResumeToText, formatResumeToLatex, formatCoverLetterToLatex, formatCombinedToLatex } from '../services/resumeParser';
+import { getActiveAiDescriptor } from '../services/settingsService';
 
 const LOADING_STEPS = [
     { id: 'analyze', label: 'Analisando compatibilidade' },
@@ -79,6 +80,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     const handleOptimize = async () => {
         setStep('processing');
         try {
+            const optimizationAi = getActiveAiDescriptor();
             const result = await optimizeResume(resumeText, jobDescription, levels[aggressiveness].promptType);
             
             const resumeData = result.resumeData;
@@ -97,7 +99,8 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                     optimizedContent: generatedText, 
                     latexCode: generatedLatex,
                     improvements: result.improvements,
-                    impact: result.impact
+                    impact: result.impact,
+                    optimizationAi
                 });
             }
 

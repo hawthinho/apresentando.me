@@ -15,6 +15,7 @@ import { DonationBanner } from './components/DonationBanner';
 import { analyzeResume } from './services/aiService';
 import { extractResumeFromPdf } from './services/pdfService';
 import { clearAnalysisHistory, getAnalysisHistory, saveAnalysis, updateAnalysis } from './services/historyService';
+import { getActiveAiDescriptor } from './services/settingsService';
 
 /* ── Error Toast ─────────────────────────────────────────── */
 const ErrorToast = ({ message, onDismiss }) => {
@@ -94,6 +95,7 @@ function App() {
       const { text, metadata } = await extractResumeFromPdf(file);
       setResumeText(text);
 
+      const analysisAi = getActiveAiDescriptor();
       const result = await analyzeResume(text, jobDescription, metadata);
       await new Promise(resolve => setTimeout(resolve, 3000));
 
@@ -106,7 +108,8 @@ function App() {
         matchScore: result.matchScore,
         data: result,
         resumeText: text,
-        jobDescription
+        jobDescription,
+        analysisAi
       });
       setActiveAnalysisId(savedItem.id);
       setHistory(getAnalysisHistory());

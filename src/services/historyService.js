@@ -24,7 +24,9 @@ export const saveAnalysis = (analysis) => {
         matchScore: analysis.matchScore,
         data: analysis.data,
         resumeText: analysis.resumeText,
-        jobDescription: analysis.jobDescription
+        jobDescription: analysis.jobDescription,
+        analysisAi: analysis.analysisAi || null,
+        optimizationAi: analysis.optimizationAi || null
     };
 
     // Add to beginning and limit size

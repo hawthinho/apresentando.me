@@ -28,14 +28,29 @@ test('history service saves, updates and deletes analyses in localStorage', () =
         matchScore: 70,
         data: { atsScore: 82 },
         resumeText: 'Resume text',
-        jobDescription: 'Job text'
+        jobDescription: 'Job text',
+        analysisAi: {
+            providerLabel: 'Gemini',
+            modelLabel: 'Gemini 3.1 Flash-Lite'
+        }
     });
 
     assert.equal(getAnalysisHistory().length, 1);
     assert.equal(getAnalysisHistory()[0].fileName, 'cv.pdf');
+    assert.deepEqual(getAnalysisHistory()[0].analysisAi, {
+        providerLabel: 'Gemini',
+        modelLabel: 'Gemini 3.1 Flash-Lite'
+    });
 
-    updateAnalysis(saved.id, { optimizedContent: 'Optimized resume' });
+    updateAnalysis(saved.id, {
+        optimizedContent: 'Optimized resume',
+        optimizationAi: {
+            providerLabel: 'DeepSeek',
+            modelLabel: 'DeepSeek V4 Pro'
+        }
+    });
     assert.equal(getAnalysisHistory()[0].optimizedContent, 'Optimized resume');
+    assert.equal(getAnalysisHistory()[0].optimizationAi.modelLabel, 'DeepSeek V4 Pro');
 
     deleteAnalysis(saved.id);
     assert.deepEqual(getAnalysisHistory(), []);

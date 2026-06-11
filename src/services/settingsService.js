@@ -14,12 +14,14 @@ export { DEFAULT_SETTINGS };
 
 const normalizeSettings = (settings = {}) => {
     const provider = getProvider(settings.provider).id;
-    const apiKeys = { ...(settings.apiKeys || {}) };
+    const storedApiKeys = { ...(settings.apiKeys || {}) };
 
-    if (settings.apiKey && !apiKeys.google) {
-        apiKeys.google = settings.apiKey;
+    if (settings.apiKey && !storedApiKeys.google) {
+        storedApiKeys.google = settings.apiKey;
     }
 
+    const activeApiKey = storedApiKeys[provider] || '';
+    const apiKeys = activeApiKey ? { [provider]: activeApiKey } : {};
     const models = { ...(settings.models || {}) };
     const requestedModel = models[provider] || settings.model || getDefaultModelForProvider(provider);
     const selectedModel = getModelOption(provider, requestedModel).id;
@@ -66,4 +68,18 @@ export const getApiKeyForSettings = (settings = getSettings()) => {
 export const getSelectedModelForSettings = (settings = getSettings()) => {
     const normalized = normalizeSettings(settings);
     return normalized.models?.[normalized.provider] || normalized.model || getDefaultModelForProvider(normalized.provider);
+};
+
+export const getActiveAiDescriptor = (settings = getSettings()) => {
+    const normalized = normalizeSettings(settings);
+    const provider = getProvider(normalized.provider);
+    const model = getModelOption(provider.id, getSelectedModelForSettings(normalized));
+
+    return {
+        providerId: provider.id,
+        providerLabel: provider.shortLabel,
+        providerName: provider.label,
+        modelId: model.id,
+        modelLabel: model.label
+    };
 };

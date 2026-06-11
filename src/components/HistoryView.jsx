@@ -1,6 +1,26 @@
 import React from 'react';
 import { formatHistoryDate } from '../services/historyService';
 
+const formatAiLabel = (ai) => {
+    if (!ai) return '';
+    const provider = ai.providerLabel || ai.providerName || ai.providerId || 'IA';
+    const model = ai.modelLabel || ai.modelId || '';
+    return model ? `${provider} / ${model}` : provider;
+};
+
+const AiModelBadge = ({ label, ai, tone = 'muted' }) => {
+    if (!ai) return null;
+
+    const isPrimary = tone === 'primary';
+
+    return (
+        <span className={`inline-flex max-w-full items-center gap-2 border-2 px-2 py-1 font-jetbrains text-[9px] font-black uppercase leading-none ${isPrimary ? 'border-foreground bg-primary text-foreground' : 'border-foreground/50 bg-[#F4F4F0] text-foreground'} group-hover:border-foreground group-hover:bg-white group-hover:text-foreground`}>
+            <span className="shrink-0 opacity-70">{label}</span>
+            <span className="truncate">{formatAiLabel(ai)}</span>
+        </span>
+    );
+};
+
 export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory }) => {
     const handleClearHistory = () => {
         if (window.confirm('Apagar todo o histórico salvo neste navegador?')) {
@@ -75,6 +95,10 @@ export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory 
                                         )}
                                     </div>
                                     <p className="text-sm text-foreground/70 group-hover:text-foreground font-bold font-jetbrains mt-1">{formatHistoryDate(item.date)}</p>
+                                    <div className="mt-3 flex max-w-full flex-wrap gap-2">
+                                        <AiModelBadge label="Análise" ai={item.analysisAi} />
+                                        <AiModelBadge label="Otimização" ai={item.optimizationAi} tone="primary" />
+                                    </div>
                                 </div>
                                 <div className="flex flex-col items-end shrink-0 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t-2 border-foreground/30 md:border-0 border-dashed">
                                     <div className="font-space font-black text-4xl group-hover:text-primary-foreground">

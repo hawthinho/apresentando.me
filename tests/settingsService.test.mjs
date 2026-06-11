@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
     clearSettings,
+    getActiveAiDescriptor,
     getSelectedModelForSettings,
     getSettings,
     saveSettings
@@ -42,4 +43,50 @@ test('settings service migrates old Gemini models to the current default', () =>
     assert.equal(saved.model, 'gemini-3.1-flash-lite');
     assert.equal(saved.models.google, 'gemini-3.1-flash-lite');
     assert.equal(getSettings().model, 'gemini-3.1-flash-lite');
+});
+
+test('settings service keeps only the active provider API key', () => {
+    globalThis.localStorage = createStorage();
+
+    const saved = saveSettings({
+        provider: 'openrouter',
+        apiKey: 'legacy-google-key',
+        apiKeys: {
+            google: 'google-key',
+            openrouter: 'openrouter-key',
+            deepseek: 'deepseek-key'
+        },
+        model: 'openrouter/free',
+        models: {
+            google: 'gemini-3.1-flash-lite',
+            openrouter: 'openrouter/free'
+        }
+    });
+
+    assert.deepEqual(saved.apiKeys, { openrouter: 'openrouter-key' });
+    assert.equal(saved.apiKey, 'openrouter-key');
+    assert.equal(getSelectedModelForSettings(saved), 'openrouter/free');
+});
+
+test('settings service exposes the active AI descriptor for history badges', () => {
+    globalThis.localStorage = createStorage();
+
+    const saved = saveSettings({
+        provider: 'deepseek',
+        apiKeys: {
+            deepseek: 'deepseek-key'
+        },
+        model: 'deepseek-v4-pro',
+        models: {
+            deepseek: 'deepseek-v4-pro'
+        }
+    });
+
+    assert.deepEqual(getActiveAiDescriptor(saved), {
+        providerId: 'deepseek',
+        providerLabel: 'DeepSeek',
+        providerName: 'DeepSeek',
+        modelId: 'deepseek-v4-pro',
+        modelLabel: 'DeepSeek V4 Pro'
+    });
 });
