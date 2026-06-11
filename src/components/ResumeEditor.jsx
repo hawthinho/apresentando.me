@@ -127,10 +127,10 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 lg:pb-10 mb-8 border-b-4 border-foreground">
                 <div>
                     <span className="inline-block font-jetbrains font-bold text-[10px] uppercase tracking-widest bg-primary text-foreground px-3 py-1 mb-4 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        Modo de Edição Manual
+                        Modo de edição manual
                     </span>
                     <h1 className="font-space font-black text-5xl md:text-6xl lg:text-7xl uppercase tracking-tighter leading-none">
-                        Editor de <br/><span className="text-background bg-foreground px-2 inline-block mt-2 rotate-1">Registros.</span>
+                        Editor de <br/><span className="text-background bg-foreground px-2 inline-block mt-2 rotate-1">registros.</span>
                     </h1>
                 </div>
                 <Button
@@ -146,12 +146,12 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                 
                 {/* Contact Info */}
                 <div className={sectionContainerClasses}>
-                    <EditorSectionHeader title="Informações de Contato" section="contact" isExpanded={expandedSections.contact} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>} />
+                    <EditorSectionHeader title="Informações de contato" section="contact" isExpanded={expandedSections.contact} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>} />
                     {expandedSections.contact && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0]">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                                 <div className="md:col-span-2">
-                                    <label className={labelClasses}>Nome Completo</label>
+                                    <label className={labelClasses}>Nome completo</label>
                                     <input type="text" className={inputClasses} value={data.contact.name} onChange={(e) => updateField('contact.name', e.target.value)} placeholder="Seu nome completo" />
                                 </div>
                                 <div>
@@ -167,7 +167,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                     <input type="text" className={inputClasses} value={data.contact.linkedin} onChange={(e) => updateField('contact.linkedin', e.target.value)} placeholder="linkedin.com/in/seu-perfil" />
                                 </div>
                                 <div className="md:col-span-2 lg:col-span-1">
-                                    <label className={labelClasses}>Portfolio / GitHub</label>
+                                    <label className={labelClasses}>Portfólio / GitHub</label>
                                     <input type="text" className={inputClasses} value={data.contact.portfolio || ''} onChange={(e) => updateField('contact.portfolio', e.target.value)} placeholder="github.com/usuario" />
                                 </div>
                                 <div className="md:col-span-2">
@@ -181,7 +181,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Professional Summary */}
                 <div className={sectionContainerClasses}>
-                    <EditorSectionHeader title="Resumo Profissional" section="summary" isExpanded={expandedSections.summary} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>} />
+                    <EditorSectionHeader title="Resumo profissional" section="summary" isExpanded={expandedSections.summary} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>} />
                     {expandedSections.summary && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0]">
                             <label className={labelClasses}>Descrição</label>
@@ -192,7 +192,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Experiences */}
                 <div className={sectionContainerClasses}>
-                    <EditorSectionHeader title="Experiência Profissional" section="experiences" isExpanded={expandedSections.experiences} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><rect x="2" y="7" width="20" height="14"></rect><path d="M16 21V5h-8v16"></path></svg>} />
+                    <EditorSectionHeader title="Experiência profissional" section="experiences" isExpanded={expandedSections.experiences} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><rect x="2" y="7" width="20" height="14"></rect><path d="M16 21V5h-8v16"></path></svg>} />
                     {expandedSections.experiences && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
                             {data.experiences.map((exp, expIndex) => (
@@ -209,24 +209,24 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-x-8 gap-y-6 mt-4">
                                         <div className="lg:col-span-2">
                                             <label className={labelClasses}>Cargo</label>
-                                            <input type="text" className={inputClasses} value={exp.role} onChange={(e) => updateArrayItem('experiences', expIndex, 'role', e.target.value)} placeholder="Senior Developer" />
+                                            <input type="text" className={inputClasses} value={exp.role} onChange={(e) => updateArrayItem('experiences', expIndex, 'role', e.target.value)} placeholder="Desenvolvedor sênior" />
                                         </div>
                                         <div className="lg:col-span-2">
                                             <label className={labelClasses}>Empresa</label>
-                                            <input type="text" className={inputClasses} value={exp.company} onChange={(e) => updateArrayItem('experiences', expIndex, 'company', e.target.value)} placeholder="Tech Solutions" />
+                                            <input type="text" className={inputClasses} value={exp.company} onChange={(e) => updateArrayItem('experiences', expIndex, 'company', e.target.value)} placeholder="Empresa exemplo" />
                                         </div>
                                         <div className="lg:col-span-2">
-                                            <label className={labelClasses}>Data Início</label>
+                                            <label className={labelClasses}>Data de início</label>
                                             <input type="text" className={inputClasses} value={exp.startDate} onChange={(e) => updateArrayItem('experiences', expIndex, 'startDate', e.target.value)} placeholder="Mai/2021" />
                                         </div>
                                         <div className="lg:col-span-2">
-                                            <label className={labelClasses}>Data Fim</label>
+                                            <label className={labelClasses}>Data de fim</label>
                                             <input type="text" className={inputClasses} value={exp.endDate} onChange={(e) => updateArrayItem('experiences', expIndex, 'endDate', e.target.value)} placeholder="Presente" />
                                         </div>
                                     </div>
 
                                     <div className="mt-8 border-t-2 border-dashed border-foreground/50 pt-6">
-                                        <label className={labelClasses}>Atividades e Conquistas</label>
+                                        <label className={labelClasses}>Atividades e conquistas</label>
                                         <div className="flex flex-col gap-4 mt-4">
                                             {exp.bullets.map((bullet, bulletIndex) => (
                                                 <div key={bulletIndex} className="flex flex-col md:flex-row gap-4 items-start">
@@ -235,14 +235,14 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                                     <button className={removeBtnClasses} onClick={() => removeBullet(expIndex, bulletIndex)}>Remover</button>
                                                 </div>
                                             ))}
-                                            <button className={addBtnClasses} onClick={() => addBullet(expIndex)}>+ Nova Atividade</button>
+                                            <button className={addBtnClasses} onClick={() => addBullet(expIndex)}>+ Nova atividade</button>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                             <button className={`${addBtnClasses} bg-foreground text-background hover:bg-primary hover:text-foreground h-16 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none border-0`} onClick={() => addArrayItem('experiences', { role: '', company: '', startDate: '', endDate: '', bullets: [''] })}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Adicionar Experiência Completa
+                                Adicionar experiência completa
                             </button>
                         </div>
                     )}
@@ -254,14 +254,14 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                     {expandedSections.skills && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-6">
                             <div>
-                                <label className={labelClasses}>Hard Skills (Técnicas) <span className="text-[10px] lowercase text-muted-foreground ml-2 tracking-normal font-jetbrains">Separadas por vírgula</span></label>
+                                <label className={labelClasses}>Hard skills (técnicas) <span className="text-[10px] lowercase text-muted-foreground ml-2 tracking-normal font-jetbrains">Separadas por vírgula</span></label>
                                 <input type="text" className={inputClasses} value={hardSkillsText} onChange={(e) => setHardSkillsText(e.target.value)} onBlur={(e) => {
                                         const skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
                                         updateField('skills.hard', skills);
                                 }} placeholder="React, Node.js, SQL..." />
                             </div>
                             <div>
-                                <label className={labelClasses}>Soft Skills (Comportamentais) <span className="text-[10px] lowercase text-muted-foreground ml-2 tracking-normal font-jetbrains">Separadas por vírgula</span></label>
+                                <label className={labelClasses}>Soft skills (comportamentais) <span className="text-[10px] lowercase text-muted-foreground ml-2 tracking-normal font-jetbrains">Separadas por vírgula</span></label>
                                 <input type="text" className={inputClasses} value={softSkillsText} onChange={(e) => setSoftSkillsText(e.target.value)} onBlur={(e) => {
                                         const skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
                                         updateField('skills.soft', skills);
@@ -273,7 +273,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
 
                 {/* Education */}
                 <div className={sectionContainerClasses}>
-                    <EditorSectionHeader title="Formação Acadêmica" section="education" isExpanded={expandedSections.education} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>} />
+                    <EditorSectionHeader title="Formação acadêmica" section="education" isExpanded={expandedSections.education} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>} />
                     {expandedSections.education && (
                         <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
                             {data.education.map((edu, eduIndex) => (
@@ -284,13 +284,13 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                                        <div className="lg:col-span-1"><label className={labelClasses}>Grau / Curso</label><input type="text" className={inputClasses} value={edu.degree} onChange={(e) => updateArrayItem('education', eduIndex, 'degree', e.target.value)} /></div>
+                                        <div className="lg:col-span-1"><label className={labelClasses}>Grau / curso</label><input type="text" className={inputClasses} value={edu.degree} onChange={(e) => updateArrayItem('education', eduIndex, 'degree', e.target.value)} /></div>
                                         <div className="lg:col-span-1"><label className={labelClasses}>Instituição</label><input type="text" className={inputClasses} value={edu.institution} onChange={(e) => updateArrayItem('education', eduIndex, 'institution', e.target.value)} /></div>
-                                        <div className="lg:col-span-1"><label className={labelClasses}>Ano de Formação</label><input type="text" className={inputClasses} value={edu.year} onChange={(e) => updateArrayItem('education', eduIndex, 'year', e.target.value)} /></div>
+                                        <div className="lg:col-span-1"><label className={labelClasses}>Ano de formação</label><input type="text" className={inputClasses} value={edu.year} onChange={(e) => updateArrayItem('education', eduIndex, 'year', e.target.value)} /></div>
                                     </div>
                                 </div>
                             ))}
-                            <button className={addBtnClasses} onClick={() => addArrayItem('education', { degree: '', institution: '', year: '' })}>+ Expandir Formação Acadêmica</button>
+                            <button className={addBtnClasses} onClick={() => addArrayItem('education', { degree: '', institution: '', year: '' })}>+ Expandir formação acadêmica</button>
                         </div>
                     )}
                 </div>
@@ -314,7 +314,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                     </div>
                                 </div>
                             ))}
-                            <button className={addBtnClasses} onClick={() => addArrayItem('certificates', { name: '', institution: '', year: '' })}>+ Adicionar Certificação</button>
+                            <button className={addBtnClasses} onClick={() => addArrayItem('certificates', { name: '', institution: '', year: '' })}>+ Adicionar certificação</button>
                         </div>
                     )}
                 </div>
@@ -344,7 +344,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                     <button className={removeBtnClasses} onClick={() => removeArrayItem('languages', langIndex)}>Excluir</button>
                                 </div>
                             ))}
-                            <button className={addBtnClasses} onClick={() => addArrayItem('languages', { language: '', level: '' })}>+ Adicionar Idioma</button>
+                            <button className={addBtnClasses} onClick={() => addArrayItem('languages', { language: '', level: '' })}>+ Adicionar idioma</button>
                         </div>
                     )}
                 </div>
@@ -358,7 +358,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                     onClick={() => onSave?.(data)}
                 >
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" className="mr-4"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                    Salvar Novo Estado
+                    Salvar alterações
                 </Button>
             </div>
         </div>

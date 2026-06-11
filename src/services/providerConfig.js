@@ -18,7 +18,7 @@ export const PROVIDERS = {
                 label: 'Gemini 3.1 Flash-Lite',
                 badge: 'Recomendado',
                 billing: 'Cota gratuita + uso pago',
-                description: 'Modelo padrao para analise rapida, menor custo e boa latencia.'
+                description: 'Modelo padrão para análise rápida, menor custo e boa latência.'
             }
         ]
     },
@@ -26,7 +26,7 @@ export const PROVIDERS = {
         id: 'openrouter',
         label: 'OpenRouter',
         shortLabel: 'OpenRouter',
-        billingLabel: 'Roteador gratis/pago',
+        billingLabel: 'Roteador grátis/pago',
         defaultModel: 'openrouter/free',
         apiKeyLabel: 'OpenRouter API Key',
         docsUrl: 'https://openrouter.ai/keys',
@@ -39,9 +39,9 @@ export const PROVIDERS = {
             {
                 id: 'openrouter/free',
                 label: 'OpenRouter Free Router',
-                badge: 'Gratis',
-                billing: 'Gratis com limites e variacao de modelo',
-                description: 'Escolhe automaticamente um modelo gratuito compativel; ideal para testes.'
+                badge: 'Grátis',
+                billing: 'Grátis com limites e variação de modelo',
+                description: 'Escolhe automaticamente um modelo gratuito compatível; ideal para testes.'
             },
             {
                 id: 'deepseek/deepseek-v4-pro',
@@ -71,7 +71,7 @@ export const PROVIDERS = {
         docsSteps: [
             'Acesse a plataforma DeepSeek.',
             'Abra API keys e crie uma chave.',
-            'Garanta saldo ou creditos ativos antes de usar.'
+            'Garanta saldo ou créditos ativos antes de usar.'
         ],
         models: [
             {
@@ -79,14 +79,14 @@ export const PROVIDERS = {
                 label: 'DeepSeek V4 Pro',
                 badge: 'Pago',
                 billing: 'Pago por token',
-                description: 'Modelo premium com contexto amplo e raciocinio forte.'
+                description: 'Modelo premium com contexto amplo e raciocínio forte.'
             },
             {
                 id: 'deepseek-v4-flash',
                 label: 'DeepSeek V4 Flash',
                 badge: 'Pago',
                 billing: 'Pago por token',
-                description: 'Alternativa mais economica para analises frequentes.'
+                description: 'Alternativa mais econômica para análises frequentes.'
             }
         ]
     },
@@ -102,7 +102,7 @@ export const PROVIDERS = {
         docsSteps: [
             'Acesse Z.ai Model API.',
             'Entre em API Keys e gere uma chave.',
-            'Use a API geral para este app, nao o endpoint exclusivo de Coding Plan.'
+            'Use a API geral para este app, não o endpoint exclusivo de Coding Plan.'
         ],
         models: [
             {

@@ -13,7 +13,7 @@ export const DonationBanner = () => {
             O SISTEMA É DE GRAÇA, MAS AS MINHAS OLHEIRAS NÃO.
           </h2>
           <p className="font-jetbrains text-xs md:text-sm font-bold uppercase opacity-90 max-w-2xl leading-relaxed">
-            CURTIU O PROJETO? ELE DEU UM TRABALHO PARA FICAR PRONTO. QUER MANDAR UM PIX PARA FINANCIAR MEU CAFÉ (E MINHA TERAPIA)? VOCÊ AINDA GANHA O PASSAPORTE VIP PRO CÉU DOS VIBECODERS.
+            CURTIU O PROJETO? ELE DEU UM TRABALHO PARA FICAR PRONTO. QUER MANDAR UM PIX PARA FINANCIAR MEU CAFÉ (E MINHA TERAPIA)? VOCÊ AINDA GANHA O PASSAPORTE VIP PARA O CÉU DOS VIBECODERS.
           </p>
         </div>
 

@@ -4,7 +4,7 @@ const STEPS = [
     { id: 'extract', label: 'Extraindo conteúdo do PDF' },
     { id: 'structure', label: 'Analisando estrutura do currículo' },
     { id: 'ai', label: 'Análise inteligente por IA' },
-    { id: 'match', label: 'Calculando Match Score' },
+    { id: 'match', label: 'Calculando aderência à vaga' },
     { id: 'report', label: 'Gerando relatório final' }
 ];
 
@@ -38,7 +38,7 @@ export const LoadingOverlay = () => {
                     </div>
                 </div>
 
-                <h2 className="loading-title">Analisando seu Perfil</h2>
+                <h2 className="loading-title">Analisando seu perfil</h2>
 
                 <div className="loading-steps">
                     {STEPS.map((step, index) => {

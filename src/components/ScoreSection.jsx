@@ -53,7 +53,7 @@ export const ScoreSection = ({ score, probability, reason }) => {
                 </div>
                 
                 <div className="inline-block bg-background text-foreground font-jetbrains font-bold text-[10px] lg:text-xs px-3 py-1 uppercase tracking-widest self-start mb-6">
-                    Status da Triagem
+                    Status da triagem
                 </div>
                 
                 <div>
@@ -61,12 +61,12 @@ export const ScoreSection = ({ score, probability, reason }) => {
                         {probability}
                     </div>
                     <div className="font-jetbrains font-bold text-xs text-muted-foreground uppercase tracking-widest mt-2">
-                        Probabilidade de Leitura ATS
+                        Probabilidade de leitura ATS
                     </div>
                 </div>
 
                 <div className="mt-8 border-t-2 border-dashed border-background/20 pt-6 flex-1 z-10">
-                    <h3 className="font-jetbrains font-black text-primary uppercase text-sm mb-3">Diagnóstico de Formato</h3>
+                    <h3 className="font-jetbrains font-black text-primary uppercase text-sm mb-3">Diagnóstico de formato</h3>
                     <p className="font-jetbrains text-sm md:text-base leading-relaxed text-background/90">{reason}</p>
                 </div>
 
@@ -75,7 +75,7 @@ export const ScoreSection = ({ score, probability, reason }) => {
                         <div className="bg-primary text-foreground p-1 border-2 border-background">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </div>
-                        Perfeita leitura ATS
+                        Leitura ATS perfeita
                     </div>
                     <div className="flex items-center gap-3 font-jetbrains text-xs font-bold uppercase">
                         <div className="bg-primary text-foreground p-1 border-2 border-background">

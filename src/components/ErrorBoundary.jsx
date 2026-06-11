@@ -66,7 +66,7 @@ export class ErrorBoundary extends React.Component {
                             fontFamily: 'inherit'
                         }}
                     >
-                        Recarregar Página
+                        Recarregar página
                     </button>
                 </div>
             );

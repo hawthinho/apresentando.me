@@ -70,10 +70,10 @@ export const SettingsView = ({ onBack }) => {
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-8 border-b-4 border-foreground">
                 <div>
                     <span className="inline-block font-jetbrains font-bold text-[10px] uppercase tracking-widest bg-foreground text-primary px-3 py-1 mb-4 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        Painel de Controle
+                        Painel de controle
                     </span>
                     <h1 className="font-space font-black text-5xl md:text-6xl uppercase tracking-tighter leading-none mb-2">
-                        Configuração de <br/><span className="bg-foreground text-primary px-3 pt-2 pb-1 inline-block mt-3 mb-2 shadow-[4px_4px_0px_0px_rgba(212,255,0,1)]">Motor IA.</span>
+                        Configuração de <br/><span className="bg-foreground text-primary px-3 pt-2 pb-1 inline-block mt-3 mb-2 shadow-[4px_4px_0px_0px_rgba(212,255,0,1)]">Motor de IA.</span>
                     </h1>
                 </div>
                 <button
@@ -90,7 +90,7 @@ export const SettingsView = ({ onBack }) => {
                     <section className="flex flex-col gap-4">
                         <div>
                             <label className="font-space font-black text-2xl uppercase tracking-tighter">
-                                Provedor Principal
+                                Provedor principal
                             </label>
                             <p className="font-jetbrains font-bold text-xs text-muted-foreground uppercase mt-2">
                                 Escolha onde a análise e a geração serão executadas.
@@ -100,7 +100,7 @@ export const SettingsView = ({ onBack }) => {
                                     <rect x="3" y="11" width="18" height="10" rx="2"></rect>
                                     <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
                                 </svg>
-                                <span>Trava ativa: somente {provider.shortLabel} usa API Key agora. Ao salvar outro provedor, qualquer chave anterior é removida deste navegador.</span>
+                                <span>Trava ativa: somente {provider.shortLabel} usa a API Key no momento. Ao salvar outro provedor, qualquer chave anterior é removida deste navegador.</span>
                             </div>
                         </div>
 
@@ -173,7 +173,7 @@ export const SettingsView = ({ onBack }) => {
                                 </label>
                                 <div className="bg-muted text-muted-foreground p-3 border-l-4 border-foreground font-jetbrains font-bold text-[10px] uppercase mb-2 flex items-center gap-3 mt-2">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-                                    <span>Apenas a chave do provedor ativo fica salva no Local Storage. Curriculo e vaga sao enviados somente ao provedor escolhido.</span>
+                                    <span>Apenas a chave do provedor ativo fica salva no armazenamento local. Currículo e vaga são enviados somente ao provedor escolhido.</span>
                                 </div>
                                 <input
                                     type="password"
@@ -227,7 +227,7 @@ export const SettingsView = ({ onBack }) => {
                             className="h-14 px-8 rounded-none border-4 border-foreground bg-foreground text-primary hover:bg-black font-jetbrains font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center justify-center gap-3"
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                            Gravar Configuração
+                            Salvar configuração
                         </button>
                     </div>
                 </div>

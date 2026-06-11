@@ -27,7 +27,7 @@ export const AnalysisCard = ({
                 <div className="flex items-center gap-3 mb-6">
                     <span className="w-2.5 h-2.5 bg-primary animate-pulse" />
                     <span className="font-jetbrains font-bold text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-                        Motor ATS Online. Pronto para Análise
+                        Motor ATS Online. Pronto para análise
                     </span>
                 </div>
 
@@ -81,7 +81,7 @@ export const AnalysisCard = ({
                         </span>
                         <div>
                             <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight leading-none">
-                                Matriz Fonte
+                                Currículo fonte
                             </h2>
                             <p className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
                                 Seu currículo em formato PDF
@@ -109,7 +109,7 @@ export const AnalysisCard = ({
                         </span>
                         <div>
                             <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight leading-none">
-                                Vaga Alvo
+                                Vaga-alvo
                             </h2>
                             <p className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
                                 Potencializa a precisão da análise
@@ -143,7 +143,7 @@ export const AnalysisCard = ({
                 >
                     {file && hasApiKey ? (
                         <>
-                            <span>Processar Análise</span>
+                            <span>Processar análise</span>
                             <svg className="w-8 h-8 md:w-10 md:h-10 group-hover:translate-x-2 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
                                 <line x1="2" y1="12" x2="22" y2="12" />
                                 <polyline points="15 5 22 12 15 19" />
@@ -156,7 +156,7 @@ export const AnalysisCard = ({
                                 <line x1="12" y1="8" x2="12" y2="12" />
                                 <line x1="12" y1="16" x2="12.01" y2="16" />
                             </svg>
-                            Aguardando chave de api
+                            Aguardando chave de API
                         </span>
                     ) : (
                         <span className="flex items-center gap-3 text-xl md:text-2xl">
@@ -165,7 +165,7 @@ export const AnalysisCard = ({
                                 <line x1="12" y1="8" x2="12" y2="12" />
                                 <line x1="12" y1="16" x2="12.01" y2="16" />
                             </svg>
-                            Aguardando Documento
+                            Aguardando documento
                         </span>
                     )}
                 </button>
@@ -176,7 +176,7 @@ export const AnalysisCard = ({
                 <div className="bg-foreground text-primary px-4 py-3 font-jetbrains text-[11px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground">
                     <span className="w-2 h-2 bg-primary rounded-full animate-pulse shrink-0" />
                     <span className="opacity-80">
-                        Motor selecionado: {provider.shortLabel} / {selectedModel}. Tempo estimado ~30s. Não feche a aba.
+                        Motor selecionado: {provider.shortLabel} / {selectedModel}. Tempo estimado: ~30s. Não feche a aba.
                     </span>
                 </div>
                 <div className="bg-muted text-muted-foreground px-4 py-3 font-jetbrains text-[10px] font-bold uppercase tracking-wider flex items-center gap-3 border-2 border-foreground/20">

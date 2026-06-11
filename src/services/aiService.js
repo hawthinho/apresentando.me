@@ -316,7 +316,7 @@ const getOptimizationInstructions = (aggressiveness) => {
 - Corrija gramática, ortografia e consistência.
 - Padronize datas, títulos e bullets.
 - Preserve voz, fatos, datas, empresas e links.
-- Insira keywords apenas onde já existe contexto compatível.
+- Insira palavras-chave apenas onde já existe contexto compatível.
 - Não invente conquistas, senioridade, certificações ou ferramentas.
 `,
         medium: `
@@ -331,7 +331,7 @@ const getOptimizationInstructions = (aggressiveness) => {
 - Faça tudo do modo equilibrado.
 - Reestruture a narrativa para maximizar clareza, aderência e impacto.
 - Remova informação irrelevante para a vaga.
-- Espelhe termos da vaga sem empilhar keywords artificialmente.
+- Espelhe termos da vaga sem empilhar palavras-chave artificialmente.
 - Reescreva todos os bullets fracos, mantendo fatos e limites do original.
 `
     };

@@ -2,20 +2,20 @@ import React, { useState, useMemo } from 'react';
 
 const JOB_PRESETS = [
     {
-        label: "[01] Desenvolvedor(a) Fullstack Sênior",
+        label: "[01] Desenvolvedor(a) Full Stack Sênior",
         text: `🚀 SOBRE A VAGA
-Estamos buscando um(a) Desenvolvedor(a) Fullstack Sênior para integrar nossa principal Squad de pagamentos. Você será diretamente responsável por arquitetar soluções resilientes, de alta disponibilidade e contribuir com decisões arquiteturais de impacto para milhões de usuários.
+Estamos buscando um(a) Desenvolvedor(a) Full Stack Sênior para integrar nossa principal squad de pagamentos. Você será diretamente responsável por arquitetar soluções resilientes, de alta disponibilidade e contribuir com decisões arquiteturais de impacto para milhões de usuários.
 
 💼 RESPONSABILIDADES
 - Liderar o desenho e implementação de microsserviços escaláveis.
 - Manter e evoluir interfaces front-end complexas utilizando React.js e Next.js.
-- Otimizar queries e modelagem de banco de dados relacionais e NoSQL (PostgreSQL, MongoDB).
-- Atuar como mentor técnico para desenvolvedores Plenos e Juniores.
+- Otimizar consultas e modelagem de bancos de dados relacionais e NoSQL (PostgreSQL, MongoDB).
+- Atuar como mentor técnico para desenvolvedores plenos e juniores.
 
 🎯 REQUISITOS OBRIGATÓRIOS
 - 5+ anos de experiência comprovada com Node.js e React.
 - Vivência sólida em arquiteturas orientadas a eventos (Kafka/RabbitMQ).
-- Forte background em testes automatizados e Integração Contínua (CI/CD).
+- Forte experiência em testes automatizados e integração contínua (CI/CD).
 - Inglês avançado para conversação com times globais.
 
 🌟 DIFERENCIAIS
@@ -28,16 +28,16 @@ Estamos buscando um(a) Desenvolvedor(a) Fullstack Sênior para integrar nossa pr
 Buscamos um(a) Coordenador(a) Financeiro(a) analítico(a) e movido(a) a resultados para gerenciar o planejamento financeiro, orçamento e rotinas de tesouraria de uma grande multinacional de varejo.
 
 💼 RESPONSABILIDADES
-- Coordenar a equipe de contas a pagar, receber e tesouraria diária (Cash Management).
+- Coordenar a equipe de contas a pagar, contas a receber e tesouraria diária.
 - Estruturar e analisar o DRE mensal, garantindo a saúde do fluxo de caixa e capital de giro.
-- Elaborar reports e dashboards financeiros críticos em Power BI para a diretoria executiva.
+- Elaborar relatórios e dashboards financeiros críticos em Power BI para a diretoria executiva.
 - Liderar o processo de auditoria externa e garantir a conformidade fiscal (Compliance).
 
 🎯 REQUISITOS OBRIGATÓRIOS
 - Formação superior completa em Administração, Economia ou Ciências Contábeis.
-- Excel nível Especialista (VBA, Power Query, modelagem financeira de alto grau).
+- Excel em nível especialista (VBA, Power Query, modelagem financeira de alto grau).
 - Experiência mínima de 4 anos em posição de liderança no setor financeiro corporativo.
-- Sólido conhecimento de operação em ERPs de grande porte (SAP HANO ou TOTVS).
+- Sólido conhecimento de operação em ERPs de grande porte (SAP HANA ou TOTVS).
 
 🌟 DIFERENCIAIS
 - Pós-graduação, MBA ou especialização em Controladoria Corporativa.
@@ -46,7 +46,7 @@ Buscamos um(a) Coordenador(a) Financeiro(a) analítico(a) e movido(a) a resultad
     {
         label: "[03] Gerente de Recursos Humanos (HR Business Partner)",
         text: `🚀 SOBRE A VAGA
-Vaga para Gerente de Recursos Humanos (BP) com atuação 100% estratégica e próxima às lideranças (C-Level). Foco total em retenção de talentos (Turnover) e gestão robusta da cultura de um ambiente em hiper-crescimento.
+Vaga para Gerente de Recursos Humanos (BP) com atuação 100% estratégica e próxima às lideranças (C-Level). Foco total em retenção de talentos, redução de turnover e gestão robusta da cultura de um ambiente em hipercrescimento.
 
 💼 RESPONSABILIDADES
 - Estruturar planos de carreira consolidados, trilhas de desenvolvimento (PDI) e mapas de sucessão empresarial.
@@ -56,27 +56,27 @@ Vaga para Gerente de Recursos Humanos (BP) com atuação 100% estratégica e pr�
 
 🎯 REQUISITOS OBRIGATÓRIOS
 - Formação superior em Psicologia, Administração ou Gestão de RH.
-- Sólida vivência demonstrável de no mínimo 6 anos em posições estratégicas de Recursos Humanos.
+- Sólida vivência, com no mínimo 6 anos em posições estratégicas de Recursos Humanos.
 - Domínio em metodologias ágeis de avaliação e People Analytics em softwares modernos.
 - Capacidade argumentativa e visão de dono do negócio.
 
 🌟 DIFERENCIAIS
-- Vivência prévia no segmento de tecnologia (Startups/Fintechs) escalando de Series A para Series C.`
+- Vivência prévia no segmento de tecnologia (startups/fintechs), com empresas escalando de Série A para Série C.`
     },
     {
         label: "[04] Enfermeiro(a) RT - Auditoria Clínica Hospitalar",
         text: `🚀 SOBRE A VAGA
-Rede hospitalar referência de nível ouro busca Enfermeiro(a) Especialista em Auditoria Clínica para atuar estritamente na garantia da qualidade da assistência prestada (Quality Assurance) e conformidade de faturamentos operacionais.
+Rede hospitalar referência de nível ouro busca Enfermeiro(a) especialista em auditoria clínica para atuar estritamente na garantia da qualidade da assistência prestada e na conformidade dos faturamentos operacionais.
 
 💼 RESPONSABILIDADES
 - Realizar rotinas de auditoria concorrente à beira do leito e retrospectiva analítica de prontuários eletrônicos.
-- Analisar a pertinência clínica de uso rigoroso de OPME (Órteses, Próteses e Materiais Especiais) frente às normativas ANS Múltiplas.
-- Elaborar e assinar pareceres técnicos baseados em literatura médica para contestação robusta de glosas junto às Operadoras.
-- Criar POPs e capacitar equipes gerenciais de enfermagem para minimizar evasão local.
+- Analisar a pertinência clínica do uso de OPME (órteses, próteses e materiais especiais) frente às normativas da ANS.
+- Elaborar e assinar pareceres técnicos baseados em literatura médica para contestação robusta de glosas junto às operadoras.
+- Criar POPs e capacitar equipes gerenciais de enfermagem para reduzir glosas e perdas operacionais.
 
 🎯 REQUISITOS OBRIGATÓRIOS
 - Graduação em Enfermagem com registro ativo, isento de infrações e totalmente regularizado no COREN.
-- Pós-graduação lato-sensu completa em Auditoria de Sistemas de Saúde ou Gestão de OPME.
+- Pós-graduação lato sensu completa em Auditoria de Sistemas de Saúde ou Gestão de OPME.
 - Experiência prévia exigida de 3 anos liderando rotinas de auditoria complexa em contas médicas.
 - Domínio técnico da Tabela SUS, CBHPM e Rol de Procedimentos Reguladores da ANS.
 
@@ -87,22 +87,22 @@ Rede hospitalar referência de nível ouro busca Enfermeiro(a) Especialista em A
     {
         label: "[05] UX/UI Product Designer",
         text: `🚀 SOBRE A VAGA
-Buscamos um Product Designer end-to-end com paixão em traduzir dores de negócios latentes em interfaces polidas, mágicas e super usáveis para o nosso maior pilar SaaS B2B.
+Buscamos um Product Designer end-to-end com paixão por traduzir dores de negócio em interfaces polidas, consistentes e muito usáveis para o nosso maior pilar SaaS B2B.
 
 💼 RESPONSABILIDADES
-- Conduzir ciclos completos de pesquisas de UX (User Research), testes a/b em massa e entrevistas com grande amostragem de clientes corporativos.
+- Conduzir ciclos completos de pesquisas de UX (User Research), testes A/B e entrevistas com grande amostragem de clientes corporativos.
 - Desenhar arquitetura de informação coerente, criar fluxos lógicos e construir jornadas sem atritos.
-- Dar manutenção iterativa ao nosso forte Design System local (Design Tokens & Hand-offs).
+- Dar manutenção iterativa ao nosso design system local (Design Tokens e handoffs).
 - Produzir protótipos em alta fidelidade com extrema qualidade visual usando Figma.
 
 🎯 REQUISITOS OBRIGATÓRIOS
-- Mais de 3 anos de experiência imersa construindo Produtos Digitais e Web Apps complexos.
+- Mais de 3 anos de experiência construindo produtos digitais e aplicações web complexas.
 - Portfólio demonstrando não apenas as interfaces prontas, mas todo o processo de investigação e discovery (Design Thinking).
-- Facilidade com prototipagem avançada de Auto-layouts no Figma.
+- Facilidade com prototipagem avançada e Auto Layout no Figma.
 - Empatia e foco contínuo no sucesso do usuário final.
 
 🌟 DIFERENCIAIS
-- Habilidade profunda em microinterações avançadas usando Framer ou Principie.`
+- Habilidade avançada em microinterações usando Framer ou Principle.`
     }
 ];
 
@@ -163,7 +163,7 @@ export const JobInput = ({ value, onChange }) => {
                             onChange={(e) => { onChange(e.target.value); }}
                             defaultValue=""
                         >
-                            <option value="" disabled>⚡ CARREGAR PRESET DE VAGA</option>
+                            <option value="" disabled>⚡ CARREGAR EXEMPLO DE VAGA</option>
                             {JOB_PRESETS.map((preset, idx) => (
                                 <option key={idx} value={preset.text}>{preset.label}</option>
                             ))}
@@ -196,7 +196,7 @@ export const JobInput = ({ value, onChange }) => {
                             `}
                             value={value}
                             onChange={(e) => onChange(e.target.value)}
-                            placeholder={`>_ Cole aqui a descrição da vaga...\n\nListe requisitos técnicos, skills e competências avaliadas.\n\nIsto melhora a precisão da análise ATS.`}
+                            placeholder={`>_ Cole aqui a descrição da vaga...\n\nListe requisitos técnicos, habilidades e competências avaliadas.\n\nIsto melhora a precisão da análise ATS.`}
                             spellCheck="false"
                         />
 
@@ -212,7 +212,7 @@ export const JobInput = ({ value, onChange }) => {
                         <div className="flex items-center gap-3">
                             <span className={`w-2 h-2 ${isJobIdentified ? 'bg-primary animate-pulse' : 'bg-foreground/20'}`} />
                             <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-foreground/50">
-                                {isJobIdentified ? 'Vaga Detectada' : 'Aguardando Input'}
+                                {isJobIdentified ? 'Vaga detectada' : 'Aguardando entrada'}
                             </span>
                         </div>
 

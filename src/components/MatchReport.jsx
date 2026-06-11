@@ -4,7 +4,7 @@ export const MatchReport = ({ score, analysis, foundKeywords, missingKeywords })
     return (
         <div className="w-full bg-[#f8f9fa] border-4 border-foreground mt-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
             <div className="absolute -top-5 right-8 bg-foreground text-background font-jetbrains font-black text-xs px-4 py-2 uppercase tracking-widest flex items-center gap-2">
-                Match Report Module
+                Módulo de compatibilidade
             </div>
 
             {/* Header Area */}
@@ -20,7 +20,7 @@ export const MatchReport = ({ score, analysis, foundKeywords, missingKeywords })
                     </div>
                 </div>
                 <div className="p-8 flex-1 bg-background flex flex-col justify-center">
-                    <h3 className="font-space font-black text-2xl uppercase mb-3">Análise de Combinação</h3>
+                    <h3 className="font-space font-black text-2xl uppercase mb-3">Análise de aderência</h3>
                     <p className="font-jetbrains text-sm md:text-base text-foreground/80 leading-relaxed font-medium">
                         {analysis}
                     </p>
@@ -32,7 +32,7 @@ export const MatchReport = ({ score, analysis, foundKeywords, missingKeywords })
                 {/* Found Keywords */}
                 <div className="p-8">
                     <div className="font-jetbrains font-black uppercase text-sm mb-6 pb-2 border-b-4 border-foreground flex items-center justify-between">
-                        <span>Checklist de Requisitos</span>
+                        <span>Checklist de requisitos</span>
                         <span className="bg-foreground text-background px-2 py-0.5 text-[10px]">{foundKeywords.length}</span>
                     </div>
                     <div className="flex flex-col gap-3">
@@ -53,7 +53,7 @@ export const MatchReport = ({ score, analysis, foundKeywords, missingKeywords })
                 {/* Missing Keywords */}
                 <div className="p-8">
                     <div className="font-jetbrains font-black uppercase text-sm mb-6 pb-2 border-b-4 border-foreground flex items-center justify-between">
-                        <span>O que Acrescentar</span>
+                        <span>O que acrescentar</span>
                         <span className="bg-destructive text-destructive-foreground px-2 py-0.5 text-[10px]">{missingKeywords.length}</span>
                     </div>
                     <div className="flex flex-col gap-3">

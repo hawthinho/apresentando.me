@@ -163,7 +163,7 @@ export const FileUpload = ({ file, onFileSelect }) => {
                                 <div className="flex items-center gap-2">
                                     <span className="w-2.5 h-2.5 bg-foreground animate-pulse" />
                                     <span className="font-jetbrains font-black text-[10px] uppercase tracking-widest text-foreground">
-                                        Documento Carregado
+                                        Documento carregado
                                     </span>
                                 </div>
                                 <svg className="w-5 h-5 text-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
@@ -206,7 +206,7 @@ export const FileUpload = ({ file, onFileSelect }) => {
                                 <line x1="18" y1="6" x2="6" y2="18" />
                                 <line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
-                            Remover e Selecionar Outro
+                            Remover e selecionar outro
                         </button>
                     </div>
                 )}

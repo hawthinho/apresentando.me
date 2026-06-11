@@ -33,7 +33,7 @@ export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory 
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 mb-8 border-b-4 border-foreground">
                 <div>
                     <span className="inline-block font-jetbrains font-bold text-[10px] uppercase tracking-widest bg-foreground text-primary px-3 py-1 mb-4 border-2 border-foreground shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                        Logs do Sistema
+                        Logs do sistema
                     </span>
                     <h1 className="font-space font-black text-5xl md:text-6xl uppercase tracking-tighter leading-none">
                         Histórico de <br/><span className="text-background bg-foreground px-2 inline-block mt-2 -rotate-1">Análises.</span>
@@ -68,8 +68,8 @@ export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory 
                 {history.length === 0 ? (
                     <div className="text-center p-12 bg-[#F4F4F0] border-4 border-foreground border-dashed flex flex-col items-center justify-center flex-1">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mb-4 opacity-50"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-                        <p className="font-space font-black text-2xl uppercase mb-2">Sem Registros</p>
-                        <p className="text-sm font-medium font-jetbrains">Inicie uma nova análise no terminal principal para registrar eventos.</p>
+                        <p className="font-space font-black text-2xl uppercase mb-2">Sem registros</p>
+                        <p className="text-sm font-medium font-jetbrains">Inicie uma nova análise na tela principal para registrar eventos.</p>
                     </div>
                 ) : (
                     <div className="flex flex-col gap-6">
@@ -104,7 +104,7 @@ export const HistoryView = ({ history, onSelectAnalysis, onBack, onClearHistory 
                                     <div className="font-space font-black text-4xl group-hover:text-primary-foreground">
                                         {item.atsScore} <span className="text-sm align-super opacity-50 font-jetbrains">/100</span>
                                     </div>
-                                    <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest mt-1 opacity-70">ATS Score</span>
+                                    <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest mt-1 opacity-70">Score ATS</span>
                                 </div>
                             </div>
                         ))}

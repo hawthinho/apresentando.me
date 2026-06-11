@@ -181,7 +181,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     const steps = [
         { id: 'config', label: 'Configuração', num: 1 },
         { id: 'processing', label: 'Processamento', num: 2 },
-        { id: 'success', label: 'Resultado Final', num: 3 }
+        { id: 'success', label: 'Resultado final', num: 3 }
     ];
 
     const getCurrentStepIndex = () => {
@@ -251,7 +251,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
 
             <div className="bg-background border-4 border-foreground w-full shadow-[12px_12px_0px_0px_rgba(212,255,0,1)] flex flex-col relative bg-white">
                 <div className="border-b-4 border-foreground p-8 md:p-12 relative overflow-hidden bg-white">
-                    <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tighter leading-none text-foreground/50">Progresso do Override</h2>
+                    <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tighter leading-none text-foreground/50">Progresso da otimização</h2>
 
                     {/* Stepper Grid */}
                     <div className="grid grid-cols-3 gap-4 mt-6">
@@ -307,7 +307,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
 
                             <div className="mt-8 flex justify-end gap-4 border-t-2 border-foreground/30 pt-8">
                                 <Button className="h-14 px-8 rounded-none border-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black uppercase text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none" onClick={handleOptimize}>
-                                    Iniciar Override
+                                    Iniciar otimização
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-5 h-5 ml-2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </Button>
                             </div>
@@ -323,7 +323,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                 <span className="font-space font-black text-xl text-foreground">{(loadingStepIndex / (LOADING_STEPS.length - 1) * 100).toFixed(0)}%</span>
                             </div>
 
-                            <h3 className="font-space font-black text-3xl uppercase tracking-tighter mb-8">Executando Rotinas</h3>
+                            <h3 className="font-space font-black text-3xl uppercase tracking-tighter mb-8">Executando rotinas</h3>
 
                             <div className="w-full max-w-md flex flex-col gap-4">
                                 {LOADING_STEPS.map((s, index) => {
@@ -345,8 +345,8 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                     {step === 'success' && (
                         <div className="flex flex-col gap-8">
                             <div className="bg-primary text-foreground p-8 border-4 border-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                <h3 className="font-space font-black text-3xl md:text-4xl uppercase tracking-tighter break-words hyphens-auto">Currículo Reconstruído.</h3>
-                                <p className="font-jetbrains font-bold uppercase text-sm lg:text-base mt-4">Sua nova versão profissional está encriptada e pronta para emissão.</p>
+                                <h3 className="font-space font-black text-3xl md:text-4xl uppercase tracking-tighter break-words hyphens-auto">Currículo reconstruído.</h3>
+                                <p className="font-jetbrains font-bold uppercase text-sm lg:text-base mt-4">Sua nova versão profissional está pronta para emissão.</p>
                             </div>
 
                             <div className="bg-[#D4FF00] text-foreground p-4 md:p-6 border-4 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-jetbrains font-bold text-xs md:text-sm uppercase flex items-start md:items-center gap-4">
@@ -357,23 +357,23 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 mt-4">
                                 {/* Core Version */}
                                 <div className="border-4 border-foreground bg-white p-6 lg:p-8 flex flex-col gap-4 relative">
-                                    <div className="absolute -top-4 -left-4 bg-foreground text-background font-jetbrains font-black text-[10px] uppercase px-3 py-1">Versão Original (IA)</div>
+                                    <div className="absolute -top-4 -left-4 bg-foreground text-background font-jetbrains font-black text-[10px] uppercase px-3 py-1">Versão gerada por IA</div>
                                     
                                     <Button className="w-full h-16 lg:h-20 mt-4 rounded-none bg-foreground text-primary hover:bg-black font-jetbrains font-black uppercase tracking-widest border-2 border-foreground" onClick={handleDownloadPDF}>
                                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                        Baixar PDF Final
+                                        Baixar PDF final
                                     </Button>
 
                                     <div className="border-2 border-foreground hover:bg-muted transition-colors mt-2">
                                         <div className="flex items-center justify-between p-4 cursor-pointer" onClick={() => setShowLatex(!showLatex)}>
-                                            <span className="font-jetbrains font-bold uppercase text-xs">Exibir Código LaTeX</span>
+                                            <span className="font-jetbrains font-bold uppercase text-xs">Exibir código LaTeX</span>
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transform transition-transform ${showLatex ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
                                         </div>
                                         {showLatex && (
                                             <div className="p-4 border-t-2 border-foreground bg-[#F4F4F0]">
                                                 <textarea readOnly value={latexCode} className="w-full h-32 bg-foreground text-primary font-jetbrains text-xs p-4 resize-none mb-4 focus:outline-none" />
                                                 <div className="flex flex-col md:flex-row gap-3">
-                                                    <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={handleCopyLatex}>Copiar Código</Button>
+                                                    <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={handleCopyLatex}>Copiar código</Button>
                                                     <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                         <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                     </a>
@@ -385,7 +385,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                     {!lastEditedAt && (
                                         <Button variant="outline" className="w-full h-12 mt-2 rounded-none border-2 border-dashed border-foreground font-jetbrains font-bold uppercase text-xs hover:bg-muted" onClick={handleEditResume}>
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                                            Editar Manualmente
+                                            Editar manualmente
                                         </Button>
                                     )}
                                 </div>
@@ -394,18 +394,18 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                 {lastEditedAt && (
                                     <div className="border-4 border-primary bg-white p-6 lg:p-8 flex flex-col gap-4 relative shadow-[8px_8px_0px_0px_rgba(212,255,0,1)]">
                                         <div className="absolute -top-4 -left-4 bg-primary text-foreground font-jetbrains font-black text-[10px] uppercase px-3 py-1 flex flex-col">
-                                            <span>Versão Editada</span>
+                                            <span>Versão editada</span>
                                             <span className="font-normal opacity-70 border-t border-foreground/30 mt-1 pt-1">{lastEditedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
                                         </div>
                                         
                                         <Button className="w-full h-16 lg:h-20 mt-4 rounded-none bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black uppercase tracking-widest border-2 border-foreground" onClick={handleDownloadEditedPDF}>
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                            Baixar PDF Editado
+                                            Baixar PDF editado
                                         </Button>
 
                                         <div className="border-2 border-foreground hover:bg-muted transition-colors mt-2">
                                             <div className="flex items-center justify-between p-4 cursor-pointer" onClick={() => setShowEditedLatex(!showEditedLatex)}>
-                                                <span className="font-jetbrains font-bold uppercase text-xs">Exibir Código LaTeX Editado</span>
+                                                <span className="font-jetbrains font-bold uppercase text-xs">Exibir código LaTeX editado</span>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transform transition-transform ${showEditedLatex ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
                                             </div>
                                             {showEditedLatex && (
@@ -415,7 +415,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                                         <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
                                                                 navigator.clipboard.writeText(formatResumeToLatex(parsedResume));
                                                                 alert("Código LaTeX copiado!");
-                                                            }}>Copiar Código</Button>
+                                                            }}>Copiar código</Button>
                                                         <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                             <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                         </a>
@@ -426,7 +426,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
 
                                         <Button variant="outline" className="w-full h-12 mt-2 rounded-none border-2 border-dashed border-foreground font-jetbrains font-bold uppercase text-xs hover:bg-muted" onClick={handleEditResume}>
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                                            Editar Novamente
+                                            Editar novamente
                                         </Button>
                                     </div>
                                 )}
@@ -463,23 +463,23 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                 {!coverLetter && !isGeneratingCoverLetter && (
                                     <div className="border-4 border-foreground bg-primary/10 p-8 flex flex-col gap-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                                         <div className="max-w-3xl">
-                                            <h4 className="font-space font-black text-2xl uppercase tracking-tighter border-b-2 border-foreground pb-1 inline-block">Potencialize sua aplicação</h4>
-                                            <p className="font-jetbrains text-sm mt-3 font-bold text-foreground/80">Escolha um estilo e gere uma Carta de Apresentação sob medida baseada neste currículo otimizado e na vaga desejada.</p>
+                                            <h4 className="font-space font-black text-2xl uppercase tracking-tighter border-b-2 border-foreground pb-1 inline-block">Potencialize sua candidatura</h4>
+                                            <p className="font-jetbrains text-sm mt-3 font-bold text-foreground/80">Escolha um estilo e gere uma carta de apresentação sob medida baseada neste currículo otimizado e na vaga desejada.</p>
                                         </div>
-                                        {renderCoverLetterStylePicker({ buttonLabel: 'Gerar Carta', icon: <FileText className="w-5 h-5 ml-2" strokeWidth={3} /> })}
+                                        {renderCoverLetterStylePicker({ buttonLabel: 'Gerar carta', icon: <FileText className="w-5 h-5 ml-2" strokeWidth={3} /> })}
                                     </div>
                                 )}
 
                                 {isGeneratingCoverLetter && !coverLetter && (
                                     <div className="border-4 border-foreground bg-background p-8 flex flex-col items-center justify-center gap-4 border-dashed shadow-none opacity-70">
                                         <div className="w-8 h-8 border-4 border-primary rounded-full border-t-foreground animate-spin"></div>
-                                        <span className="font-jetbrains font-bold uppercase tracking-widest text-xs animate-pulse">Forjando Carta Estratégica...</span>
+                                        <span className="font-jetbrains font-bold uppercase tracking-widest text-xs animate-pulse">Gerando carta estratégica...</span>
                                     </div>
                                 )}
 
                                 {coverLetter && (
                                     <div className="border-4 border-foreground bg-white p-8 flex flex-col gap-6 relative shadow-[8px_8px_0px_0px_rgba(212,255,0,1)] animate-in fade-in slide-in-from-bottom-4">
-                                        <div className="absolute -top-4 -left-4 bg-primary text-foreground font-jetbrains font-black text-[10px] uppercase px-3 py-1">Cover Letter Gerada</div>
+                                        <div className="absolute -top-4 -left-4 bg-primary text-foreground font-jetbrains font-black text-[10px] uppercase px-3 py-1">Carta gerada</div>
                                         
                                         {!isEditingCoverLetter ? (
                                             <div className="bg-[#FBFBF7] border-2 border-foreground/20 p-6 md:p-10 min-h-[240px]">
@@ -508,24 +508,24 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                             <Button className="w-full min-h-[3.5rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-primary hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground whitespace-normal leading-tight text-center" onClick={handleDownloadCoverLetterPDF}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                Baixar PDF da Carta
+                                                Baixar PDF da carta
                                             </Button>
                                             <Button variant="outline" className="w-full h-14 rounded-none border-2 border-dashed border-foreground font-jetbrains font-bold uppercase text-xs hover:bg-muted" onClick={() => setIsEditingCoverLetter(!isEditingCoverLetter)}>
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                                                {isEditingCoverLetter ? 'Finalizar Edição' : 'Editar Carta'}
+                                                {isEditingCoverLetter ? 'Finalizar edição' : 'Editar carta'}
                                             </Button>
                                         </div>
 
                                         <div className="mt-2">
                                             <h5 className="font-space font-black text-xl uppercase mb-3">Gerar outra versão</h5>
                                             <p className="font-jetbrains text-xs font-bold uppercase text-foreground/60 mb-4">Selecione um estilo novamente para criar uma nova carta.</p>
-                                            {renderCoverLetterStylePicker({ buttonLabel: 'Gerar Novamente', icon: <RefreshCw className="w-5 h-5 ml-2" strokeWidth={3} />, compact: true })}
+                                            {renderCoverLetterStylePicker({ buttonLabel: 'Gerar novamente', icon: <RefreshCw className="w-5 h-5 ml-2" strokeWidth={3} />, compact: true })}
                                         </div>
 
                                         {/* LaTeX de Cover Letter */}
                                         <div className="border-2 border-foreground hover:bg-muted transition-colors mt-2">
                                             <div className="flex items-center justify-between p-4 cursor-pointer" onClick={() => setShowCoverLetterLatex(!showCoverLetterLatex)}>
-                                                <span className="font-jetbrains font-bold uppercase text-xs">Exibir Código LaTeX da Carta</span>
+                                                <span className="font-jetbrains font-bold uppercase text-xs">Exibir código LaTeX da carta</span>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transform transition-transform ${showCoverLetterLatex ? 'rotate-180' : ''}`}><path d="M6 9l6 6 6-6" /></svg>
                                             </div>
                                             {showCoverLetterLatex && (
@@ -535,7 +535,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                                         <Button variant="outline" className="w-full md:flex-1 rounded-none border-2 border-foreground font-jetbrains uppercase text-[10px] font-bold" onClick={() => {
                                                                 navigator.clipboard.writeText(formatCoverLetterToLatex(coverLetter));
                                                                 alert("Código LaTeX copiado!");
-                                                            }}>Copiar Código</Button>
+                                                            }}>Copiar código</Button>
                                                         <a href="https://prism.openai.com/" target="_blank" rel="noopener noreferrer" className="w-full md:flex-1 block">
                                                             <Button className="w-full rounded-none border-2 border-foreground bg-primary hover:bg-foreground hover:text-primary text-foreground font-jetbrains uppercase text-[10px] font-bold">Ir para Prism ↗</Button>
                                                         </a>
@@ -551,17 +551,17 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         <div>
                                             <h4 className="font-space font-black text-2xl uppercase tracking-tighter border-b-4 border-foreground pb-2 inline-flex items-center gap-3">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                Exportação Única
+                                                Exportação única
                                             </h4>
                                             <p className="font-jetbrains text-sm mt-4 font-bold uppercase text-foreground/80">
-                                                Baixe um único pacote contendo a Carta de Apresentação e o Currículo em um mesmo arquivo.
+                                                Baixe um único pacote contendo a carta de apresentação e o currículo em um mesmo arquivo.
                                             </p>
                                         </div>
                                         
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                                             <Button className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-[#D4FF00] hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => generateResumePDF(optimizedContent, 'documento_completo.pdf', coverLetter)}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                                Baixar PDF Único
+                                                Baixar PDF único
                                             </Button>
                                             
                                             <Button variant="outline" className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none border-4 border-foreground bg-white text-foreground hover:bg-muted font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => {
@@ -570,7 +570,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                                 alert("LaTeX do pacote unificado copiado! Cole no Prism.");
                                             }}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                                                Copiar LaTeX Único
+                                                Copiar LaTeX único
                                             </Button>
                                         </div>
                                     </div>

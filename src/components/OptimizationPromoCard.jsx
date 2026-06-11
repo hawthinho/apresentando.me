@@ -5,12 +5,12 @@ export const OptimizationPromoCard = ({
     onOptimize,
     badge = "UPGRADE DO SISTEMA",
     title = <>TRANSFORME SUA ANÁLISE EM <br/><span className="bg-primary text-foreground px-2 inline-block -rotate-2 mt-2">CONTRATAÇÃO.</span></>,
-    description = "Não seja descartado por algoritmos genéricos. Nossa IA reescreve e formata seu CV para obliterar os filtros ATS mais exigentes do mercado global.",
+    description = "Não seja descartado por algoritmos genéricos. Nossa IA reescreve e formata seu currículo para superar os filtros ATS mais exigentes do mercado global.",
     benefits = [
-        "Otimização automática de keywords",
+        "Otimização automática de palavras-chave",
         "Reescrita algorítmica de experiências",
         "Design LaTeX premium blindado",
-        "Checklist garantido para Gupy"
+        "Checklist alinhado à Gupy"
     ],
     initialCount = null
 }) => {
@@ -38,7 +38,7 @@ export const OptimizationPromoCard = ({
                         {initialCount !== null && (
                             <span className="font-jetbrains font-bold text-xs uppercase tracking-widest flex items-center gap-2 text-primary border-2 border-primary/30 px-3 py-1">
                                 <span className="w-2 h-2 bg-primary animate-pulse relative before:absolute before:bg-primary before:w-4 before:h-4 before:-left-1 before:-top-1 before:animate-ping before:opacity-50"></span>
-                                {count.toLocaleString()} Otimizações Hoje
+                                {count.toLocaleString()} otimizações hoje
                             </span>
                         )}
                     </div>
@@ -61,7 +61,7 @@ export const OptimizationPromoCard = ({
                 </div>
 
                 <div className="w-full lg:w-[450px] shrink-0 border-4 border-foreground bg-white text-foreground p-8 md:p-10 flex flex-col justify-center relative transform lg:rotate-2 shadow-[-12px_12px_0px_0px_rgba(212,255,0,1)] mx-auto lg:mx-0">
-                    <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-muted-foreground border-b-2 border-foreground pb-2 self-start mb-6">Ação Recomendada</span>
+                    <span className="font-jetbrains font-bold text-[10px] uppercase tracking-widest text-muted-foreground border-b-2 border-foreground pb-2 self-start mb-6">Ação recomendada</span>
 
                     <Button onClick={onOptimize} className="w-full rounded-none min-h-[5rem] py-4 bg-primary hover:bg-black hover:text-primary text-foreground border-4 border-foreground font-jetbrains font-black uppercase text-lg sm:text-lg md:text-2xl tracking-wider transition-all shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1.5 active:translate-x-1.5 active:shadow-none mt-2 whitespace-normal h-auto leading-tight md:leading-normal text-center">
                         OTIMIZAR CURRÍCULO
