@@ -20,8 +20,53 @@ const EditorSectionHeader = ({ title, icon, section, isExpanded, onToggle }) => 
     </div>
 );
 
+const normalizeArray = (value) => Array.isArray(value) ? value : [];
+
+const withResumeDefaults = (resumeData = {}) => ({
+    contact: {
+        name: resumeData.contact?.name || '',
+        email: resumeData.contact?.email || '',
+        phone: resumeData.contact?.phone || '',
+        linkedin: resumeData.contact?.linkedin || '',
+        portfolio: resumeData.contact?.portfolio || '',
+        location: resumeData.contact?.location || ''
+    },
+    summary: resumeData.summary || '',
+    experiences: normalizeArray(resumeData.experiences).map((exp = {}) => ({
+        role: exp.role || '',
+        company: exp.company || '',
+        startDate: exp.startDate || '',
+        endDate: exp.endDate || '',
+        bullets: normalizeArray(exp.bullets)
+    })),
+    projects: normalizeArray(resumeData.projects).map((project = {}) => ({
+        name: project.name || '',
+        url: project.url || '',
+        description: project.description || '',
+        bullets: normalizeArray(project.bullets)
+    })),
+    skills: {
+        hard: normalizeArray(resumeData.skills?.hard),
+        soft: normalizeArray(resumeData.skills?.soft)
+    },
+    education: normalizeArray(resumeData.education).map((edu = {}) => ({
+        degree: edu.degree || '',
+        institution: edu.institution || '',
+        year: edu.year || ''
+    })),
+    certificates: normalizeArray(resumeData.certificates).map((cert = {}) => ({
+        name: cert.name || '',
+        institution: cert.institution || '',
+        year: cert.year || ''
+    })),
+    languages: normalizeArray(resumeData.languages).map((lang = {}) => ({
+        language: lang.language || '',
+        level: lang.level || ''
+    }))
+});
+
 export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
-    const [data, setData] = useState(resumeData);
+    const [data, setData] = useState(() => withResumeDefaults(resumeData));
 
     const [hardSkillsText, setHardSkillsText] = useState(
         (resumeData?.skills?.hard || []).join(', ')
@@ -34,6 +79,7 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
         contact: true,
         summary: true,
         experiences: true,
+        projects: true,
         skills: true,
         education: true,
         certificates: true,
@@ -112,6 +158,36 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
     const removeBullet = (expIndex, bulletIndex) => {
         const newData = JSON.parse(JSON.stringify(data));
         newData.experiences[expIndex].bullets.splice(bulletIndex, 1);
+        setData(newData);
+        onUpdate?.(newData);
+    };
+
+    const addProjectBullet = (projectIndex) => {
+        const newData = JSON.parse(JSON.stringify(data));
+        if (!Array.isArray(newData.projects[projectIndex].bullets)) {
+            newData.projects[projectIndex].bullets = [];
+        }
+        newData.projects[projectIndex].bullets.push('');
+        setData(newData);
+        onUpdate?.(newData);
+    };
+
+    const updateProjectBullet = (projectIndex, bulletIndex, value) => {
+        const newData = JSON.parse(JSON.stringify(data));
+        if (!Array.isArray(newData.projects[projectIndex].bullets)) {
+            newData.projects[projectIndex].bullets = [];
+        }
+        newData.projects[projectIndex].bullets[bulletIndex] = value;
+        setData(newData);
+        onUpdate?.(newData);
+    };
+
+    const removeProjectBullet = (projectIndex, bulletIndex) => {
+        const newData = JSON.parse(JSON.stringify(data));
+        if (!Array.isArray(newData.projects[projectIndex].bullets)) {
+            newData.projects[projectIndex].bullets = [];
+        }
+        newData.projects[projectIndex].bullets.splice(bulletIndex, 1);
         setData(newData);
         onUpdate?.(newData);
     };
@@ -246,6 +322,63 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                             >
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 Adicionar experiência completa
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* Projects */}
+                <div className={sectionContainerClasses}>
+                    <EditorSectionHeader title="Projetos" section="projects" isExpanded={expandedSections.projects} onToggle={toggleSection} icon={<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path></svg>} />
+                    {expandedSections.projects && (
+                        <div className="p-6 md:p-8 bg-[#F4F4F0] flex flex-col gap-8">
+                            {data.projects.map((project, projectIndex) => (
+                                <div key={projectIndex} className="bg-white border-4 border-foreground p-6 md:p-8 relative mt-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                    <div className="absolute -top-4 -left-4 bg-primary text-foreground border-2 border-foreground font-jetbrains font-black text-xs px-3 py-1 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                        Projeto #{projectIndex + 1}
+                                    </div>
+                                    <div className="absolute top-2 right-2">
+                                        <button className="text-foreground hover:text-destructive transition-colors p-2" onClick={() => removeArrayItem('projects', projectIndex)}>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-8 gap-y-6 mt-4">
+                                        <div>
+                                            <label className={labelClasses}>Nome do projeto</label>
+                                            <input type="text" className={inputClasses} value={project.name || ''} onChange={(e) => updateArrayItem('projects', projectIndex, 'name', e.target.value)} placeholder="API de controle financeiro" />
+                                        </div>
+                                        <div>
+                                            <label className={labelClasses}>Link</label>
+                                            <input type="text" className={inputClasses} value={project.url || ''} onChange={(e) => updateArrayItem('projects', projectIndex, 'url', e.target.value)} placeholder="github.com/usuario/projeto" />
+                                        </div>
+                                        <div className="md:col-span-2">
+                                            <label className={labelClasses}>Descrição curta</label>
+                                            <input type="text" className={inputClasses} value={project.description || ''} onChange={(e) => updateArrayItem('projects', projectIndex, 'description', e.target.value)} placeholder="Projeto pessoal com autenticação, APIs REST e testes." />
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 border-t-2 border-dashed border-foreground/50 pt-6">
+                                        <label className={labelClasses}>Destaques técnicos</label>
+                                        <div className="flex flex-col gap-4 mt-4">
+                                            {(project.bullets || []).map((bullet, bulletIndex) => (
+                                                <div key={bulletIndex} className="flex flex-col md:flex-row gap-4 items-start">
+                                                    <span className="font-jetbrains font-bold text-primary text-2xl mt-1 shrink-0">•</span>
+                                                    <textarea className={`${inputClasses} h-24 resize-y`} value={bullet} onChange={(e) => updateProjectBullet(projectIndex, bulletIndex, e.target.value)} placeholder="Descrição do resultado técnico..." />
+                                                    <button className={removeBtnClasses} onClick={() => removeProjectBullet(projectIndex, bulletIndex)}>Remover</button>
+                                                </div>
+                                            ))}
+                                            <button className={addBtnClasses} onClick={() => addProjectBullet(projectIndex)}>+ Novo destaque</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <button
+                                className="w-full mt-6 h-16 border-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary font-jetbrains font-black text-sm uppercase transition-all flex justify-center items-center gap-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none"
+                                onClick={() => addArrayItem('projects', { name: '', url: '', description: '', bullets: [''] })}
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Adicionar projeto
                             </button>
                         </div>
                     )}

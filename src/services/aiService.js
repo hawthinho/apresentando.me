@@ -91,6 +91,12 @@ const normalizeResumeData = (resumeData = {}) => ({
         hard: asStringArray(resumeData.skills?.hard, 40),
         soft: asStringArray(resumeData.skills?.soft, 20)
     },
+    projects: Array.isArray(resumeData.projects) ? resumeData.projects.map((project) => ({
+        name: asText(project?.name),
+        url: asText(project?.url),
+        description: asText(project?.description),
+        bullets: asStringArray(project?.bullets, 8)
+    })).filter((project) => project.name || project.url || project.description || project.bullets.length) : [],
     education: Array.isArray(resumeData.education) ? resumeData.education.map((edu) => ({
         degree: asText(edu?.degree),
         institution: asText(edu?.institution),
@@ -316,6 +322,7 @@ const getOptimizationInstructions = (aggressiveness) => {
 - Corrija gramática, ortografia e consistência.
 - Padronize datas, títulos e bullets.
 - Preserve voz, fatos, datas, empresas e links.
+- Preserve projetos reais e seus links quando existirem.
 - Insira palavras-chave apenas onde já existe contexto compatível.
 - Não invente conquistas, senioridade, certificações ou ferramentas.
 `,
@@ -325,6 +332,7 @@ const getOptimizationInstructions = (aggressiveness) => {
 - Reformule bullets com verbos de ação e impacto concreto.
 - Quantifique apenas quando houver número explícito ou inferência segura.
 - Reordene habilidades conforme relevância para a vaga.
+- Para perfis júnior, transição de carreira ou pouca experiência formal, valorize projetos reais como evidência técnica.
 - Mantenha linguagem profissional, humana e verificável.
 `,
         high: `
@@ -347,6 +355,7 @@ ${STYLE_GUARDRAILS}
 Regras:
 - Nunca invente empresas, cargos, datas, certificações, tecnologias ou resultados.
 - Preserve todos os links do currículo original.
+- Preserve projetos existentes em uma seção própria. Se o currículo trouxer projetos pessoais, acadêmicos, portfólio ou GitHub, mova esses dados para o array projects.
 - Se uma seção não existir, deixe o array vazio.
 - Escreva em português do Brasil.
 - Use linguagem natural, profissional e específica. Evite texto robótico, clichês e exageros.
@@ -359,6 +368,7 @@ Formato obrigatório:
     "summary": "",
     "experiences": [{ "role": "", "company": "", "startDate": "", "endDate": "", "bullets": [] }],
     "skills": { "hard": [], "soft": [] },
+    "projects": [{ "name": "", "url": "", "description": "", "bullets": [] }],
     "education": [{ "degree": "", "institution": "", "year": "" }],
     "certificates": [{ "name": "", "institution": "", "year": "" }],
     "languages": [{ "language": "", "level": "" }]

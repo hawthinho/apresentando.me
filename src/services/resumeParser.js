@@ -26,6 +26,7 @@ export const parseResumeText = (content) => {
             hard: [],
             soft: []
         },
+        projects: [],
         education: [],
         certificates: [],
         languages: []
@@ -33,6 +34,7 @@ export const parseResumeText = (content) => {
 
     let currentSection = 'header';
     let currentExperience = null;
+    let currentProject = null;
     let currentEducation = null;
     let lineIndex = 0;
 
@@ -54,10 +56,14 @@ export const parseResumeText = (content) => {
         const sectionType = getSectionType(line);
 
         if (sectionType) {
-            // Save current experience/education if any
+            // Save current section item if any
             if (currentExperience) {
                 result.experiences.push(currentExperience);
                 currentExperience = null;
+            }
+            if (currentProject) {
+                result.projects.push(currentProject);
+                currentProject = null;
             }
             if (currentEducation) {
                 result.education.push(currentEducation);
@@ -115,6 +121,24 @@ export const parseResumeText = (content) => {
                 parseSkillsLine(line, result.skills);
                 break;
 
+            case 'projects':
+                if (line.startsWith('-') || line.startsWith('•')) {
+                    if (!currentProject) {
+                        currentProject = { name: '', url: '', description: '', bullets: [] };
+                    }
+                    currentProject.bullets.push(line.replace(/^[-•]\s*/, ''));
+                } else if (currentProject && looksLikeUrl(line) && !currentProject.url) {
+                    currentProject.url = line;
+                } else if (currentProject && !currentProject.description && !line.includes('|')) {
+                    currentProject.description = line;
+                } else {
+                    if (currentProject) {
+                        result.projects.push(currentProject);
+                    }
+                    currentProject = parseProjectLine(line);
+                }
+                break;
+
             case 'education':
                 if (line.includes('|')) {
                     if (currentEducation) {
@@ -154,6 +178,9 @@ export const parseResumeText = (content) => {
     if (currentExperience) {
         result.experiences.push(currentExperience);
     }
+    if (currentProject) {
+        result.projects.push(currentProject);
+    }
     if (currentEducation) {
         result.education.push(currentEducation);
     }
@@ -167,16 +194,26 @@ export const parseResumeText = (content) => {
  * @returns {string} Formatted resume text
  */
 export const formatResumeToText = (data) => {
+    const contact = data.contact || {};
+    const experiences = Array.isArray(data.experiences) ? data.experiences : [];
+    const projects = Array.isArray(data.projects) ? data.projects : [];
+    const skills = {
+        hard: Array.isArray(data.skills?.hard) ? data.skills.hard : [],
+        soft: Array.isArray(data.skills?.soft) ? data.skills.soft : []
+    };
+    const education = Array.isArray(data.education) ? data.education : [];
+    const certificates = Array.isArray(data.certificates) ? data.certificates : [];
+    const languages = Array.isArray(data.languages) ? data.languages : [];
     const lines = [];
 
     // Header
-    lines.push(data.contact.name);
+    lines.push(contact.name || '');
     const contactParts = [];
-    if (data.contact.email) contactParts.push(data.contact.email);
-    if (data.contact.phone) contactParts.push(data.contact.phone);
-    if (data.contact.linkedin) contactParts.push(data.contact.linkedin);
-    if (data.contact.portfolio) contactParts.push(data.contact.portfolio);
-    if (data.contact.location) contactParts.push(data.contact.location);
+    if (contact.email) contactParts.push(contact.email);
+    if (contact.phone) contactParts.push(contact.phone);
+    if (contact.linkedin) contactParts.push(contact.linkedin);
+    if (contact.portfolio) contactParts.push(contact.portfolio);
+    if (contact.location) contactParts.push(contact.location);
     if (contactParts.length > 0) {
         lines.push(contactParts.join(' | '));
     }
@@ -190,47 +227,65 @@ export const formatResumeToText = (data) => {
     }
 
     // Experience
-    if (data.experiences.length > 0) {
+    if (experiences.length > 0) {
         lines.push('EXPERIÊNCIA PROFISSIONAL');
-        data.experiences.forEach(exp => {
+        experiences.forEach(exp => {
             const expParts = [exp.role, exp.company];
             if (exp.startDate || exp.endDate) {
                 expParts.push(`${exp.startDate || ''} - ${exp.endDate || ''}`);
             }
             lines.push(expParts.filter(Boolean).join(' | '));
-            exp.bullets.forEach(bullet => {
+            (exp.bullets || []).forEach(bullet => {
                 lines.push(`- ${bullet}`);
             });
             lines.push('');
         });
     }
 
-    // Skills
-    if (data.skills.hard.length > 0 || data.skills.soft.length > 0) {
-        lines.push('COMPETÊNCIAS');
-        if (data.skills.hard.length > 0) {
-            lines.push(`[Hard Skills]: ${data.skills.hard.join(', ')}`);
-        }
-        if (data.skills.soft.length > 0) {
-            lines.push(`[Soft Skills]: ${data.skills.soft.join(', ')}`);
-        }
-        lines.push('');
+    // Projects
+    if (projects.length > 0) {
+        lines.push('PROJETOS');
+        projects.forEach(project => {
+            const projectParts = [project.name, project.url].filter(Boolean);
+            if (projectParts.length > 0) {
+                lines.push(projectParts.join(' | '));
+            }
+            if (project.description) {
+                lines.push(project.description);
+            }
+            (project.bullets || []).forEach(bullet => {
+                lines.push(`- ${bullet}`);
+            });
+            lines.push('');
+        });
     }
 
     // Education
-    if (data.education.length > 0) {
+    if (education.length > 0) {
         lines.push('FORMAÇÃO ACADÊMICA');
-        data.education.forEach(edu => {
+        education.forEach(edu => {
             const eduParts = [edu.degree, edu.institution, edu.year].filter(Boolean);
             lines.push(eduParts.join(' | '));
         });
         lines.push('');
     }
 
+    // Skills
+    if (skills.hard.length > 0 || skills.soft.length > 0) {
+        lines.push('COMPETÊNCIAS');
+        if (skills.hard.length > 0) {
+            lines.push(`[Hard Skills]: ${skills.hard.join(', ')}`);
+        }
+        if (skills.soft.length > 0) {
+            lines.push(`[Soft Skills]: ${skills.soft.join(', ')}`);
+        }
+        lines.push('');
+    }
+
     // Certificates
-    if (data.certificates.length > 0) {
+    if (certificates.length > 0) {
         lines.push('CERTIFICADOS E CURSOS');
-        data.certificates.forEach(cert => {
+        certificates.forEach(cert => {
             const certParts = [cert.name, cert.institution, cert.year].filter(Boolean);
             lines.push(`- ${certParts.join(' | ')}`);
         });
@@ -238,9 +293,9 @@ export const formatResumeToText = (data) => {
     }
 
     // Languages
-    if (data.languages.length > 0) {
+    if (languages.length > 0) {
         lines.push('IDIOMAS');
-        data.languages.forEach(lang => {
+        languages.forEach(lang => {
             lines.push(`- ${lang.language}: ${lang.level}`);
         });
     }
@@ -263,6 +318,7 @@ function getSectionType(line) {
     if (upper === 'RESUMO PROFISSIONAL' || upper === 'RESUMO' || upper === 'OBJETIVO') return 'summary';
     if (upper === 'EXPERIÊNCIA PROFISSIONAL' || upper === 'EXPERIÊNCIA' || upper === 'EXPERIENCIAS') return 'experience';
     if (upper === 'COMPETÊNCIAS' || upper === 'HABILIDADES' || upper === 'SKILLS') return 'skills';
+    if (upper === 'PROJETOS' || upper === 'PROJECTS' || upper === 'PORTFÓLIO' || upper === 'PORTFOLIO') return 'projects';
     if (upper === 'FORMAÇÃO ACADÊMICA' || upper === 'FORMAÇÃO' || upper === 'EDUCAÇÃO') return 'education';
     if (upper === 'CERTIFICADOS E CURSOS' || upper === 'CERTIFICADOS' || upper === 'CURSOS' || upper === 'CERTIFICAÇÕES') return 'certificates';
     if (upper === 'IDIOMAS' || upper === 'LÍNGUAS') return 'languages';
@@ -271,11 +327,16 @@ function getSectionType(line) {
     if (upper.includes('RESUMO') || upper.includes('OBJETIVO')) return 'summary';
     if (upper.includes('EXPERIÊNCIA') || upper.includes('EXPERIENCIAS')) return 'experience';
     if (upper.includes('COMPETÊNCIAS') || upper.includes('HABILIDADES') || upper === 'SKILLS') return 'skills';
+    if (upper.includes('PROJETOS') || upper === 'PROJECTS' || upper.includes('PORTFÓLIO') || upper.includes('PORTFOLIO')) return 'projects';
     if (upper.includes('FORMAÇÃO') || upper.includes('EDUCAÇÃO')) return 'education';
     if (upper.includes('CERTIFICAD') || upper.includes('CURSOS')) return 'certificates';
     if (upper.includes('IDIOMAS') || upper.includes('LÍNGUAS')) return 'languages';
 
     return null;
+}
+
+function looksLikeUrl(line) {
+    return /(https?:\/\/|github\.com|gitlab\.com|bitbucket\.org|www\.)/i.test(line);
 }
 
 function parseContactLine(line, contact) {
@@ -392,6 +453,17 @@ function parseEducationLine(line) {
     };
 }
 
+function parseProjectLine(line) {
+    const parts = line.split('|').map(p => p.trim()).filter(Boolean);
+    const url = parts.find(looksLikeUrl) || '';
+    return {
+        name: parts[0] || line.trim(),
+        url,
+        description: parts.find((part, index) => index > 0 && part !== url && !looksLikeUrl(part)) || '',
+        bullets: []
+    };
+}
+
 function parseCertificateLine(line) {
     if (!line.trim()) return null;
     const parts = line.split('|').map(p => p.trim());
@@ -434,6 +506,16 @@ function parseLanguageLine(line) {
  * @returns {string} LaTeX code
  */
 export const formatResumeToLatex = (data) => {
+    const contact = data.contact || {};
+    const experiences = Array.isArray(data.experiences) ? data.experiences : [];
+    const projects = Array.isArray(data.projects) ? data.projects : [];
+    const skills = {
+        hard: Array.isArray(data.skills?.hard) ? data.skills.hard : [],
+        soft: Array.isArray(data.skills?.soft) ? data.skills.soft : []
+    };
+    const education = Array.isArray(data.education) ? data.education : [];
+    const certificates = Array.isArray(data.certificates) ? data.certificates : [];
+    const languages = Array.isArray(data.languages) ? data.languages : [];
     const escapeLatex = (str) => {
         if (!str) return '';
         return str
@@ -443,121 +525,140 @@ export const formatResumeToLatex = (data) => {
             .replace(/\^/g, '\\textasciicircum{}');
     };
 
+    const formatDateRange = (startDate, endDate) => [startDate, endDate].filter(Boolean).join(' a ');
+
     let latex = `\\documentclass[a4paper,10pt]{article}
+\\usepackage{cmap}
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage[brazil]{babel}
-\\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\\usepackage[left=1.6cm,right=1.6cm,top=1.5cm,bottom=1.5cm]{geometry}
 \\usepackage{enumitem}
-\\usepackage{hyperref}
-\\usepackage{titlesec}
-\\usepackage{xcolor}
+\\usepackage{lmodern}
 
-% Colors
-\\definecolor{primary}{RGB}{15, 118, 110} % Teal
-
-% Formatting
-\\titleformat{\\section}{\\Large\\bfseries\\color{primary}}{}{0em}{}[\\titlerule]
-\\titlespacing{\\section}{0pt}{12pt}{8pt}
-
-\\newcommand{\\resumetitle}[1]{{\\fontsize{24}{28}\\selectfont\\textbf{\\color{primary}#1}}\\\\[6pt]}
-\\newcommand{\\resumeheader}[1]{{\\small #1}\\\\[12pt]}
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{0pt}
+\\setlist[itemize]{leftmargin=1.35em,itemsep=2pt,topsep=2pt,parsep=0pt,partopsep=0pt}
+\\newcommand{\\sectiontitle}[1]{\\vspace{8pt}\\noindent\\textbf{\\MakeUppercase{#1}}\\par\\vspace{2pt}\\hrule\\vspace{5pt}}
 
 \\begin{document}
 \\pagestyle{empty}
 
-% Header
-\\begin{center}
-    \\resumetitle{${escapeLatex(data.contact.name)}}
-    \\resumeheader{
-        ${[
-            data.contact.email,
-            data.contact.phone,
-            data.contact.linkedin,
-            data.contact.portfolio,
-            data.contact.location
-        ].filter(Boolean).map(escapeLatex).join(' $\\cdot$ ')}
-    }
-\\end{center}
+{\\fontsize{18}{22}\\selectfont\\textbf{${escapeLatex(contact.name)}}}\\par
+${[
+    contact.email,
+    contact.phone,
+    contact.linkedin,
+    contact.portfolio,
+    contact.location
+].filter(Boolean).map(escapeLatex).join(' | ')}\\par
 
 `;
 
     // Summary
     if (data.summary) {
-        latex += `\\section*{Resumo Profissional}
+        latex += `\\sectiontitle{Resumo}
 ${escapeLatex(data.summary)}
 
 `;
     }
 
     // Experience
-    if (data.experiences && data.experiences.length > 0) {
-        latex += `\\section*{Experiência Profissional}
-\\begin{itemize}[leftmargin=*,label={}]
+    if (experiences.length > 0) {
+        latex += `\\sectiontitle{Experiência Profissional}
 `;
-        data.experiences.forEach(exp => {
-            latex += `    \\item \\textbf{${escapeLatex(exp.role)}} $|$ ${escapeLatex(exp.company)} \\hfill {\\small ${escapeLatex(exp.startDate)} -- ${escapeLatex(exp.endDate)}}
-    \\begin{itemize}[leftmargin=1.5em,label=\\textbullet]
+        experiences.forEach(exp => {
+            latex += `\\textbf{${escapeLatex(exp.role)}}\\par
+${[exp.company, formatDateRange(exp.startDate, exp.endDate)].filter(Boolean).map(escapeLatex).join(' | ')}\\par
+\\begin{itemize}
 `;
-            exp.bullets.forEach(bullet => {
-                latex += `        \\item ${escapeLatex(bullet)}
+            (exp.bullets || []).forEach(bullet => {
+                latex += `    \\item ${escapeLatex(bullet)}
 `;
             });
-            latex += `    \\end{itemize}
-    \\vspace{4pt}
+            latex += `\\end{itemize}
+\\vspace{3pt}
 `;
         });
-        latex += `\\end{itemize}
-
-`;
     }
 
-    // Skills
-    if ((data.skills.hard && data.skills.hard.length) || (data.skills.soft && data.skills.soft.length)) {
-        latex += `\\section*{Competências}
+    // Projects
+    if (projects.length > 0) {
+        latex += `\\sectiontitle{Projetos}
 `;
-        if (data.skills.hard && data.skills.hard.length) {
-            latex += `\\textbf{Hard Skills:} ${data.skills.hard.map(escapeLatex).join(', ')}\\\\[4pt]
+        projects.forEach(project => {
+            if (project.name) {
+                latex += `\\textbf{${escapeLatex(project.name)}}\\par
 `;
-        }
-        if (data.skills.soft && data.skills.soft.length) {
-            latex += `\\textbf{Soft Skills:} ${data.skills.soft.map(escapeLatex).join(', ')}
-
+            }
+            if (project.url) {
+                latex += `${escapeLatex(project.url)}\\par
 `;
-        }
+            }
+            if (project.description) {
+                latex += `${escapeLatex(project.description)}\\par
+`;
+            }
+            if (project.bullets && project.bullets.length) {
+                latex += `\\begin{itemize}
+`;
+                project.bullets.forEach(bullet => {
+                    latex += `    \\item ${escapeLatex(bullet)}
+`;
+                });
+                latex += `\\end{itemize}
+`;
+            }
+            latex += `\\vspace{3pt}
+`;
+        });
     }
 
     // Education
-    if (data.education && data.education.length > 0) {
-        latex += `\\section*{Formação Acadêmica}
-\\begin{itemize}[leftmargin=*,label={}]
+    if (education.length > 0) {
+        latex += `\\sectiontitle{Formação}
 `;
-        data.education.forEach(edu => {
-            latex += `    \\item \\textbf{${escapeLatex(edu.degree)}} $|$ ${escapeLatex(edu.institution)} \\hfill {\\small ${escapeLatex(edu.year)}}
+        education.forEach(edu => {
+            latex += `\\textbf{${escapeLatex(edu.degree)}}\\par
+${[edu.institution, edu.year].filter(Boolean).map(escapeLatex).join(' | ')}\\par
 `;
             if (edu.details && edu.details.length) {
-                latex += `    \\begin{itemize}[leftmargin=1.5em,label=\\textbullet]
+                latex += `\\begin{itemize}
 `;
                 edu.details.forEach(detail => {
-                    latex += `        \\item ${escapeLatex(detail)}
+                    latex += `    \\item ${escapeLatex(detail)}
 `;
                 });
-                latex += `    \\end{itemize}
+                latex += `\\end{itemize}
 `;
             }
+            latex += `\\vspace{3pt}
+`;
         });
-        latex += `\\end{itemize}
+    }
+
+    // Skills
+    if (skills.hard.length || skills.soft.length) {
+        latex += `\\sectiontitle{Habilidades}
+`;
+        if (skills.hard.length) {
+            latex += `\\textbf{Hard Skills:} ${skills.hard.map(escapeLatex).join(', ')}\\\\[4pt]
+`;
+        }
+        if (skills.soft.length) {
+            latex += `\\textbf{Soft Skills:} ${skills.soft.map(escapeLatex).join(', ')}
 
 `;
+        }
     }
 
     // Certificates
-    if (data.certificates && data.certificates.length > 0) {
-        latex += `\\section*{Certificados e Cursos}
-\\begin{itemize}[leftmargin=*,label={}]
+    if (certificates.length > 0) {
+        latex += `\\sectiontitle{Certificações}
+\\begin{itemize}
 `;
-        data.certificates.forEach(cert => {
-            latex += `    \\item \\textbf{${escapeLatex(cert.name)}} $|$ ${escapeLatex(cert.institution)} \\hfill {\\small ${escapeLatex(cert.year)}}
+        certificates.forEach(cert => {
+            latex += `    \\item ${[cert.name, cert.institution, cert.year].filter(Boolean).map(escapeLatex).join(' | ')}
 `;
         });
         latex += `\\end{itemize}
@@ -566,11 +667,11 @@ ${escapeLatex(data.summary)}
     }
 
     // Languages
-    if (data.languages && data.languages.length > 0) {
-        latex += `\\section*{Idiomas}
+    if (languages.length > 0) {
+        latex += `\\sectiontitle{Idiomas}
 `;
-        data.languages.forEach((lang, index) => {
-            const isLast = index === data.languages.length - 1;
+        languages.forEach((lang, index) => {
+            const isLast = index === languages.length - 1;
             latex += `\\textbf{${escapeLatex(lang.language)}}: ${escapeLatex(lang.level)}${isLast ? '' : '\\\\[2pt]'}
 `;
         });

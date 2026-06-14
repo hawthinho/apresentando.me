@@ -100,6 +100,7 @@ const detectSections = (text) => {
         experience: /(experiência|experiencia|experience|histórico profissional|historico profissional)/i.test(text),
         education: /(formação|formacao|educação|educacao|education|graduação|graduacao)/i.test(text),
         skills: /(habilidades|competências|competencias|skills|ferramentas|tecnologias)/i.test(text),
+        projects: /(projetos|projects|portfólio|portfolio|github\.com|gitlab\.com)/i.test(text),
         bullets: /(^|\n)\s*[-•*]/.test(text) || lower.includes(' implement') || lower.includes(' lider')
     };
 };

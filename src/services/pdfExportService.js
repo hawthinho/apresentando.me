@@ -5,14 +5,11 @@ import jsPDF from 'jspdf';
  * Creates beautifully formatted PDF resumes with proper typography and structure
  */
 
-// Color palette based on design system
+// ATS classic palette: keep the exported resume plain, high-contrast and parser-friendly.
 const colors = {
-    primary: '#0F766E',      // action-strong (teal)
-    accent: '#9EEA6C',       // action-primary (green)
-    textPrimary: '#1A1A1A',  // text-primary
-    textSecondary: '#6B7280', // text-secondary
-    border: '#E5E7EB',       // border-default
-    background: '#F5F5F7',   // surface-page
+    textPrimary: '#111111',
+    textSecondary: '#333333',
+    border: '#555555'
 };
 
 // Resume section patterns to detect
@@ -140,10 +137,10 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
 
     const pageWidth = 210;
     const pageHeight = 297;
-    const marginLeft = 20;
-    const marginRight = 20;
-    const marginTop = 20;
-    const marginBottom = 20;
+    const marginLeft = 14;
+    const marginRight = 14;
+    const marginTop = 14;
+    const marginBottom = 14;
     const contentWidth = pageWidth - marginLeft - marginRight;
 
     let yPosition = marginTop;
@@ -158,17 +155,6 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
             return true;
         }
         return false;
-    };
-
-    /**
-     * Draw a horizontal divider line
-     */
-    const drawDivider = (color = colors.primary) => {
-        checkPageBreak(5);
-        doc.setDrawColor(color);
-        doc.setLineWidth(0.5);
-        doc.line(marginLeft, yPosition, pageWidth - marginRight, yPosition);
-        yPosition += 4;
     };
 
     // ========== COVER LETTER ==========
@@ -195,52 +181,46 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
 
     // ========== HEADER: Name ==========
     if (parsed.candidateName) {
-        doc.setFontSize(24);
+        doc.setFontSize(18);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(colors.primary);
-        doc.text(parsed.candidateName.toUpperCase(), pageWidth / 2, yPosition, { align: 'center' });
-        yPosition += 10;
+        doc.setTextColor(colors.textPrimary);
+        doc.text(parsed.candidateName, marginLeft, yPosition);
+        yPosition += 6;
     }
 
     // ========== HEADER: Contact Info ==========
     if (parsed.contactInfo.length > 0) {
-        doc.setFontSize(9);
+        doc.setFontSize(8.5);
         doc.setFont('helvetica', 'normal');
-        doc.setTextColor(colors.textSecondary);
+        doc.setTextColor(colors.textPrimary);
 
-        // Join contact info with separator
-        const contactText = parsed.contactInfo.join('  •  ');
+        const contactText = parsed.contactInfo.join(' | ');
         const contactLines = doc.splitTextToSize(contactText, contentWidth);
 
         for (const line of contactLines) {
-            doc.text(line, pageWidth / 2, yPosition, { align: 'center' });
+            doc.text(line, marginLeft, yPosition);
             yPosition += 4;
         }
-        yPosition += 4;
+        yPosition += 2;
     }
-
-    // Draw header divider
-    drawDivider(colors.primary);
-    yPosition += 4;
 
     // ========== SECTIONS ==========
     for (const section of parsed.sections) {
         if (section.type === 'header') continue;
 
-        checkPageBreak(20);
+        checkPageBreak(16);
 
         // Section Title
-        doc.setFontSize(12);
+        doc.setFontSize(10.5);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(colors.primary);
+        doc.setTextColor(colors.textPrimary);
         doc.text(section.title.toUpperCase(), marginLeft, yPosition);
-        yPosition += 6;
+        yPosition += 2.5;
 
-        // Subtle line under section title
         doc.setDrawColor(colors.border);
-        doc.setLineWidth(0.3);
-        doc.line(marginLeft, yPosition - 2, marginLeft + 50, yPosition - 2);
-        yPosition += 2;
+        doc.setLineWidth(0.2);
+        doc.line(marginLeft, yPosition, pageWidth - marginRight, yPosition);
+        yPosition += 5;
 
         // Section Content
         let previousWasSubheading = false;
@@ -267,7 +247,7 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
                     // Draw label in bold
                     doc.setFontSize(10);
                     doc.setFont('helvetica', 'bold');
-                    doc.setTextColor(colors.primary);
+                    doc.setTextColor(colors.textPrimary);
                     const labelWidth = doc.getTextWidth(label + ': ');
                     doc.text(label + ':', marginLeft, yPosition);
 
@@ -314,7 +294,7 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
                 doc.setTextColor(colors.textPrimary);
 
                 // Draw bullet
-                doc.setFillColor(colors.primary);
+                doc.setFillColor(colors.textPrimary);
                 doc.circle(marginLeft + 2, yPosition - 1.5, 0.8, 'F');
 
                 // Draw text with wrap
@@ -331,7 +311,7 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
 
             } else if (isSubheading(item) || (section.type === 'experience' && !previousWasSubheading && i > 0)) {
                 // Job title / Company / Date line
-                yPosition += 3;
+                yPosition += 2;
                 checkPageBreak(10);
 
                 doc.setFontSize(10);
@@ -366,22 +346,7 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
         }
 
         // Space after section
-        yPosition += 6;
-    }
-
-    // ========== FOOTER ==========
-    const totalPages = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(colors.textSecondary);
-        doc.text(
-            `Página ${i} de ${totalPages}`,
-            pageWidth / 2,
-            pageHeight - 10,
-            { align: 'center' }
-        );
+        yPosition += 4;
     }
 
     // Save the PDF
