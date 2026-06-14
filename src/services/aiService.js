@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getCoverLetterStyle } from "./coverLetterStyles";
+import { buildKeywordTransferBrief, improveKeywordCoverage } from "./jobKeywordService";
 import { getProvider } from "./providerConfig";
 import { getApiKeyForSettings, getSelectedModelForSettings, getSettings } from "./settingsService";
 import { sanitizeCoverLetterText, sanitizeGeneratedText } from "./textSanitizer.js";
@@ -356,6 +357,9 @@ Regras:
 - Nunca invente empresas, cargos, datas, certificações, tecnologias ou resultados.
 - Preserve todos os links do currículo original.
 - Preserve projetos existentes em uma seção própria. Se o currículo trouxer projetos pessoais, acadêmicos, portfólio ou GitHub, mova esses dados para o array projects.
+- Use a descrição da vaga como fonte de vocabulário ATS, mas apenas quando houver evidência real no currículo original.
+- Se houver brecha real no currículo, faça cerca de 80% das palavras-chave importantes e compatíveis da vaga aparecerem naturalmente no currículo otimizado.
+- Não empilhe palavras-chave. Distribua termos em resumo, habilidades, projetos e bullets apenas quando fizer sentido.
 - Se uma seção não existir, deixe o array vazio.
 - Escreva em português do Brasil.
 - Use linguagem natural, profissional e específica. Evite texto robótico, clichês e exageros.
@@ -380,9 +384,21 @@ Formato obrigatório:
 
 export const optimizeResume = async (resumeText, jobDescription, aggressiveness) => {
     try {
+        const keywordTransferBrief = buildKeywordTransferBrief(jobDescription);
         const userPrompt = `
 NÍVEL DE INTERVENÇÃO:
 ${getOptimizationInstructions(aggressiveness)}
+
+CHECKLIST DE PALAVRAS-CHAVE DA VAGA:
+${keywordTransferBrief}
+
+REGRA DE TRANSFERÊNCIA DE PALAVRAS-CHAVE:
+- Primeiro, compare o checklist com o currículo original.
+- Marque internamente quais termos são comprovados ou compatíveis com experiências, projetos, habilidades, formação ou certificações do candidato.
+- Quando o currículo permitir, inclua cerca de 80% desses termos compatíveis no JSON final.
+- Use os termos exatos da vaga ao menos uma vez quando isso soar natural.
+- Se o currículo não sustentar uma palavra-chave, não use essa palavra-chave.
+- Se não for possível chegar perto de 80% sem inventar, priorize honestidade e naturalidade.
 
 CURRÍCULO ORIGINAL:
 ${resumeText}
@@ -398,7 +414,11 @@ ${jobDescription || "Não fornecida. Otimize para clareza, leitura ATS e competi
             expectJson: true
         });
 
-        return sanitizeGeneratedText(normalizeOptimization(parseJsonResponse(text)));
+        const normalized = normalizeOptimization(parseJsonResponse(text));
+        return sanitizeGeneratedText({
+            ...normalized,
+            resumeData: improveKeywordCoverage(normalized.resumeData, resumeText, jobDescription)
+        });
     } catch (error) {
         console.error("Erro na otimização:", error);
         throw new Error(error.message || "Falha ao otimizar currículo.");
