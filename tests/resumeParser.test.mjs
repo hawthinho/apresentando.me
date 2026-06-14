@@ -82,6 +82,18 @@ test('formatted resume text follows the ATS classic section order', () => {
     assert.ok(educationIndex < skillsIndex);
 });
 
+test('parseResumeText detects WhatsApp phone labels in contact info', () => {
+    const parsed = parseResumeText(`Ana Souza
+ana@example.com | WhatsApp: +55 11 99999-0000 | linkedin.com/in/anasouza
+
+RESUMO
+Designer de produto.
+`);
+
+    assert.equal(parsed.contact.phone, '+55 11 99999-0000');
+    assert.equal(parsed.contact.phoneIsWhatsapp, true);
+});
+
 test('LaTeX formatters escape reserved characters', () => {
     const latex = formatResumeToLatex({
         ...resumeData,

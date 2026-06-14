@@ -1,4 +1,5 @@
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
+import { getContactItemLink, splitContactItems } from './contactLinkService.js';
 
 /**
  * Professional Resume PDF Export Service
@@ -124,10 +125,52 @@ const isSubheading = (text) => {
         text.includes(' - ') && text.match(/\d{2,4}/);
 };
 
+const drawLinkedText = (doc, text, x, y, link = '') => {
+    doc.text(text, x, y);
+    if (!link) return;
+
+    const width = doc.getTextWidth(text);
+    doc.link(x, y - 3, width, 4, { url: link });
+};
+
+const drawContactInfo = (doc, contactInfo, contactOptions, marginLeft, contentWidth, yPosition) => {
+    const items = splitContactItems(contactInfo);
+    const separator = ' | ';
+    const lineHeight = 4;
+    const maxX = marginLeft + contentWidth;
+    let currentX = marginLeft;
+    let currentY = yPosition;
+
+    items.forEach((item, index) => {
+        const link = getContactItemLink(item, contactOptions);
+        const separatorWidth = currentX === marginLeft ? 0 : doc.getTextWidth(separator);
+        const itemWidth = doc.getTextWidth(item);
+
+        if (currentX !== marginLeft && currentX + separatorWidth + itemWidth > maxX) {
+            currentX = marginLeft;
+            currentY += lineHeight;
+        }
+
+        if (currentX !== marginLeft) {
+            doc.text(separator, currentX, currentY);
+            currentX += separatorWidth;
+        }
+
+        drawLinkedText(doc, item, currentX, currentY, link);
+        currentX += itemWidth;
+
+        if (index === items.length - 1) {
+            currentY += lineHeight;
+        }
+    });
+
+    return currentY;
+};
+
 /**
  * Generate professional PDF from resume content
  */
-export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf', coverLetterContent = null) => {
+export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf', coverLetterContent = null, options = {}) => {
     const parsed = parseResumeContent(content);
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -194,13 +237,7 @@ export const generateResumePDF = (content, filename = 'curriculo_otimizado.pdf',
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(colors.textPrimary);
 
-        const contactText = parsed.contactInfo.join(' | ');
-        const contactLines = doc.splitTextToSize(contactText, contentWidth);
-
-        for (const line of contactLines) {
-            doc.text(line, marginLeft, yPosition);
-            yPosition += 4;
-        }
+        yPosition = drawContactInfo(doc, parsed.contactInfo, options.contact || {}, marginLeft, contentWidth, yPosition);
         yPosition += 2;
     }
 

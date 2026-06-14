@@ -76,6 +76,7 @@ const normalizeResumeData = (resumeData = {}) => ({
         name: asText(resumeData.contact?.name),
         email: asText(resumeData.contact?.email),
         phone: asText(resumeData.contact?.phone),
+        phoneIsWhatsapp: Boolean(resumeData.contact?.phoneIsWhatsapp),
         linkedin: asText(resumeData.contact?.linkedin),
         portfolio: asText(resumeData.contact?.portfolio),
         location: asText(resumeData.contact?.location)

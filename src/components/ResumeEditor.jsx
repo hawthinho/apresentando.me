@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { buildWhatsappUrl } from '../services/contactLinkService';
 
 const EditorSectionHeader = ({ title, icon, section, isExpanded, onToggle }) => (
     <div
@@ -27,6 +28,7 @@ const withResumeDefaults = (resumeData = {}) => ({
         name: resumeData.contact?.name || '',
         email: resumeData.contact?.email || '',
         phone: resumeData.contact?.phone || '',
+        phoneIsWhatsapp: Boolean(resumeData.contact?.phoneIsWhatsapp),
         linkedin: resumeData.contact?.linkedin || '',
         portfolio: resumeData.contact?.portfolio || '',
         location: resumeData.contact?.location || ''
@@ -237,6 +239,20 @@ export const ResumeEditor = ({ resumeData, onUpdate, onBack, onSave }) => {
                                 <div>
                                     <label className={labelClasses}>Telefone</label>
                                     <input type="tel" className={inputClasses} value={data.contact.phone} onChange={(e) => updateField('contact.phone', e.target.value)} placeholder="(11) 99999-9999" />
+                                    <label className="mt-4 flex items-start gap-3 font-jetbrains font-bold uppercase text-[10px] leading-relaxed text-foreground cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            checked={data.contact.phoneIsWhatsapp}
+                                            onChange={(e) => updateField('contact.phoneIsWhatsapp', e.target.checked)}
+                                            className="mt-0.5 h-5 w-5 shrink-0 accent-[#D4FF00]"
+                                        />
+                                        <span>Este número é WhatsApp</span>
+                                    </label>
+                                    {data.contact.phoneIsWhatsapp && !buildWhatsappUrl(data.contact.phone) && (
+                                        <p className="mt-2 font-jetbrains text-[10px] font-bold uppercase leading-relaxed text-destructive">
+                                            Para criar o link, informe código do país e DDD. Ex: +55 11 99999-9999.
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <label className={labelClasses}>LinkedIn</label>

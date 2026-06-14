@@ -16,6 +16,7 @@ export const parseResumeText = (content) => {
             name: '',
             email: '',
             phone: '',
+            phoneIsWhatsapp: false,
             linkedin: '',
             portfolio: '',
             location: ''
@@ -342,16 +343,19 @@ function looksLikeUrl(line) {
 function parseContactLine(line, contact) {
     const parts = line.split('|').map(p => p.trim());
     parts.forEach(part => {
-        if (part.includes('@')) {
-            contact.email = part;
-        } else if (part.match(/linkedin/i) || part.includes('linkedin.com')) {
-            contact.linkedin = part;
-        } else if (part.match(/behance|dribbble|github|gitlab|portfolio|figma\.com/i)) {
-            contact.portfolio = part;
-        } else if (part.match(/[\d\s+()-]{8,}/)) {
-            contact.phone = part;
-        } else if (part.length > 0 && !contact.location) {
-            contact.location = part;
+        const isWhatsapp = /whats\s*app|whatsapp/i.test(part);
+        const cleanPart = part.replace(/whats\s*app:?|whatsapp:?/ig, '').trim();
+        if (cleanPart.includes('@')) {
+            contact.email = cleanPart;
+        } else if (cleanPart.match(/linkedin/i) || cleanPart.includes('linkedin.com')) {
+            contact.linkedin = cleanPart;
+        } else if (cleanPart.match(/behance|dribbble|github|gitlab|portfolio|figma\.com/i)) {
+            contact.portfolio = cleanPart;
+        } else if (cleanPart.match(/[\d\s+()-]{8,}/)) {
+            contact.phone = cleanPart;
+            contact.phoneIsWhatsapp = Boolean(contact.phoneIsWhatsapp || isWhatsapp);
+        } else if (cleanPart.length > 0 && !contact.location) {
+            contact.location = cleanPart;
         }
     });
 }
