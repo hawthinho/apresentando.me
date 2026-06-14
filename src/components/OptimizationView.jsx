@@ -3,6 +3,7 @@ import { FileText, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { optimizeResume, generateCoverLetter } from '../services/aiService';
 import { COVER_LETTER_STYLES } from '../services/coverLetterStyles';
+import { buildResumePdfFilename } from '../services/downloadFilenameService';
 import { generateResumePDF, generateCoverLetterPDF } from '../services/pdfExportService';
 import { parseResumeText, formatResumeToText, formatResumeToLatex, formatCoverLetterToLatex, formatCombinedToLatex } from '../services/resumeParser';
 import { getActiveAiDescriptor } from '../services/settingsService';
@@ -113,7 +114,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     };
 
     const handleDownloadPDF = () => {
-        generateResumePDF(optimizedContent, 'curriculo_otimizado.pdf');
+        generateResumePDF(optimizedContent, buildResumePdfFilename(parsedResume || optimizedContent));
     };
 
     const handleCopyLatex = () => {
@@ -134,7 +135,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
     const handleDownloadEditedPDF = () => {
         if (!parsedResume) return;
         const updatedContent = formatResumeToText(parsedResume);
-        generateResumePDF(updatedContent, 'curriculo_editado.pdf');
+        generateResumePDF(updatedContent, buildResumePdfFilename(parsedResume));
     };
 
     const getCurrentResumeContent = () => {
@@ -559,7 +560,7 @@ export const OptimizationView = ({ resumeText, jobDescription, onOpenEditor, edi
                                         </div>
                                         
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                            <Button className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-[#D4FF00] hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => generateResumePDF(optimizedContent, 'documento_completo.pdf', coverLetter)}>
+                                            <Button className="w-full min-h-[4rem] h-auto py-3 px-2 md:px-4 rounded-none bg-foreground text-[#D4FF00] hover:bg-black font-jetbrains font-black uppercase tracking-wider text-xs md:text-sm border-2 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all duration-200 whitespace-normal leading-tight text-center" onClick={() => generateResumePDF(optimizedContent, buildResumePdfFilename(parsedResume || optimizedContent), coverLetter)}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="mr-2 md:mr-3 shrink-0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                                                 Baixar PDF único
                                             </Button>
